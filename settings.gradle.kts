@@ -21,4 +21,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "ModernMusicPlayer"
 include(":app")
- 
+include(":core")
+include(":core:core_ui")
+include(":core:core_media_store")
+include(":core:core_domain")
+include(":core:core_media_service")
+include(":features")
+include(":features:home")

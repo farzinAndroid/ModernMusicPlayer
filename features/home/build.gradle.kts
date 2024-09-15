@@ -1,25 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hiltPlugin)
 }
 
 android {
-    namespace = "com.farzin.modernmusicplayer"
+    namespace = "com.farzin.home"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.farzin.modernmusicplayer"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -64,17 +58,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // compose
-    implementation(libs.bundles.composeBundle)
-
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    //hilt navigation
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    // coil
-    implementation(libs.coil.compose)
-
+    // compose
+    implementation(libs.bundles.composeBundle)
 }
