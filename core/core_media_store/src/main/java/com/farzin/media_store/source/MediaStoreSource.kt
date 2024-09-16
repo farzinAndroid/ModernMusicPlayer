@@ -11,6 +11,7 @@ import com.farzin.media_store.utils.ArtWorkUtils.toArtworkUri
 import com.farzin.media_store.utils.CursorUtils.getLong
 import com.farzin.media_store.utils.CursorUtils.getString
 import com.farzin.media_store.utils.DateTimeUtils.toLocalDateTime
+import com.farzin.media_store.utils.FilePathUtils.asFolder
 import com.farzin.media_store.utils.MediaStoreUtils
 import com.farzin.media_store.utils.MediaStoreUtils.observe
 import com.farzin.media_store.utils.SortUtils
@@ -23,7 +24,6 @@ class MediaStoreSource @Inject constructor(
 
 
     fun getSongs(
-        favoriteSongs:Set<String>,
         sortBy: SortBy,
         sortOrder: SortOrder
     ) = contentResolver.observe(MediaStoreUtils.Collection).map {
@@ -45,6 +45,7 @@ class MediaStoreSource @Inject constructor(
                     val duration = cursor.getLong(MediaStore.Audio.Media.DURATION)
                     val date = cursor.getLong(MediaStore.Audio.Media.DATE_ADDED)
                     val artworkUri = albumId.toArtworkUri()
+                    val folder = cursor.getString(MediaStore.Audio.Media.DATA).asFolder()
 
                     val mediaUri: Uri = ContentUris.withAppendedId(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -62,7 +63,7 @@ class MediaStoreSource @Inject constructor(
                         date = date.toLocalDateTime(),
                         mediaUri = mediaUri,
                         artworkUri = artworkUri,
-                        isFavorite = id.toString() in favoriteSongs
+                        folder = folder
                     ).let(::add)
                 }
             }
