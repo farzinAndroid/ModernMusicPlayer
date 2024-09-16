@@ -13,13 +13,14 @@ composeBom = "2024.09.01"
 jetbrainsKotlinJvm = "1.9.0"
 appcompat = "1.7.0"
 material = "1.12.0"
-jvmTarget = "18"
+jvmTarget = "1.8"
 kspVersion = "1.9.20-1.0.14"
 androidx-media3 = "1.4.1"
 coil = "2.6.0"
 compileSdk = "34"
 targetSdk = "34"
 minSdk = "26"
+kotlinx-datetime = "0.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,7 @@ androidx-media3-session = { module = "androidx.media3:media3-session", version.r
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
