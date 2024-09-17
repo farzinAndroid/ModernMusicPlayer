@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SharedPreferencesRepository {
 
-    suspend fun getUserData(): Flow<UserData>
+    suspend fun getUserData(): UserData
 
     suspend fun setPlayingQueueIds(playingQueueIds: List<String>)
     suspend fun setPlayingQueueIndex(playingQueueIndex: Int)

@@ -70,16 +70,19 @@ class DefaultPreferences @Inject constructor(
     }
 
 
-    override suspend fun getUserData(): Flow<UserData> = callbackFlow {
+    override suspend fun getUserData(): UserData =
         withContext(Dispatchers.IO) {
             val savedPlayingQueueIdsString =
-                sharedPreferences.getString(SharedPreferencesRepository.PLAYING_QUEUE_ID_KEY, null) ?: ""
-            val savedPlayingQueueIdsList = turnPlayQueueIdToListUseCase.invoke(savedPlayingQueueIdsString)
+                sharedPreferences.getString(SharedPreferencesRepository.PLAYING_QUEUE_ID_KEY, null)
+                    ?: ""
+            val savedPlayingQueueIdsList =
+                turnPlayQueueIdToListUseCase.invoke(savedPlayingQueueIdsString)
 
             val savedPlayingQueueIndex =
                 sharedPreferences.getInt(SharedPreferencesRepository.PLAYING_QUEUE_INDEX_KEY, -1)
             val savedPlaybackMode =
-                sharedPreferences.getString(SharedPreferencesRepository.PLAY_BACK_MODE_KEY, null) ?: ""
+                sharedPreferences.getString(SharedPreferencesRepository.PLAY_BACK_MODE_KEY, null)
+                    ?: ""
             val savedSortOrder =
                 sharedPreferences.getString(SharedPreferencesRepository.SORT_ORDER_KEY, null) ?: ""
             val savedSortBy =
@@ -93,10 +96,8 @@ class DefaultPreferences @Inject constructor(
                 playbackMode = EnumUtils.fromStringPlaybackMode(savedPlaybackMode)
             )
 
-            trySend(userData).isSuccess
+            return@withContext userData
         }
-        awaitClose { /* Clean up if needed */ }
-    }.flowOn(Dispatchers.IO)
 
 
 }

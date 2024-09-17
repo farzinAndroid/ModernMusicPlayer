@@ -25,12 +25,10 @@ class MediaRepositoryImpl @Inject constructor(
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     override val songs: Flow<List<Song>> =
-        userData.flatMapLatest { userData ->
             mediaStoreSource.getSongs(
                 sortOrder = userData.sortOrder,
                 sortBy = userData.sortBy
             )
-        }
 
 
     override val artists: Flow<List<Artist>> = songs.map { songs ->

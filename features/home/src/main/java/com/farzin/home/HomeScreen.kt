@@ -18,7 +18,7 @@ fun HomeScreen(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
 ) {
 
-    val userData by homeViewmodel.getUserData().collectAsState(null)
+    val userData by homeViewmodel.userData.collectAsState()
 
     Column(
         modifier = Modifier
@@ -31,7 +31,7 @@ fun HomeScreen(
                 homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
             }
         ) {
-            Text(text = userData?.playbackMode?.name ?: "")
+            Text(text = userData.playbackMode.name)
         }
 
     }
