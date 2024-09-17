@@ -4,14 +4,22 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.farzin.core_data.domain.usecases.TurnPlayQueueIdToListUseCase
 import com.farzin.core_data.preferences.DefaultPreferences
+import com.farzin.core_data.repository.MediaRepositoryImpl
+import com.farzin.core_domain.repository.MediaRepository
 import com.farzin.core_domain.repository.SharedPreferencesRepository
-import com.farzin.core_domain.usecases.GetUserDataUseCase
-import com.farzin.core_domain.usecases.PreferencesUseCases
-import com.farzin.core_domain.usecases.SetPlaybackModeUseCase
-import com.farzin.core_domain.usecases.SetPlayingQueueIdsUseCase
-import com.farzin.core_domain.usecases.SetPlayingQueueIndexUseCase
-import com.farzin.core_domain.usecases.SetSortByUseCase
-import com.farzin.core_domain.usecases.SetSortOrderUseCase
+import com.farzin.core_domain.usecases.media.GetAlbumsUseCase
+import com.farzin.core_domain.usecases.media.GetArtistUseCase
+import com.farzin.core_domain.usecases.media.GetFoldersUseCase
+import com.farzin.core_domain.usecases.media.GetSongsUseCase
+import com.farzin.core_domain.usecases.media.MediaUseCases
+import com.farzin.core_domain.usecases.preferences.GetUserDataUseCase
+import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
+import com.farzin.core_domain.usecases.preferences.SetPlaybackModeUseCase
+import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIdsUseCase
+import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIndexUseCase
+import com.farzin.core_domain.usecases.preferences.SetSortByUseCase
+import com.farzin.core_domain.usecases.preferences.SetSortOrderUseCase
+import com.farzin.media_store.source.MediaStoreSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +48,17 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideMediaUseCases(
+        mediaRepository: MediaRepository
+    ) = MediaUseCases(
+        getSongsUseCase = GetSongsUseCase(mediaRepository),
+        getArtistsUseCase = GetArtistUseCase(mediaRepository),
+        getAlbumsUseCase = GetAlbumsUseCase(mediaRepository),
+        getFoldersUseCase = GetFoldersUseCase(mediaRepository)
+    )
+
+    @Provides
+    @Singleton
     fun provideSharedPreferences(
         @ApplicationContext context: Context
     ) : SharedPreferences = context.getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
@@ -56,6 +75,16 @@ object AppModule {
     ) : SharedPreferencesRepository = DefaultPreferences(
         sharedPreferences = sharedPreferences,
         turnPlayQueueIdToListUseCase = turnPlayQueueIdToListUseCase
+    )
+
+    @Provides
+    @Singleton
+    fun provideMediaRepositoryImpl(
+        mediaStoreSource: MediaStoreSource,
+        preferencesRepository: SharedPreferencesRepository
+    ) : MediaRepository = MediaRepositoryImpl(
+        mediaStoreSource = mediaStoreSource,
+        defaultPreferences = preferencesRepository
     )
 
 }

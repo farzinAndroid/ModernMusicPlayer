@@ -1,13 +1,13 @@
 package com.farzin.core_data.repository
 
-import com.farzin.core_data.preferences.DefaultPreferences
 import com.farzin.core_domain.repository.MediaRepository
+import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_model.Album
 import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
+import com.farzin.core_model.UserData
 import com.farzin.media_store.source.MediaStoreSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -15,19 +15,23 @@ import javax.inject.Inject
 
 class MediaRepositoryImpl @Inject constructor(
     private val mediaStoreSource: MediaStoreSource,
-    private val defaultPreferences: DefaultPreferences,
+    private val defaultPreferences: SharedPreferencesRepository,
 ) : MediaRepository {
 
 
-    val userData = runBlocking {
-        defaultPreferences.getUserData()
+    var userData: UserData = UserData()
+
+    init {
+        userData = runBlocking {
+            defaultPreferences.getUserData()
+        }
     }
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     override val songs: Flow<List<Song>> =
-            mediaStoreSource.getSongs(
-                sortOrder = userData.sortOrder,
-                sortBy = userData.sortBy
-            )
+        mediaStoreSource.getSongs(
+            sortOrder = userData.sortOrder,
+            sortBy = userData.sortBy
+        )
 
 
     override val artists: Flow<List<Artist>> = songs.map { songs ->

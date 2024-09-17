@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
@@ -52,6 +53,7 @@ class MediaStoreSource @Inject constructor(
                         id
                     )
 
+                    Log.e("TAG","mediaUri: $mediaUri")
                     Song(
                         mediaId = id.toString(),
                         title = title,

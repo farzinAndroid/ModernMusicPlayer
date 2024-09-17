@@ -1,4 +1,4 @@
-package com.farzin.core_domain.usecases
+package com.farzin.core_domain.usecases.preferences
 
 data class PreferencesUseCases(
     val getUserDataUseCase: GetUserDataUseCase,
