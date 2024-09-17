@@ -1,4 +1,4 @@
-package com.farzin.core_domain.usecases
+package com.farzin.core_data.domain.usecases
 
 class TurnPlayQueueIdToListUseCase {
     operator fun invoke(playingQueueIdsString: String): List<String> {

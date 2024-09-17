@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(project(":core:core_model"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,5 +70,5 @@ dependencies {
 
     implementation(project(":core:core_media_service"))
     implementation(project(":core:core_domain"))
-    implementation(project(":core:core_data"))
+    implementation(project(":core:core_model"))
 }

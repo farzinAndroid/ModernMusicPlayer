@@ -2,9 +2,9 @@ package com.farzin.core_data.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.farzin.core_data.domain.usecases.TurnPlayQueueIdToListUseCase
 import com.farzin.core_data.preferences.DefaultPreferences
-import com.farzin.core_domain.repository.SharedPreferencesRepository
-import com.farzin.core_domain.usecases.TurnPlayQueueIdToListUseCase
+import com.farzin.core_data.repository.SharedPreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,9 +22,7 @@ object DataModule {
         @ApplicationContext context: Context
     ) : SharedPreferences= context.getSharedPreferences("shared_preferences",Context.MODE_PRIVATE)
 
-    @Provides
-    @Singleton
-    fun provideTurnPlayQueueIdToListUseCase() = TurnPlayQueueIdToListUseCase()
+
 
     @Provides
     @Singleton

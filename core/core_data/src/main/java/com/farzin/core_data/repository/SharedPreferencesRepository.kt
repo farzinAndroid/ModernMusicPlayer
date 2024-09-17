@@ -1,10 +1,9 @@
-package com.farzin.core_domain.repository
+package com.farzin.core_data.repository
 
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_model.UserData
-import kotlinx.coroutines.flow.Flow
 
 interface SharedPreferencesRepository {
 
