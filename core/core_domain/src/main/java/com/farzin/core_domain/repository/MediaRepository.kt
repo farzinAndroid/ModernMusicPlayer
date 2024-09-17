@@ -1,4 +1,4 @@
-package com.farzin.core_data.repository
+package com.farzin.core_domain.repository
 
 import com.farzin.core_model.Album
 import com.farzin.core_model.Artist

@@ -2,7 +2,7 @@ package com.farzin.core_data.preferences
 
 import android.content.SharedPreferences
 import com.farzin.core_data.domain.usecases.TurnPlayQueueIdToListUseCase
-import com.farzin.core_data.repository.SharedPreferencesRepository
+import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_model.EnumUtils
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.SortBy

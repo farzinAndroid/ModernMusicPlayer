@@ -53,5 +53,4 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(project(":core:core_model"))
-    implementation(project(":core:core_data"))
 }

@@ -1,4 +1,4 @@
-package com.farzin.core_data.repository
+package com.farzin.core_domain.repository
 
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.SortBy
@@ -17,11 +17,11 @@ interface SharedPreferencesRepository {
 
 
     companion object{
-        val PLAYING_QUEUE_ID_KEY = "PLAYING_QUEUE_ID_KEY"
-        val PLAYING_QUEUE_INDEX_KEY = "PLAYING_QUEUE_INDEX_KEY"
-        val PLAY_BACK_MODE_KEY = "PLAY_BACK_MODE_KEY"
-        val SORT_ORDER_KEY = "SORT_ORDER_KEY"
-        val SORT_BY_KEY = "SORT_BY_KEY"
+        const val PLAYING_QUEUE_ID_KEY = "PLAYING_QUEUE_ID_KEY"
+        const val PLAYING_QUEUE_INDEX_KEY = "PLAYING_QUEUE_INDEX_KEY"
+        const val PLAY_BACK_MODE_KEY = "PLAY_BACK_MODE_KEY"
+        const val SORT_ORDER_KEY = "SORT_ORDER_KEY"
+        const val SORT_BY_KEY = "SORT_BY_KEY"
     }
 
 

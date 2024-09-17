@@ -49,5 +49,6 @@ dependencies {
 
 
     implementation(project(":core:core_model"))
+    implementation(project(":core:core_domain"))
     implementation(project(":core:core_media_store"))
 }

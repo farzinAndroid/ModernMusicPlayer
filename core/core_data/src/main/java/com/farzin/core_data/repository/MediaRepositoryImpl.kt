@@ -1,6 +1,7 @@
 package com.farzin.core_data.repository
 
 import com.farzin.core_data.preferences.DefaultPreferences
+import com.farzin.core_domain.repository.MediaRepository
 import com.farzin.core_model.Album
 import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
