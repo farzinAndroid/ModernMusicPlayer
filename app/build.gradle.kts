@@ -61,7 +61,6 @@ dependencies {
     implementation(project(":core:core_model"))
     implementation(project(":core:core_ui"))
     implementation(project(":features:home"))
-    implementation(project(":features:permission"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
