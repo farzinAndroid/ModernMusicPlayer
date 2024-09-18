@@ -22,12 +22,10 @@ class HomeViewmodel @Inject constructor(
     private val mediaUseCases: MediaUseCases
 ): ViewModel() {
 
-    var permissionState by mutableStateOf(PermissionState.NOT_GRANTED)
-
     private val _userData = MutableStateFlow(UserData())
     val userData: StateFlow<UserData> = _userData
 
-    val songs = mediaUseCases.getArtistsUseCase()
+    val songs = mediaUseCases.getSongsUseCase()
 
     init {
         viewModelScope.launch {

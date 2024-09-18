@@ -8,6 +8,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.farzin.core_ui.R
 
 @Composable
@@ -15,7 +16,7 @@ fun TextMedium(
     modifier: Modifier = Modifier,
     text:String,
     color: Color,
-    textStyle: TextStyle,
+    fontSize:TextUnit,
     maxLine:Int = Int.MAX_VALUE,
     lineHeight:TextUnit = TextUnit.Unspecified,
 ) {
@@ -25,7 +26,7 @@ fun TextMedium(
         text =text,
         modifier = modifier,
         color = color,
-        style = textStyle,
+        fontSize = fontSize,
         maxLines = maxLine,
         lineHeight = lineHeight,
         fontFamily = FontFamily(Font(R.font.gilroy_medium))

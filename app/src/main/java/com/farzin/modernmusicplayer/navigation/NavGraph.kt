@@ -17,7 +17,9 @@ fun NavGraph(
     ) {
 
         composable<Screens.Home> {
-            HomeScreen()
+            HomeScreen(
+                onSearchClicked = {}
+            )
         }
 
 

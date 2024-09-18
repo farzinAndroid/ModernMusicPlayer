@@ -76,4 +76,8 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
 
+    // coil
+    implementation(libs.coil.compose)
+
+
 }

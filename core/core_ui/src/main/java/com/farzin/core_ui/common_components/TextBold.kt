@@ -15,7 +15,7 @@ fun TextBold(
     modifier: Modifier = Modifier,
     text:String,
     color: Color,
-    textStyle: TextStyle,
+    fontSize:TextUnit,
     maxLine:Int = Int.MAX_VALUE,
     lineHeight:TextUnit = TextUnit.Unspecified,
 ) {
@@ -25,7 +25,7 @@ fun TextBold(
         text =text,
         modifier = modifier,
         color = color,
-        style = textStyle,
+        fontSize = fontSize,
         maxLines = maxLine,
         lineHeight = lineHeight,
         fontFamily = FontFamily(Font(R.font.gilroy_bold))

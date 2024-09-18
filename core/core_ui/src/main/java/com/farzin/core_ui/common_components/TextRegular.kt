@@ -14,8 +14,8 @@ import com.farzin.core_ui.R
 fun TextRegular(
     modifier: Modifier = Modifier,
     text:String,
+    fontSize:TextUnit,
     color: Color,
-    textStyle: TextStyle,
     maxLine:Int = Int.MAX_VALUE,
     lineHeight:TextUnit = TextUnit.Unspecified,
 ) {
@@ -25,7 +25,7 @@ fun TextRegular(
         text =text,
         modifier = modifier,
         color = color,
-        style = textStyle,
+        fontSize = fontSize,
         maxLines = maxLine,
         lineHeight = lineHeight,
         fontFamily = FontFamily(Font(R.font.gilroy_regular))

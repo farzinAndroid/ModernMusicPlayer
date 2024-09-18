@@ -2,4 +2,9 @@
     <string name="app_name">ModernMusicPlayer</string>
     <string name="grant_permission">You have to grant permission to continue.</string>
     <string name="grant_storage_acess">Grant storage access</string>
+    <string name="songs">Songs</string>
+    <string name="artists">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="folders">Folders</string>
+    <string name="no_songs">No Songs</string>
 </resources>
