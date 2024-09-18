@@ -1,5 +1,8 @@
-package com.farzin.home
+package com.farzin.home.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.media.MediaUseCases
@@ -18,6 +21,8 @@ class HomeViewmodel @Inject constructor(
     private val preferencesUseCases: PreferencesUseCases,
     private val mediaUseCases: MediaUseCases
 ): ViewModel() {
+
+    var permissionState by mutableStateOf(PermissionState.NOT_GRANTED)
 
     private val _userData = MutableStateFlow(UserData())
     val userData: StateFlow<UserData> = _userData

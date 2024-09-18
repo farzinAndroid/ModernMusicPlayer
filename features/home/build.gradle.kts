@@ -46,6 +46,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:core_media_service"))
+    implementation(project(":core:core_domain"))
+    implementation(project(":core:core_model"))
+    implementation(project(":core:core_ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -68,7 +72,8 @@ dependencies {
     // compose
     implementation(libs.bundles.composeBundle)
 
-    implementation(project(":core:core_media_service"))
-    implementation(project(":core:core_domain"))
-    implementation(project(":core:core_model"))
+    //permission
+    implementation(libs.accompanist.permissions)
+
+
 }

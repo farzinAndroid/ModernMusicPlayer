@@ -5,14 +5,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.farzin.home.HomeScreen
+import androidx.navigation.compose.rememberNavController
+import com.farzin.core_ui.WhiteDarkBlue
+import com.farzin.modernmusicplayer.navigation.NavGraph
 import com.farzin.modernmusicplayer.ui.theme.ModernMusicPlayerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,9 +24,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val navController = rememberNavController()
+
             ModernMusicPlayerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen()
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.WhiteDarkBlue)
+                        .statusBarsPadding()
+                ) { innerPadding ->
+                    NavGraph(
+                        navHostController = navController
+                    )
                 }
             }
         }

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ModernMusicPlayer</string>
+    <string name="grant_permission">You have to grant permission to continue.</string>
+</resources>
