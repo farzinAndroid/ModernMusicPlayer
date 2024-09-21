@@ -1,5 +1,6 @@
 package com.farzin.home.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +42,9 @@ fun SongItem(
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
-            .padding(horizontal = MaterialTheme.spacing.large32),
+            .clickable { onClick() }
+            .padding(horizontal = MaterialTheme.spacing.medium16)
+            .clip(RoundedCornerShape(12.dp)),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {

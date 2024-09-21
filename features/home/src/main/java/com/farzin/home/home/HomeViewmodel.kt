@@ -1,8 +1,5 @@
 package com.farzin.home.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.media.MediaUseCases
@@ -10,8 +7,11 @@ import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -25,11 +25,14 @@ class HomeViewmodel @Inject constructor(
     private val _userData = MutableStateFlow(UserData())
     val userData: StateFlow<UserData> = _userData
 
-    val songs = mediaUseCases.getSongsUseCase()
+
+    private val _homeState = MutableStateFlow<HomeState>(HomeState.Loading)
+    val homeState: StateFlow<HomeState> = _homeState
 
     init {
         viewModelScope.launch {
             _userData.value = getUserData()
+            getSongs()
         }
     }
 
@@ -40,9 +43,17 @@ class HomeViewmodel @Inject constructor(
         }
     }
 
-    fun getUserData(): UserData {
+    private fun getUserData(): UserData {
         return runBlocking {
             preferencesUseCases.getUserDataUseCase()
+        }
+    }
+
+    private suspend fun getSongs(){
+        mediaUseCases.getSongsUseCase().collectLatest {songs->
+            _homeState.update {
+                return@update HomeState.Success(songs)
+            }
         }
     }
 
