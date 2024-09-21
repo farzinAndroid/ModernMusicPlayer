@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.farzin.core_media_service"
+    namespace = "com.farzin.core_common"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -41,10 +41,6 @@ android {
 
 dependencies {
 
-    implementation(project(":core:core_domain"))
-    implementation(project(":core:core_model"))
-    implementation(project(":core:core_common"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,13 +48,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.kotlinx.coroutines.guava)
 
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    // media 3
-    implementation(libs.androidx.media3.session)
-    implementation(libs.androidx.media3.exoplayer)
 }
