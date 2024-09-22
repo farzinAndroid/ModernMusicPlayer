@@ -205,7 +205,12 @@ fun Home(
                                 HomePager(
                                     currentPlayingSongId = currentPlayingSongId,
                                     songs = state.songs,
-                                    onSongClick = onSongClick,
+                                    onSongClick = {index->
+                                        homeViewmodel.play(
+                                            state.songs,
+                                            index
+                                        )
+                                    },
                                 )
                             }
                         }

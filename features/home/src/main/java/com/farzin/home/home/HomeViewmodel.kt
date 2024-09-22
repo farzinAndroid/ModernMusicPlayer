@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.media.MediaUseCases
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
+import com.farzin.core_media_service.MusicServiceConnection
 import com.farzin.core_model.PlaybackMode
+import com.farzin.core_model.Song
 import com.farzin.core_model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewmodel @Inject constructor(
     private val preferencesUseCases: PreferencesUseCases,
-    private val mediaUseCases: MediaUseCases
+    private val mediaUseCases: MediaUseCases,
+    private val musicServiceConnection: MusicServiceConnection
 ): ViewModel() {
 
     private val _userData = MutableStateFlow(UserData())
@@ -56,5 +59,12 @@ class HomeViewmodel @Inject constructor(
             }
         }
     }
+
+    fun play(
+        songs: List<Song>,
+        startIndex: Int = 0,
+    ) = musicServiceConnection.playSongs(
+        songs, startIndex
+    )
 
 }

@@ -37,7 +37,6 @@ class MusicActionHandler @Inject constructor(
     val customCommands = getAvailableCustomCommands()
     private val customLayoutMap = mutableMapOf<String, CommandButton>().apply {
         this[PLAYBACK_MODE] = customCommands.getValue(PLAYBACK_MODE_REPEAT)
-//        this[FAVORITE] = customCommands.getValue(FAVORITE_OFF)
     }
     val customLayout: List<CommandButton> get() = customLayoutMap.values.toList()
 
@@ -46,19 +45,12 @@ class MusicActionHandler @Inject constructor(
             PLAYBACK_MODE_REPEAT, PLAYBACK_MODE_REPEAT_ONE, PLAYBACK_MODE_SHUFFLE -> {
                 handleRepeatShuffleCommand(action = customCommand.customAction)
             }
-
-//            FAVORITE_ON, FAVORITE_OFF -> {
-//                val id = mediaSession.player.currentMediaItem?.mediaId ?: return
-//                handleFavoriteCommand(action = customCommand.customAction, id = id)
-//            }
         }
     }
 
     fun setRepeatShuffleCommand(action: String) =
         customLayoutMap.set(PLAYBACK_MODE, customCommands.getValue(action))
 
-    fun setFavoriteCommand(action: String) =
-        customLayoutMap.set(FAVORITE, customCommands.getValue(action))
 
     fun cancelCoroutineScope() = coroutineScope.cancel()
 
@@ -70,12 +62,7 @@ class MusicActionHandler @Inject constructor(
         }
     }
 
-//    private fun handleFavoriteCommand(action: String, id: String) = coroutineScope.launch {
-//        when (action) {
-//            FAVORITE_ON -> toggleFavoriteSongUseCase(id = id, isFavorite = false)
-//            FAVORITE_OFF -> toggleFavoriteSongUseCase(id = id, isFavorite = true)
-//        }
-//    }
+
 
     private fun getAvailableCustomCommands() = mapOf(
         PLAYBACK_MODE_REPEAT to buildCustomCommand(
@@ -91,16 +78,6 @@ class MusicActionHandler @Inject constructor(
         PLAYBACK_MODE_SHUFFLE to buildCustomCommand(
             action = PLAYBACK_MODE_SHUFFLE,
             displayName = "PLAYBACK_MODE_SHUFFLE",
-            iconResource = androidx.media3.session.R.drawable.media3_icon_feed
-        ),
-        FAVORITE_ON to buildCustomCommand(
-            action = FAVORITE_ON,
-            displayName = "FAVORITE_ON",
-            iconResource = androidx.media3.session.R.drawable.media3_icon_feed
-        ),
-        FAVORITE_OFF to buildCustomCommand(
-            action = FAVORITE_OFF,
-            displayName = "FAVORITE_OFF",
             iconResource = androidx.media3.session.R.drawable.media3_icon_feed
         )
     )

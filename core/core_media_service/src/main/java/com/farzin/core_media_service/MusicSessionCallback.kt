@@ -39,8 +39,6 @@ class MusicSessionCallback @Inject constructor(
         musicActionHandler.setRepeatShuffleCommand(actionsMap.getValue(playbackMode))
     }
 
-//    fun toggleFavoriteAction(isFavorite: Boolean) =
-//        musicActionHandler.setFavoriteCommand(if (isFavorite) FAVORITE_ON else FAVORITE_OFF)
 
     override fun onAddMediaItems(
         mediaSession: MediaSession,

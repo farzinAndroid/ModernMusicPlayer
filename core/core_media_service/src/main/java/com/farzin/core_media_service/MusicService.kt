@@ -1,5 +1,3 @@
-
-
 package com.farzin.core_media_service
 
 import android.app.PendingIntent
@@ -37,7 +35,6 @@ class MusicService : MediaSessionService() {
 
     @Inject lateinit var musicSessionCallback: MusicSessionCallback
     @Inject lateinit var preferencesUseCases: PreferencesUseCases
-//    @Inject lateinit var getFavoriteSongIdsUseCase: GetFavoriteSongIdsUseCase
 
     private val _currentMediaId = MutableStateFlow("")
     private val currentMediaId = _currentMediaId.asStateFlow()
@@ -113,15 +110,6 @@ class MusicService : MediaSessionService() {
             mediaSession?.setCustomLayout(musicSessionCallback.customLayout)
         }
     }
-
-//    private fun startFavoriteSync() = coroutineScope.launch {
-//        combine(currentMediaId, getFavoriteSongIdsUseCase()) { currentMediaId, favoriteSongIds ->
-//            currentMediaId in favoriteSongIds
-//        }.collectLatest { isCurrentMediaIdFavorite ->
-//            musicSessionCallback.toggleFavoriteAction(isFavorite = isCurrentMediaIdFavorite)
-//            mediaSession?.setCustomLayout(musicSessionCallback.customLayout)
-//        }
-//    }
 
     private inner class PlayerListener : Player.Listener {
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
