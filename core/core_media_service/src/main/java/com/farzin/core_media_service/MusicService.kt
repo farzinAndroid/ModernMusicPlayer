@@ -17,6 +17,7 @@ import androidx.media3.session.MediaSessionService
 import com.farzin.core_common.Dispatcher
 import com.farzin.core_common.MusicDispatchers
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
+import com.farzin.core_media_notifications.MediaNotificationProvider
 import com.farzin.core_media_service.util.unsafeLazy
 import com.farzin.core_model.PlaybackMode
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,12 +30,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@UnstableApi
 @AndroidEntryPoint
 class MusicService : MediaSessionService() {
     private var mediaSession: MediaSession? = null
 
     @Inject lateinit var musicSessionCallback: MusicSessionCallback
     @Inject lateinit var preferencesUseCases: PreferencesUseCases
+    @Inject lateinit var mediaNotificationProvider: MediaNotificationProvider
 
     private val _currentMediaId = MutableStateFlow("")
     private val currentMediaId = _currentMediaId.asStateFlow()
@@ -71,6 +74,7 @@ class MusicService : MediaSessionService() {
             .apply { exoPlayer.addListener(PlayerListener()) }
 
 
+        this.setMediaNotificationProvider(mediaNotificationProvider)
         startPlaybackModeSync()
     }
 
@@ -84,6 +88,7 @@ class MusicService : MediaSessionService() {
             clearListener()
             mediaSession = null
         }
+        mediaNotificationProvider.cancelCoroutineScope()
         musicSessionCallback.cancelCoroutineScope()
         super.onDestroy()
     }

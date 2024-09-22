@@ -1,6 +1,7 @@
 package com.farzin.home.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -112,11 +114,13 @@ fun Home(
         SheetValue.PartiallyExpanded -> false
     }
 
-    /*LaunchedEffect(homeViewmodel.getUserData()) {
-        playbackMode = userData.playbackMode.name
-    }*/
+
     val userData by homeViewmodel.userData.collectAsState()
     var playbackMode by remember { mutableStateOf("") }
+    LaunchedEffect(homeViewmodel.getUserData()) {
+        playbackMode = userData.playbackMode.name
+        Log.e("TAG", "Home: $playbackMode")
+    }
     val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
 
     ModalNavigationDrawer(

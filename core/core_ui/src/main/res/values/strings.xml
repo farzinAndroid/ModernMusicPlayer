@@ -8,4 +8,9 @@
     <string name="folders">Folders</string>
     <string name="no_songs">No Songs</string>
     <string name="loading">Loading</string>
+    <string name="playing">Playing</string>
+    <string name="prev">Previous</string>
+    <string name="next">Next</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
 </resources>

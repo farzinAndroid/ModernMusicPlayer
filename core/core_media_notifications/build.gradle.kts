@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.farzin.core_media_service"
+    namespace = "com.farzin.core_media_notifications"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -32,20 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
 
-    implementation(project(":core:core_domain"))
-    implementation(project(":core:core_model"))
     implementation(project(":core:core_common"))
     implementation(project(":core:core_ui"))
-    implementation(project(":core:core_media_notifications"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -54,13 +46,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.kotlinx.coroutines.guava)
+    // media 3
+    implementation(libs.androidx.media3.session)
+
+    // coil
+    implementation(libs.coil)
 
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    // media 3
-    implementation(libs.androidx.media3.session)
-    implementation(libs.androidx.media3.exoplayer)
 }

@@ -46,7 +46,7 @@ class HomeViewmodel @Inject constructor(
         }
     }
 
-    private fun getUserData(): UserData {
+    fun getUserData(): UserData {
         return runBlocking {
             preferencesUseCases.getUserDataUseCase()
         }

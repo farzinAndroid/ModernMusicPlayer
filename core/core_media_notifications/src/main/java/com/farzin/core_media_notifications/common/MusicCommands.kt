@@ -1,4 +1,4 @@
-package com.farzin.core_media_service
+package com.farzin.core_media_notifications.common
 
 object MusicCommands {
     const val PLAYBACK_MODE = "playback_mode"
