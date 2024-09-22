@@ -1,5 +1,3 @@
-
-
 package com.farzin.core_media_service
 
 import android.content.Context
@@ -10,10 +8,7 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.SessionCommand
 import com.farzin.core_common.Dispatcher
 import com.farzin.core_common.MusicDispatchers
-import com.farzin.core_domain.usecases.preferences.SetPlaybackModeUseCase
-import com.farzin.core_media_service.MusicCommands.FAVORITE
-import com.farzin.core_media_service.MusicCommands.FAVORITE_OFF
-import com.farzin.core_media_service.MusicCommands.FAVORITE_ON
+import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_media_service.MusicCommands.PLAYBACK_MODE
 import com.farzin.core_media_service.MusicCommands.PLAYBACK_MODE_REPEAT
 import com.farzin.core_media_service.MusicCommands.PLAYBACK_MODE_REPEAT_ONE
@@ -30,7 +25,7 @@ import javax.inject.Inject
 class MusicActionHandler @Inject constructor(
     @Dispatcher(MusicDispatchers.MAIN) mainDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context,
-    private val setPlaybackModeUseCase: SetPlaybackModeUseCase,
+    private val preferencesUseCases: PreferencesUseCases,
 ) {
     private val coroutineScope = CoroutineScope(mainDispatcher + SupervisorJob())
 
@@ -56,12 +51,11 @@ class MusicActionHandler @Inject constructor(
 
     private fun handleRepeatShuffleCommand(action: String) = coroutineScope.launch {
         when (action) {
-            PLAYBACK_MODE_REPEAT -> setPlaybackModeUseCase(PlaybackMode.REPEAT_ONE)
-            PLAYBACK_MODE_REPEAT_ONE -> setPlaybackModeUseCase(PlaybackMode.SHUFFLE)
-            PLAYBACK_MODE_SHUFFLE -> setPlaybackModeUseCase(PlaybackMode.REPEAT)
+            PLAYBACK_MODE_REPEAT -> preferencesUseCases.setPlaybackModeUseCase(PlaybackMode.REPEAT_ONE)
+            PLAYBACK_MODE_REPEAT_ONE -> preferencesUseCases.setPlaybackModeUseCase(PlaybackMode.SHUFFLE)
+            PLAYBACK_MODE_SHUFFLE -> preferencesUseCases.setPlaybackModeUseCase(PlaybackMode.REPEAT)
         }
     }
-
 
 
     private fun getAvailableCustomCommands() = mapOf(

@@ -52,7 +52,7 @@ class MusicService : MediaSessionService() {
             .setUsage(USAGE_MEDIA)
             .build()
 
-        val player = ExoPlayer.Builder(this)
+        val exoPlayer = ExoPlayer.Builder(this)
             .setAudioAttributes(audioAttributes, true)
             .setHandleAudioBecomingNoisy(true)
             .build()
@@ -64,11 +64,11 @@ class MusicService : MediaSessionService() {
             getPendingIntent(0, immutableFlag or PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-        mediaSession = MediaSession.Builder(this, player)
+        mediaSession = MediaSession.Builder(this, exoPlayer)
             .setCallback(musicSessionCallback)
             .setSessionActivity(sessionActivityPendingIntent)
             .build()
-            .apply { player.addListener(PlayerListener()) }
+            .apply { exoPlayer.addListener(PlayerListener()) }
 
 
         startPlaybackModeSync()
@@ -79,8 +79,8 @@ class MusicService : MediaSessionService() {
     @OptIn(UnstableApi::class)
     override fun onDestroy() {
         mediaSession?.run {
-            player.release()
-            release()
+            this.player.release()
+            this.release()
             clearListener()
             mediaSession = null
         }
@@ -93,17 +93,17 @@ class MusicService : MediaSessionService() {
             mediaSession?.player?.run {
                 when (playbackMode) {
                     PlaybackMode.REPEAT -> {
-                        shuffleModeEnabled = false
-                        repeatMode = Player.REPEAT_MODE_ALL
+                        this.shuffleModeEnabled = false
+                        this.repeatMode = Player.REPEAT_MODE_ALL
                     }
 
                     PlaybackMode.REPEAT_ONE -> {
-                        repeatMode = Player.REPEAT_MODE_ONE
+                        this.repeatMode = Player.REPEAT_MODE_ONE
                     }
 
                     PlaybackMode.SHUFFLE -> {
-                        repeatMode = Player.REPEAT_MODE_ALL
-                        shuffleModeEnabled = true
+                        this.repeatMode = Player.REPEAT_MODE_ALL
+                        this.shuffleModeEnabled = true
                     }
                 }
             musicSessionCallback.setPlaybackModeAction(playbackMode)

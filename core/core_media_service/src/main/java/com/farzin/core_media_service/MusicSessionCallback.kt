@@ -59,7 +59,9 @@ class MusicSessionCallback @Inject constructor(
         val connectionResult = super.onConnect(session, controller)
         val availableSessionCommands = connectionResult.availableSessionCommands.buildUpon()
         musicActionHandler.customCommands.values.forEach { commandButton ->
-            commandButton.sessionCommand?.let(availableSessionCommands::add)
+            commandButton.sessionCommand?.let{sessionCommand->
+                availableSessionCommands.add(sessionCommand)
+            }
         }
 
         return MediaSession.ConnectionResult.accept(

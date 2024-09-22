@@ -142,10 +142,10 @@ class MusicServiceConnection @Inject constructor(
     private fun updateMusicState(player: Player) = with(player) {
         _musicState.update {
             it.copy(
-                currentMediaId = currentMediaItem?.mediaId.orEmpty(),
-                playbackState = playbackState.asPlaybackState(),
-                playWhenReady = playWhenReady,
-                duration = duration.orDefaultTimestamp()
+                currentMediaId = this.currentMediaItem?.mediaId.orEmpty(),
+                playbackState = this.playbackState.asPlaybackState(),
+                playWhenReady = this.playWhenReady,
+                duration = this.duration.orDefaultTimestamp()
             )
         }
     }
