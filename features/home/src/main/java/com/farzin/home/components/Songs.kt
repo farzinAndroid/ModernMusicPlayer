@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.NoSongText
 import com.farzin.core_ui.theme.spacing
@@ -20,6 +21,7 @@ fun Songs(
     currentPlayingSongId: String,
     onClick: (Int) -> Unit,
     onToggleFavorite: () -> Unit,
+    musicState: MusicState,
     modifier: Modifier = Modifier
 ) {
 
@@ -34,7 +36,8 @@ fun Songs(
                     song = song,
                     onClick = { onClick(index) },
                     onToggleFavorite = onToggleFavorite,
-                    isPlaying = song.mediaId == currentPlayingSongId
+                    isPlaying = song.mediaId == currentPlayingSongId,
+                    musicState = musicState
                 )
 
             }

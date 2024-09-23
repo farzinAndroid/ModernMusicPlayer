@@ -9,7 +9,6 @@ import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -22,8 +21,11 @@ import javax.inject.Inject
 class HomeViewmodel @Inject constructor(
     private val preferencesUseCases: PreferencesUseCases,
     private val mediaUseCases: MediaUseCases,
-    private val musicServiceConnection: MusicServiceConnection
-): ViewModel() {
+    private val musicServiceConnection: MusicServiceConnection,
+) : ViewModel() {
+
+    val musicState = musicServiceConnection.musicState
+    val currentPosition = musicServiceConnection.currentPosition
 
     private val _userData = MutableStateFlow(UserData())
     val userData: StateFlow<UserData> = _userData
@@ -39,7 +41,7 @@ class HomeViewmodel @Inject constructor(
         }
     }
 
-    fun setPlayBackMode(playbackMode: PlaybackMode){
+    fun setPlayBackMode(playbackMode: PlaybackMode) {
         viewModelScope.launch {
             preferencesUseCases.setPlaybackModeUseCase(playbackMode)
             _userData.value = getUserData()
@@ -52,8 +54,8 @@ class HomeViewmodel @Inject constructor(
         }
     }
 
-    private suspend fun getSongs(){
-        mediaUseCases.getSongsUseCase().collectLatest {songs->
+    private suspend fun getSongs() {
+        mediaUseCases.getSongsUseCase().collectLatest { songs ->
             _homeState.update {
                 return@update HomeState.Success(songs)
             }
@@ -66,5 +68,16 @@ class HomeViewmodel @Inject constructor(
     ) = musicServiceConnection.playSongs(
         songs, startIndex
     )
+
+    fun pausePlay(isPlaying: Boolean) =
+        if (isPlaying) {
+            musicServiceConnection.play()
+        } else {
+            musicServiceConnection.pause()
+        }
+
+
+    fun skipNext() = musicServiceConnection.skipNext()
+    fun skipPrevious() = musicServiceConnection.skipPrevious()
 
 }

@@ -3,8 +3,8 @@ package com.farzin.home.home
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,7 +17,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -34,15 +33,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.Loading
+import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.utils.showToast
 import com.farzin.home.components.HomePager
 import com.farzin.home.components.HomeTopBar
+import com.farzin.home.components.MiniMusicController
 import com.farzin.home.permission.AudioPermission
 import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -52,9 +53,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun HomeScreen(
-    onSearchClicked: () -> Unit,
-) {
+fun HomeScreen() {
 
     val context = LocalContext.current
 
@@ -69,11 +68,7 @@ fun HomeScreen(
 
     when (permissionState.status.isGranted) {
         true -> {
-            Home(
-                onSearchClicked = onSearchClicked,
-                onSongClick = {},
-                currentPlayingSongId = ""
-            )
+            Home()
         }
 
         false -> {
@@ -94,11 +89,7 @@ fun HomeScreen(
 @Composable
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
-    onSearchClicked: () -> Unit,
-    onSongClick: (Int) -> Unit,
-    currentPlayingSongId: String,
 ) {
-
 
 
     val scope = rememberCoroutineScope()
@@ -106,7 +97,7 @@ fun Home(
         initialValue = DrawerValue.Closed,
     )
     val sheetState = rememberBottomSheetScaffoldState()
-    var isExpanded = when (sheetState.bottomSheetState.targetValue) {
+    val isExpanded = when (sheetState.bottomSheetState.targetValue) {
         SheetValue.Hidden -> false
         SheetValue.Expanded -> true
         SheetValue.PartiallyExpanded -> false
@@ -119,7 +110,27 @@ fun Home(
         playbackMode = userData.playbackMode.name
         Log.e("TAG", "Home: $playbackMode")
     }
-    val homeState by homeViewmodel.homeState.collectAsState()
+    val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
+    val currentPosition by homeViewmodel.currentPosition.collectAsState(0L)
+    val progress by animateFloatAsState(
+        targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
+    )
+
+
+    var loading by remember { mutableStateOf(false) }
+    var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
+    val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
+    when (val state = homeState) {
+        HomeState.Loading -> {
+            loading = true
+        }
+
+        is HomeState.Success -> {
+            loading = false
+            songs = state.songs
+        }
+    }
+
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -143,22 +154,23 @@ fun Home(
                         Box(
                             Modifier
                                 .fillMaxWidth()
-                                .height(70.dp),
+                                .height(72.dp),
                             contentAlignment = Alignment.Center
                         ) {
-
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color.Black)
-                                    .clickable {
-                                        scope.launch {
-                                            sheetState.bottomSheetState.expand()
-                                        }
-                                    }
-                            ) {
-                                Text("Hello")
-                            }
+                            MiniMusicController(
+                                progress = progress,
+                                song = songs[musicState.currentSongIndex],
+                                onNextClicked = {
+                                    homeViewmodel.skipNext()
+                                },
+                                onPrevClicked = {
+                                    homeViewmodel.skipPrevious()
+                                },
+                                onPlayPauseClicked = {
+                                    homeViewmodel.pausePlay(!musicState.playWhenReady)
+                                },
+                                musicState = musicState
+                            )
                         }
                     }
 
@@ -175,7 +187,7 @@ fun Home(
                     }
 
                 },
-                scaffoldState =sheetState,
+                scaffoldState = sheetState,
                 sheetPeekHeight = 60.dp,
                 sheetDragHandle = null,
                 sheetShape = RoundedCornerShape(0.dp),
@@ -198,34 +210,28 @@ fun Home(
                             }
                         )
 
-                        when (val state = homeState) {
-                            HomeState.Loading -> {
-                                Loading()
-                            }
-
-                            is HomeState.Success -> {
-                                HomePager(
-                                    currentPlayingSongId = currentPlayingSongId,
-                                    songs = state.songs,
-                                    onSongClick = {index->
-                                        homeViewmodel.play(
-                                            state.songs,
-                                            index
-                                        )
-                                    },
-                                )
-                            }
+                        if (loading) {
+                            Loading()
+                        } else {
+                            HomePager(
+                                currentPlayingSongId = musicState.currentMediaId,
+                                songs = songs,
+                                onSongClick = { index ->
+                                    homeViewmodel.play(
+                                        songs,
+                                        index
+                                    )
+                                },
+                                musicState = musicState
+                            )
                         }
                     }
                 }
             )
 
 
-
         }
     )
-
-
 
 
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
@@ -32,6 +33,7 @@ fun HomePager(
     onSongClick: (Int) -> Unit,
     currentPlayingSongId: String,
     songs: List<Song>,
+    musicState: MusicState
 ) {
 
     val scope = rememberCoroutineScope()
@@ -97,7 +99,8 @@ fun HomePager(
                     onClick = onSongClick,
                     currentPlayingSongId = currentPlayingSongId,
                     onToggleFavorite = {},
-                    songs = songs
+                    songs = songs,
+                    musicState = musicState
                 )
             }
 
