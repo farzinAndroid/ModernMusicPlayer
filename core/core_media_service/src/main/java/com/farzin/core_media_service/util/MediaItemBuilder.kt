@@ -14,6 +14,7 @@ internal fun buildPlayableMediaItem(
     mediaId: String,
     artistId: Long,
     albumId: Long,
+    albumTitle: String,
     mediaUri: Uri,
     artworkUri: Uri,
     title: String,
@@ -33,6 +34,7 @@ internal fun buildPlayableMediaItem(
             .setArtworkUri(artworkUri)
             .setTitle(title)
             .setArtist(artist)
+            .setAlbumTitle(albumTitle)
             .setIsBrowsable(false)
             .setIsPlayable(true)
             .setExtras(

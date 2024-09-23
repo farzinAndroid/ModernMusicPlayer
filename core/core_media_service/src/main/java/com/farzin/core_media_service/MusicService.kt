@@ -62,8 +62,7 @@ class MusicService : MediaSessionService() {
 
         val sessionActivityPendingIntent = TaskStackBuilder.create(this).run {
             addNextIntent(Intent(this@MusicService, Class.forName("com.farzin.modernmusicplayer.MainActivity")))
-            val immutableFlag =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+            val immutableFlag = PendingIntent.FLAG_IMMUTABLE
             getPendingIntent(0, immutableFlag or PendingIntent.FLAG_UPDATE_CURRENT)
         }
 

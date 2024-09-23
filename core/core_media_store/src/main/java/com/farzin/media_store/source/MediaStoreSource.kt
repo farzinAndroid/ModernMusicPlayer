@@ -53,7 +53,6 @@ class MediaStoreSource @Inject constructor(
                         id
                     )
 
-                    Log.e("TAG","mediaUri: $mediaUri")
                     Song(
                         mediaId = id.toString(),
                         title = title,

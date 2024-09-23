@@ -15,5 +15,6 @@ internal fun Song.asMediaItem() = buildPlayableMediaItem(
     artist = artist,
     folder = folder,
     duration = duration,
-    date = date
+    date = date,
+    albumTitle = album
 )

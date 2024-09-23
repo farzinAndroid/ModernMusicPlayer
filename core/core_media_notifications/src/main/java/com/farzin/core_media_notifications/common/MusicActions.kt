@@ -28,7 +28,7 @@ object MusicActions {
         context: Context,
         actionFactory: MediaNotification.ActionFactory,
     ) = MusicAction(
-        iconResource = com.farzin.core_ui.R.drawable.prev,
+        iconResource = com.farzin.core_ui.R.drawable.ic_skip_previous,
         titleResource = com.farzin.core_ui.R.string.prev,
         command = Player.COMMAND_SEEK_TO_PREVIOUS
     ).asNotificationAction(context, mediaSession, actionFactory)
@@ -39,7 +39,7 @@ object MusicActions {
         context: Context,
         actionFactory: MediaNotification.ActionFactory,
     ) = MusicAction(
-        iconResource = com.farzin.core_ui.R.drawable.next,
+        iconResource = com.farzin.core_ui.R.drawable.ic_skip_next,
         titleResource = com.farzin.core_ui.R.string.next,
         command = Player.COMMAND_SEEK_TO_NEXT
     ).asNotificationAction(context, mediaSession, actionFactory)
@@ -51,7 +51,7 @@ object MusicActions {
         actionFactory: MediaNotification.ActionFactory,
         playWhenReady:Boolean
     ) = MusicAction(
-        iconResource = if (playWhenReady) com.farzin.core_ui.R.drawable.pause else com.farzin.core_ui.R.drawable.play,
+        iconResource = if (playWhenReady) com.farzin.core_ui.R.drawable.ic_pause else com.farzin.core_ui.R.drawable.ic_play,
         titleResource = if (playWhenReady) com.farzin.core_ui.R.string.pause else com.farzin.core_ui.R.string.play,
         command = Player.COMMAND_PLAY_PAUSE
     ).asNotificationAction(context, mediaSession, actionFactory)

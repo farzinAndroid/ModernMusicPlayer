@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.CommandButton
@@ -88,8 +89,8 @@ class MediaNotificationProvider @Inject constructor(
     ) = listOf(
 //        MusicActions.getRepeatShuffleAction(mediaSession, customLayout, actionFactory),
         MusicActions.skipToPreviousAction(mediaSession, context, actionFactory),
-        MusicActions.skipToNextAction(mediaSession, context, actionFactory),
         MusicActions.playPauseAction(mediaSession, context, actionFactory, playWhenReady),
+        MusicActions.skipToNextAction(mediaSession, context, actionFactory),
     )
 
     override fun handleCustomCommand(
@@ -108,7 +109,7 @@ class MediaNotificationProvider @Inject constructor(
         val notificationChannel = NotificationChannel(
             MusicNotificationChannelId,
             context.getString(com.farzin.core_ui.R.string.playing),
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_LOW
         )
 
         notificationManager.createNotificationChannel(notificationChannel)

@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
-    homeViewmodel: HomeViewmodel = hiltViewModel(),
     onSearchClicked: () -> Unit,
 ) {
 
@@ -71,7 +70,6 @@ fun HomeScreen(
     when (permissionState.status.isGranted) {
         true -> {
             Home(
-                homeViewmodel = homeViewmodel,
                 onSearchClicked = onSearchClicked,
                 onSongClick = {},
                 currentPlayingSongId = ""
@@ -95,7 +93,7 @@ fun HomeScreen(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Home(
-    homeViewmodel: HomeViewmodel,
+    homeViewmodel: HomeViewmodel = hiltViewModel(),
     onSearchClicked: () -> Unit,
     onSongClick: (Int) -> Unit,
     currentPlayingSongId: String,
@@ -121,7 +119,7 @@ fun Home(
         playbackMode = userData.playbackMode.name
         Log.e("TAG", "Home: $playbackMode")
     }
-    val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
+    val homeState by homeViewmodel.homeState.collectAsState()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
