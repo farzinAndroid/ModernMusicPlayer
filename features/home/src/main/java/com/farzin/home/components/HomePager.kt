@@ -9,10 +9,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.farzin.core_model.Song
@@ -20,6 +23,7 @@ import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.WhiteDarkBlue
+import com.farzin.core_ui.theme.spacing
 import com.farzin.home.home.MediaTab
 import kotlinx.coroutines.launch
 
@@ -38,9 +42,10 @@ fun HomePager(
     val selectedTabIndex = pagerState.currentPage
 
 
-    TabRow(
+    ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
         modifier = Modifier
+            .padding(top = MaterialTheme.spacing.small8)
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.BackgroundColor),
         tabs = {
@@ -63,6 +68,18 @@ fun HomePager(
                     onClick = {
                         scope.launch { pagerState.animateScrollToPage(index) }
                     },
+                )
+            }
+        },
+        divider = {},
+        containerColor = MaterialTheme.colorScheme.BackgroundColor,
+        indicator = {tabPositions ->
+            if (selectedTabIndex < tabPositions.size) {
+                TabRowDefaults.SecondaryIndicator(
+                    modifier = Modifier
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    color = MaterialTheme.colorScheme.WhiteDarkBlue,
+                    height = 1.dp
                 )
             }
         }
