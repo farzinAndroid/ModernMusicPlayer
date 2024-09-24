@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.farzin.core_ui.common_components.ErrorImage
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.core_ui.utils.PaletteGenerator
@@ -41,9 +42,13 @@ fun FullPlayerImage(
     var palette by remember { mutableStateOf<MutableMap<String, String>>(mutableMapOf()) }
 
     LaunchedEffect(artWorkUri) {
-        val imageBitmap = PaletteGenerator.convertImageUrlToBitmap(artWorkUri, context)
-        palette =
-            imageBitmap?.let { PaletteGenerator.extractColorsFromBitmap(imageBitmap) as MutableMap<String, String> }!!
+        try {
+            val imageBitmap = PaletteGenerator.convertImageUrlToBitmap(artWorkUri, context)
+            palette =
+                imageBitmap?.let { PaletteGenerator.extractColorsFromBitmap(imageBitmap) as MutableMap<String, String> }!!
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
     Box(
         modifier = Modifier
@@ -66,7 +71,10 @@ fun FullPlayerImage(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            error = {
+                ErrorImage()
+            }
         )
     }
 

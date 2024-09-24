@@ -9,6 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.common_components.TextRegular
@@ -32,6 +35,13 @@ fun FullPlayerTitleArtist(
             text = title,
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
+            modifier = Modifier
+                .fillMaxWidth(),
+            maxLine = 2,
+            overflow = TextOverflow.Ellipsis,
+            textStyle = TextStyle(
+                textAlign = TextAlign.Center
+            )
         )
 
         Spacer(Modifier.height(MaterialTheme.spacing.extraSmall4))
