@@ -80,4 +80,6 @@ class HomeViewmodel @Inject constructor(
     fun skipNext() = musicServiceConnection.skipNext()
     fun skipPrevious() = musicServiceConnection.skipPrevious()
 
+    fun skipToIndex(index: Int) = musicServiceConnection.skipToIndex(index)
+
 }

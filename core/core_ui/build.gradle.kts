@@ -58,4 +58,12 @@ dependencies {
 
     // compose
     implementation(libs.bundles.composeBundle)
+
+
+    // palette api
+    implementation(libs.androidx.palette.ktx)
+
+    // coil compose
+    implementation(libs.coil.compose)
+
 }

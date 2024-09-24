@@ -44,6 +44,7 @@ import com.farzin.core_ui.utils.showToast
 import com.farzin.home.components.HomePager
 import com.farzin.home.components.HomeTopBar
 import com.farzin.home.components.MiniMusicController
+import com.farzin.home.full_player.FullPlayer
 import com.farzin.home.permission.AudioPermission
 import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -134,6 +135,7 @@ fun Home(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = false,
         drawerContent = {
             Column(
                 modifier = Modifier
@@ -176,15 +178,15 @@ fun Home(
 
 
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .background(Color.Black)
 
-                    ) {
-                        Text("Hello")
-                    }
+                    FullPlayer(
+                        songs = songs,
+                        currentSongIndex = musicState.currentSongIndex,
+                        currentMediaId = musicState.currentMediaId,
+                        onSkipToIndex = {
+                            homeViewmodel.skipToIndex(it)
+                        }
+                    )
 
                 },
                 scaffoldState = sheetState,
