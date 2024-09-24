@@ -1,6 +1,7 @@
 package com.farzin.home.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -92,6 +93,7 @@ fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
 ) {
 
+    val activity = LocalContext.current as Activity
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(
@@ -171,6 +173,11 @@ fun Home(
                                 onPlayPauseClicked = {
                                     homeViewmodel.pausePlay(!musicState.playWhenReady)
                                 },
+                                onMiniMusicControllerClicked = {
+                                    scope.launch {
+                                        sheetState.bottomSheetState.expand()
+                                    }
+                                },
                                 musicState = musicState
                             )
                         }
@@ -185,6 +192,13 @@ fun Home(
                         currentMediaId = musicState.currentMediaId,
                         onSkipToIndex = {
                             homeViewmodel.skipToIndex(it)
+                        },
+                        onBackClicked = {
+                            if (isExpanded){
+                                scope.launch {
+                                    sheetState.bottomSheetState.partialExpand()
+                                }
+                            }
                         }
                     )
 

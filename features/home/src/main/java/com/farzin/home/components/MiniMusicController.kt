@@ -42,13 +42,17 @@ fun MiniMusicController(
     musicState: MusicState,
     onPrevClicked:()->Unit,
     onPlayPauseClicked:()->Unit,
-    onNextClicked:()->Unit
+    onNextClicked:()->Unit,
+    onMiniMusicControllerClicked:()->Unit
 ) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.BackgroundColor)
+            .clickable {
+                onMiniMusicControllerClicked()
+            }
     ) {
         LinearProgressIndicator(
             progress = {
