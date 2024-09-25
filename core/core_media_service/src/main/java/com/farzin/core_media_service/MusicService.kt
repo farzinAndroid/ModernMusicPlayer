@@ -10,6 +10,7 @@ import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC
 import androidx.media3.common.C.USAGE_MEDIA
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
@@ -26,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -93,24 +95,29 @@ class MusicService : MediaSessionService() {
     }
 
     private fun startPlaybackModeSync() = coroutineScope.launch {
-        val playbackMode = preferencesUseCases.getUserDataUseCase().playbackMode
+        preferencesUseCases.getUserDataUseCase().collectLatest {
             mediaSession?.player?.run {
-                when (playbackMode) {
+                when (it.playbackMode) {
                     PlaybackMode.REPEAT -> {
+                        Log.e("TAG", "repeat mode : ${this.repeatMode}")
                         this.shuffleModeEnabled = false
                         this.repeatMode = Player.REPEAT_MODE_ALL
                     }
 
                     PlaybackMode.REPEAT_ONE -> {
+                        Log.e("TAG", "repeat mode : ${this.repeatMode}")
                         this.repeatMode = Player.REPEAT_MODE_ONE
                     }
 
                     PlaybackMode.SHUFFLE -> {
+                        Log.e("TAG", "shuffle mode : ${this.shuffleModeEnabled}")
                         this.repeatMode = Player.REPEAT_MODE_ALL
                         this.shuffleModeEnabled = true
                     }
                 }
-            musicSessionCallback.setPlaybackModeAction(playbackMode)
+
+            }
+            musicSessionCallback.setPlaybackModeAction(it.playbackMode)
             mediaSession?.setCustomLayout(musicSessionCallback.customLayout)
         }
     }

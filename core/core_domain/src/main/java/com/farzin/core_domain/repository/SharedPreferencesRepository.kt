@@ -4,10 +4,11 @@ import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_model.UserData
+import kotlinx.coroutines.flow.Flow
 
 interface SharedPreferencesRepository {
 
-    suspend fun getUserData(): UserData
+    suspend fun getUserData(): Flow<UserData>
 
     suspend fun setPlayingQueueIds(playingQueueIds: List<String>)
     suspend fun setPlayingQueueIndex(playingQueueIndex: Int)

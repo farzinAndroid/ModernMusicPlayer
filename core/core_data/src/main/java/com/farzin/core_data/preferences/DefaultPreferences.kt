@@ -9,6 +9,8 @@ import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_model.UserData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -66,7 +68,7 @@ class DefaultPreferences @Inject constructor(
     }
 
 
-    override suspend fun getUserData(): UserData =
+    override suspend fun getUserData(): Flow<UserData> =
         withContext(Dispatchers.IO) {
             val savedPlayingQueueIdsString =
                 sharedPreferences.getString(SharedPreferencesRepository.PLAYING_QUEUE_ID_KEY, null)
@@ -92,7 +94,7 @@ class DefaultPreferences @Inject constructor(
                 playbackMode = EnumUtils.fromStringPlaybackMode(savedPlaybackMode)
             )
 
-            return@withContext userData
+            return@withContext flowOf(userData)
         }
 
 

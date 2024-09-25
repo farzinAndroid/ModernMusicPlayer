@@ -12,6 +12,9 @@ import com.farzin.core_domain.usecases.media.GetArtistUseCase
 import com.farzin.core_domain.usecases.media.GetFoldersUseCase
 import com.farzin.core_domain.usecases.media.GetSongsUseCase
 import com.farzin.core_domain.usecases.media.MediaUseCases
+import com.farzin.core_domain.usecases.preferences.GetPlaybackModeUseCase
+import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIdsUseCase
+import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIndexUseCase
 import com.farzin.core_domain.usecases.preferences.GetUserDataUseCase
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_domain.usecases.preferences.SetPlaybackModeUseCase
@@ -44,6 +47,9 @@ object AppModule {
         setSortByUseCase = SetSortByUseCase(defaultPreferences),
         setPlayingQueueIndexUseCase = SetPlayingQueueIndexUseCase(defaultPreferences),
         setPlayingQueueIdsUseCase = SetPlayingQueueIdsUseCase(defaultPreferences),
+        getPlaybackModeUseCase = GetPlaybackModeUseCase(defaultPreferences),
+        getPlayQueueIndexUseCase = GetPlayingQueueIndexUseCase(defaultPreferences),
+        getPlayingQueueIdsUseCase = GetPlayingQueueIdsUseCase(defaultPreferences)
     )
 
     @Provides

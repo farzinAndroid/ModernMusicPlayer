@@ -24,7 +24,6 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.Loading
 import com.farzin.core_ui.common_components.convertToPosition
@@ -108,14 +108,12 @@ fun Home(
     }
 
 
-    val userData by homeViewmodel.userData.collectAsState()
-    var playbackMode by remember { mutableStateOf("") }
-    LaunchedEffect(homeViewmodel.getUserData()) {
-        playbackMode = userData.playbackMode.name
-        Log.e("TAG", "Home: $playbackMode")
-    }
+    val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
-    val currentPosition by homeViewmodel.currentPosition.collectAsState(0L)
+    val playbackMode by homeViewmodel.playbackMode.collectAsStateWithLifecycle(PlaybackMode.REPEAT)
+    LaunchedEffect(playbackMode) {
+        Log.e("TAG", playbackMode.name)
+    }
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
@@ -194,7 +192,7 @@ fun Home(
                             homeViewmodel.skipToIndex(it)
                         },
                         onBackClicked = {
-                            if (isExpanded){
+                            if (isExpanded) {
                                 scope.launch {
                                     sheetState.bottomSheetState.partialExpand()
                                 }
@@ -202,11 +200,16 @@ fun Home(
                         },
                         currentPosition = currentPosition,
                         onToggleLikeButton = {},
-                        onShuffleClicked = {},
-                        onRepeatClicked = {},
+                        onShuffleClicked = {
+                            homeViewmodel.setPlayBackMode()
+                        },
+                        onRepeatClicked = {
+                            homeViewmodel.setPlayBackMode()
+                        },
                         onSeekTo = {
-                            homeViewmodel.seekTo(convertToPosition(it,musicState.duration))
-                        }
+                            homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
+                        },
+                        playbackMode = playbackMode
                     )
 
                 },

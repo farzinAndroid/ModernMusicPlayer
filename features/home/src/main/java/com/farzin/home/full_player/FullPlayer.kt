@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.farzin.core_model.MusicState
+import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
@@ -46,6 +47,7 @@ fun FullPlayer(
     currentPosition:Long,
     musicState: MusicState,
     onSeekTo:(Float)->Unit,
+    playbackMode: PlaybackMode
 ) {
 
     val context = LocalContext.current
@@ -157,7 +159,8 @@ fun FullPlayer(
         FullPlayerRepeatShuffleLike(
             onShuffleClicked = onShuffleClicked,
             onToggleLikeButton = onToggleLikeButton,
-            onRepeatClicked = onRepeatClicked
+            onRepeatClicked = onRepeatClicked,
+            playbackMode=playbackMode
         )
 
         Spacer(Modifier.height(60.dp))

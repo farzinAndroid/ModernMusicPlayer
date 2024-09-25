@@ -10,8 +10,10 @@ import com.farzin.core_model.Song
 import com.farzin.core_model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -30,28 +32,29 @@ class HomeViewmodel @Inject constructor(
     private val _userData = MutableStateFlow(UserData())
     val userData: StateFlow<UserData> = _userData
 
+    val playbackMode = preferencesUseCases.getPlaybackModeUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = PlaybackMode.REPEAT
+    )
+
 
     private val _homeState = MutableStateFlow<HomeState>(HomeState.Loading)
     val homeState: StateFlow<HomeState> = _homeState
 
     init {
         viewModelScope.launch {
-            _userData.value = getUserData()
             getSongs()
         }
     }
 
-    fun setPlayBackMode(playbackMode: PlaybackMode) {
-        viewModelScope.launch {
-            preferencesUseCases.setPlaybackModeUseCase(playbackMode)
-            _userData.value = getUserData()
+    fun setPlayBackMode() = viewModelScope.launch {
+        val newPlaybackMode = when (playbackMode.value) {
+            PlaybackMode.REPEAT -> PlaybackMode.REPEAT_ONE
+            PlaybackMode.REPEAT_ONE -> PlaybackMode.SHUFFLE
+            PlaybackMode.SHUFFLE -> PlaybackMode.REPEAT
         }
-    }
-
-    fun getUserData(): UserData {
-        return runBlocking {
-            preferencesUseCases.getUserDataUseCase()
-        }
+        preferencesUseCases.setPlaybackModeUseCase(playbackMode = newPlaybackMode)
     }
 
     private suspend fun getSongs() {

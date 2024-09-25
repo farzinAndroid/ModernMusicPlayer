@@ -7,4 +7,7 @@ data class PreferencesUseCases(
     val setSortByUseCase: SetSortByUseCase,
     val setPlayingQueueIndexUseCase: SetPlayingQueueIndexUseCase,
     val setPlayingQueueIdsUseCase: SetPlayingQueueIdsUseCase,
+    val getPlaybackModeUseCase: GetPlaybackModeUseCase,
+    val getPlayQueueIndexUseCase: GetPlayingQueueIndexUseCase,
+    val getPlayingQueueIdsUseCase: GetPlayingQueueIdsUseCase,
 )
