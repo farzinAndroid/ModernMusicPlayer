@@ -20,7 +20,6 @@ import com.farzin.core_media_service.util.asPlaybackState
 import com.farzin.core_media_service.util.orDefaultTimestamp
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +35,6 @@ import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.time.Duration.Companion.milliseconds
 
 
@@ -83,7 +81,7 @@ class MusicServiceConnection @Inject constructor(
         play()
     }
 
-    fun skipTo(position: Long) = mediaController?.run {
+    fun seekTo(position: Long) = mediaController?.run {
         seekTo(position)
         play()
     }

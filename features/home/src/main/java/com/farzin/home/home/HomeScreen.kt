@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.Loading
+import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.utils.showToast
@@ -187,9 +188,8 @@ fun Home(
 
 
                     FullPlayer(
+                        musicState = musicState,
                         songs = songs,
-                        currentSongIndex = musicState.currentSongIndex,
-                        currentMediaId = musicState.currentMediaId,
                         onSkipToIndex = {
                             homeViewmodel.skipToIndex(it)
                         },
@@ -199,6 +199,13 @@ fun Home(
                                     sheetState.bottomSheetState.partialExpand()
                                 }
                             }
+                        },
+                        currentPosition = currentPosition,
+                        onToggleLikeButton = {},
+                        onShuffleClicked = {},
+                        onRepeatClicked = {},
+                        onSeekTo = {
+                            homeViewmodel.seekTo(convertToPosition(it,musicState.duration))
                         }
                     )
 

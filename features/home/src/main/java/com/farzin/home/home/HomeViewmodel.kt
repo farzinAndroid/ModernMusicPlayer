@@ -82,4 +82,6 @@ class HomeViewmodel @Inject constructor(
 
     fun skipToIndex(index: Int) = musicServiceConnection.skipToIndex(index)
 
+    fun seekTo(position: Long) = musicServiceConnection.seekTo(position)
+
 }

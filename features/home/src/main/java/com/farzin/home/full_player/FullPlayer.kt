@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerDefaults
@@ -26,11 +24,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
 import com.farzin.home.components.FullPlayerImage
 import com.farzin.home.components.FullPlayerRepeatShuffleLike
+import com.farzin.home.components.FullPlayerTimeSlider
 import com.farzin.home.components.FullPlayerTitleArtist
 import com.farzin.home.components.FullPlayerTopBar
 import kotlin.math.absoluteValue
@@ -38,39 +38,43 @@ import kotlin.math.absoluteValue
 @Composable
 fun FullPlayer(
     songs: List<Song>,
-    currentSongIndex: Int,
-    currentMediaId: String,
     onSkipToIndex: (Int) -> Unit,
-    onBackClicked:()->Unit
+    onBackClicked:()->Unit,
+    onShuffleClicked:()->Unit,
+    onRepeatClicked:()->Unit,
+    onToggleLikeButton:()->Unit,
+    currentPosition:Long,
+    musicState: MusicState,
+    onSeekTo:(Float)->Unit,
 ) {
 
     val context = LocalContext.current
 
-    val currentSong = songs[currentSongIndex]
+    val currentSong = songs[musicState.currentSongIndex]
 
     val pagerState = rememberPagerState(
         pageCount = { songs.size.coerceAtLeast(1) },
-        initialPage = currentSongIndex
+        initialPage = musicState.currentSongIndex
     )
 
-    LaunchedEffect(currentSong, currentMediaId, currentSongIndex) {
-        if (currentSong.mediaId != currentMediaId) return@LaunchedEffect
+    LaunchedEffect(currentSong, musicState.currentMediaId, musicState.currentSongIndex) {
+        if (currentSong.mediaId != musicState.currentMediaId) return@LaunchedEffect
 
-        if (currentSongIndex != pagerState.currentPage) {
-            pagerState.animateScrollToPage(page = currentSongIndex)
+        if (musicState.currentSongIndex != pagerState.currentPage) {
+            pagerState.animateScrollToPage(page = musicState.currentSongIndex)
         }
     }
 
     LaunchedEffect(
         currentSong,
-        currentMediaId,
+        musicState.currentMediaId,
         pagerState.currentPage,
         pagerState.isScrollInProgress
     ) {
 
-        if (currentSong.mediaId != currentMediaId) return@LaunchedEffect
+        if (currentSong.mediaId != musicState.currentMediaId) return@LaunchedEffect
 
-        if (currentSongIndex != pagerState.currentPage && !pagerState.isScrollInProgress) {
+        if (musicState.currentSongIndex != pagerState.currentPage && !pagerState.isScrollInProgress) {
             onSkipToIndex(pagerState.currentPage)
         }
     }
@@ -151,11 +155,19 @@ fun FullPlayer(
         Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
         FullPlayerRepeatShuffleLike(
-            onShuffleClicked = {},
-            onToggleLikeButton = {},
-            onRepeatClicked = {}
+            onShuffleClicked = onShuffleClicked,
+            onToggleLikeButton = onToggleLikeButton,
+            onRepeatClicked = onRepeatClicked
         )
 
+        Spacer(Modifier.height(60.dp))
+
+
+        FullPlayerTimeSlider(
+            currentPosition = currentPosition,
+            musicState = musicState,
+            onSeekTo = onSeekTo
+        )
 
 
     }
