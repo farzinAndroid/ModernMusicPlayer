@@ -9,10 +9,12 @@ import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,14 +31,10 @@ class HomeViewmodel @Inject constructor(
     val musicState = musicServiceConnection.musicState
     val currentPosition = musicServiceConnection.currentPosition
 
-    private val _userData = MutableStateFlow(UserData())
-    val userData: StateFlow<UserData> = _userData
+    private val _userData = MutableStateFlow<Flow<UserData>>(emptyFlow())
+    val userData: StateFlow<Flow<UserData>> = _userData
 
-    val playbackMode = preferencesUseCases.getPlaybackModeUseCase().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = PlaybackMode.REPEAT
-    )
+
 
 
     private val _homeState = MutableStateFlow<HomeState>(HomeState.Loading)
@@ -45,16 +43,22 @@ class HomeViewmodel @Inject constructor(
     init {
         viewModelScope.launch {
             getSongs()
+            _userData.value = getUserData()
         }
     }
 
-    fun setPlayBackMode() = viewModelScope.launch {
-        val newPlaybackMode = when (playbackMode.value) {
-            PlaybackMode.REPEAT -> PlaybackMode.REPEAT_ONE
-            PlaybackMode.REPEAT_ONE -> PlaybackMode.SHUFFLE
-            PlaybackMode.SHUFFLE -> PlaybackMode.REPEAT
+    fun setPlayBackMode(playbackMode: PlaybackMode){
+        viewModelScope.launch {
+            preferencesUseCases.setPlaybackModeUseCase(playbackMode)
+            musicServiceConnection.setPlaybackMode(playbackMode)
+            _userData.value = getUserData()
         }
-        preferencesUseCases.setPlaybackModeUseCase(playbackMode = newPlaybackMode)
+    }
+
+    fun getUserData(): Flow<UserData> {
+        return runBlocking {
+            preferencesUseCases.getUserDataUseCase()
+        }
     }
 
     private suspend fun getSongs() {

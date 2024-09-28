@@ -24,6 +24,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -110,9 +112,14 @@ fun Home(
 
     val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
-    val playbackMode by homeViewmodel.playbackMode.collectAsStateWithLifecycle(PlaybackMode.REPEAT)
-    LaunchedEffect(playbackMode) {
-        Log.e("TAG", playbackMode.name)
+    val userData by homeViewmodel.userData.collectAsStateWithLifecycle()
+
+    var playbackMode by remember { mutableStateOf(PlaybackMode.REPEAT) }
+
+    LaunchedEffect(userData) {
+        userData.collectLatest {
+            playbackMode = it.playbackMode
+        }
     }
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
@@ -200,11 +207,18 @@ fun Home(
                         },
                         currentPosition = currentPosition,
                         onToggleLikeButton = {},
-                        onShuffleClicked = {
-                            homeViewmodel.setPlayBackMode()
-                        },
                         onRepeatClicked = {
-                            homeViewmodel.setPlayBackMode()
+                            when (playbackMode) {
+                                PlaybackMode.REPEAT -> {
+                                    homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+                                }
+                                PlaybackMode.REPEAT_ONE -> {
+                                    homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
+                                }
+                                PlaybackMode.SHUFFLE -> {
+                                    homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+                                }
+                            }
                         },
                         onSeekTo = {
                             homeViewmodel.seekTo(convertToPosition(it, musicState.duration))

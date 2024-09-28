@@ -23,7 +23,6 @@ import com.farzin.core_ui.theme.spacing
 @Composable
 fun FullPlayerRepeatShuffleLike(
     onToggleLikeButton: () -> Unit,
-    onShuffleClicked: () -> Unit,
     onRepeatClicked: () -> Unit,
     playbackMode: PlaybackMode,
 ) {
@@ -84,8 +83,7 @@ fun FullPlayerRepeatShuffleLike(
                     contentDescription = "",
                     modifier = Modifier
                         .fillMaxSize(),
-                    tint =
-                        MaterialTheme.colorScheme.DarkGray
+                    tint = MaterialTheme.colorScheme.WhiteDarkBlue
                 )
             }
 

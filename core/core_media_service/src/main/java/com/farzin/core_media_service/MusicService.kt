@@ -95,9 +95,9 @@ class MusicService : MediaSessionService() {
     }
 
     private fun startPlaybackModeSync() = coroutineScope.launch {
-        preferencesUseCases.getUserDataUseCase().collectLatest {
+        preferencesUseCases.getPlaybackModeUseCase().collectLatest {
             mediaSession?.player?.run {
-                when (it.playbackMode) {
+                when (it) {
                     PlaybackMode.REPEAT -> {
                         Log.e("TAG", "repeat mode : ${this.repeatMode}")
                         this.shuffleModeEnabled = false
@@ -117,7 +117,7 @@ class MusicService : MediaSessionService() {
                 }
 
             }
-            musicSessionCallback.setPlaybackModeAction(it.playbackMode)
+            musicSessionCallback.setPlaybackModeAction(it)
             mediaSession?.setCustomLayout(musicSessionCallback.customLayout)
         }
     }

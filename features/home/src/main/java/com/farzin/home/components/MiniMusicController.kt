@@ -64,6 +64,7 @@ fun MiniMusicController(
             strokeCap = StrokeCap.Round,
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
             trackColor = MaterialTheme.colorScheme.DarkGray,
+            drawStopIndicator = {}
         )
 
         Row(

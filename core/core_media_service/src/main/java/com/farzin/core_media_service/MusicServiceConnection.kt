@@ -9,6 +9,7 @@ import androidx.media3.common.Player.EVENT_MEDIA_ITEM_TRANSITION
 import androidx.media3.common.Player.EVENT_MEDIA_METADATA_CHANGED
 import androidx.media3.common.Player.EVENT_PLAYBACK_STATE_CHANGED
 import androidx.media3.common.Player.EVENT_PLAY_WHEN_READY_CHANGED
+import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.farzin.core_common.Dispatcher
@@ -19,6 +20,7 @@ import com.farzin.core_media_service.mapper.asMediaItem
 import com.farzin.core_media_service.util.asPlaybackState
 import com.farzin.core_media_service.util.orDefaultTimestamp
 import com.farzin.core_model.MusicState
+import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -89,6 +91,21 @@ class MusicServiceConnection @Inject constructor(
     fun skipToIndex(index: Int, position: Long = 0L) = mediaController?.run {
         seekTo(index, position)
         play()
+    }
+
+    fun setPlaybackMode(playbackMode: PlaybackMode) = when(playbackMode){
+        PlaybackMode.REPEAT -> {
+            mediaController?.repeatMode = Player.REPEAT_MODE_ALL
+            mediaController?.shuffleModeEnabled = false
+        }
+        PlaybackMode.REPEAT_ONE -> {
+            mediaController?.repeatMode = Player.REPEAT_MODE_ONE
+            mediaController?.shuffleModeEnabled = false
+        }
+        PlaybackMode.SHUFFLE -> {
+            mediaController?.repeatMode = Player.REPEAT_MODE_OFF
+            mediaController?.shuffleModeEnabled = true
+        }
     }
 
     fun playSongs(

@@ -41,7 +41,6 @@ fun FullPlayer(
     songs: List<Song>,
     onSkipToIndex: (Int) -> Unit,
     onBackClicked:()->Unit,
-    onShuffleClicked:()->Unit,
     onRepeatClicked:()->Unit,
     onToggleLikeButton:()->Unit,
     currentPosition:Long,
@@ -157,7 +156,6 @@ fun FullPlayer(
         Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
         FullPlayerRepeatShuffleLike(
-            onShuffleClicked = onShuffleClicked,
             onToggleLikeButton = onToggleLikeButton,
             onRepeatClicked = onRepeatClicked,
             playbackMode=playbackMode
