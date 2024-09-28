@@ -116,7 +116,7 @@ fun Home(
 
     var playbackMode by remember { mutableStateOf(PlaybackMode.REPEAT) }
 
-    LaunchedEffect(userData) {
+    LaunchedEffect(homeViewmodel.getUserData()) {
         userData.collectLatest {
             playbackMode = it.playbackMode
         }
@@ -203,6 +203,8 @@ fun Home(
                                 scope.launch {
                                     sheetState.bottomSheetState.partialExpand()
                                 }
+                            }else {
+                                activity.moveTaskToBack(true)
                             }
                         },
                         currentPosition = currentPosition,
@@ -223,7 +225,16 @@ fun Home(
                         onSeekTo = {
                             homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
                         },
-                        playbackMode = playbackMode
+                        playbackMode = playbackMode,
+                        onPrevClicked = {
+                            homeViewmodel.skipPrevious()
+                        },
+                        onNextClicked = {
+                            homeViewmodel.skipNext()
+                        },
+                        onPlayPauseClicked = {
+                            homeViewmodel.pausePlay(!musicState.playWhenReady)
+                        }
                     )
 
                 },

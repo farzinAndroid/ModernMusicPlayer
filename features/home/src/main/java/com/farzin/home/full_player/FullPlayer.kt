@@ -1,5 +1,6 @@
 package com.farzin.home.full_player
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,11 +30,6 @@ import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
-import com.farzin.home.components.FullPlayerImage
-import com.farzin.home.components.FullPlayerRepeatShuffleLike
-import com.farzin.home.components.FullPlayerTimeSlider
-import com.farzin.home.components.FullPlayerTitleArtist
-import com.farzin.home.components.FullPlayerTopBar
 import kotlin.math.absoluteValue
 
 @Composable
@@ -46,7 +42,10 @@ fun FullPlayer(
     currentPosition:Long,
     musicState: MusicState,
     onSeekTo:(Float)->Unit,
-    playbackMode: PlaybackMode
+    playbackMode: PlaybackMode,
+    onPrevClicked:()->Unit,
+    onNextClicked:()->Unit,
+    onPlayPauseClicked:()->Unit
 ) {
 
     val context = LocalContext.current
@@ -170,7 +169,20 @@ fun FullPlayer(
             onSeekTo = onSeekTo
         )
 
+        Spacer(Modifier.height(40.dp))
 
+        FullPlayerMusicController(
+            onPrevClicked = onPrevClicked,
+            onNextClicked = onNextClicked,
+            onPlayPauseClicked = onPlayPauseClicked,
+            musicState = musicState
+        )
+
+
+    }
+
+    BackHandler {
+        onBackClicked()
     }
 
 }

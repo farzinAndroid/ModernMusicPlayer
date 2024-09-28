@@ -1,4 +1,4 @@
-package com.farzin.home.components
+package com.farzin.home.full_player
 
 import android.annotation.SuppressLint
 import android.content.Context

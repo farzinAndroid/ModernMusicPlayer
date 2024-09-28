@@ -1,4 +1,4 @@
-package com.farzin.home.components
+package com.farzin.home.full_player
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
