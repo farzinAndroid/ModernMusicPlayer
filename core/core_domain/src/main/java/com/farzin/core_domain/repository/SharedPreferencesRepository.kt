@@ -17,12 +17,21 @@ interface SharedPreferencesRepository {
     suspend fun setSortBy(sortBy: SortBy)
 
 
+
+    suspend fun setRepeatMode(value:Int)
+    fun getRepeatMode() : Int
+    suspend fun setShuffleMode(value:Int)
+    fun getShuffleMode() : Int
+
+
     companion object{
         const val PLAYING_QUEUE_ID_KEY = "PLAYING_QUEUE_ID_KEY"
         const val PLAYING_QUEUE_INDEX_KEY = "PLAYING_QUEUE_INDEX_KEY"
         const val PLAY_BACK_MODE_KEY = "PLAY_BACK_MODE_KEY"
         const val SORT_ORDER_KEY = "SORT_ORDER_KEY"
         const val SORT_BY_KEY = "SORT_BY_KEY"
+        const val REPEAT_MODE = "REPEAT_MODE"
+        const val SHUFFLE_MODE = "SHUFFLE_MODE"
     }
 
 

@@ -67,6 +67,31 @@ class DefaultPreferences @Inject constructor(
         }
     }
 
+    override suspend fun setRepeatMode(value: Int) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences
+                .edit()
+                .putInt(SharedPreferencesRepository.REPEAT_MODE, value)
+                .apply()
+        }
+    }
+
+    override fun getRepeatMode() : Int =
+            sharedPreferences.getInt(SharedPreferencesRepository.REPEAT_MODE, 1)
+
+
+    override suspend fun setShuffleMode(value: Int) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences
+                .edit()
+                .putInt(SharedPreferencesRepository.SHUFFLE_MODE, value)
+                .apply()
+        }
+    }
+
+    override fun getShuffleMode() : Int =
+        sharedPreferences.getInt(SharedPreferencesRepository.SHUFFLE_MODE, 1)
+
 
     override suspend fun getUserData(): Flow<UserData> =
         withContext(Dispatchers.IO) {

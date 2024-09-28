@@ -53,6 +53,8 @@ import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -116,10 +118,30 @@ fun Home(
 
     var playbackMode by remember { mutableStateOf(PlaybackMode.REPEAT) }
 
-    LaunchedEffect(homeViewmodel.getUserData()) {
-        userData.collectLatest {
-            playbackMode = it.playbackMode
+    var repeatMode by remember { mutableStateOf(false) }
+    LaunchedEffect(true) {
+        repeatMode = homeViewmodel.getRepeatMode() == 1
+        when(repeatMode){
+            true -> {
+                homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
+            }
+            false -> {
+                homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+            }
         }
+
+    }
+
+    var shuffleMode by remember { mutableStateOf(false) }
+    LaunchedEffect(true) {
+        shuffleMode = homeViewmodel.getShuffleMode() == 0
+        when(shuffleMode){
+            true -> {
+                homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
+            }
+            false -> {}
+        }
+
     }
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
@@ -210,15 +232,24 @@ fun Home(
                         currentPosition = currentPosition,
                         onToggleLikeButton = {},
                         onRepeatClicked = {
-                            when (playbackMode) {
-                                PlaybackMode.REPEAT -> {
-                                    homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
-                                }
-                                PlaybackMode.REPEAT_ONE -> {
-                                    homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
-                                }
-                                PlaybackMode.SHUFFLE -> {
-                                    homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+                            repeatMode = !repeatMode
+
+                            if (repeatMode) {
+                                homeViewmodel.setRepeatMode(1)
+                            } else {
+                                homeViewmodel.setRepeatMode(0)
+                            }
+
+                            scope.launch {
+                                delay(200)
+                                when(repeatMode){
+                                    true -> {
+
+                                        homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
+                                    }
+                                    false -> {
+                                        homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+                                    }
                                 }
                             }
                         },
@@ -234,6 +265,27 @@ fun Home(
                         },
                         onPlayPauseClicked = {
                             homeViewmodel.pausePlay(!musicState.playWhenReady)
+                        },
+                        isShuffleOn = shuffleMode,
+                        isRepeatOn = repeatMode,
+                        onShuffleClicked = {
+                            shuffleMode = !shuffleMode
+
+                            if (shuffleMode) {
+                                homeViewmodel.setShuffleMode(1)
+                            } else {
+                                homeViewmodel.setShuffleMode(0)
+                            }
+
+                            scope.launch {
+                                delay(200)
+                                when(shuffleMode){
+                                    true -> {
+                                        homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
+                                    }
+                                    false -> {}
+                                }
+                            }
                         }
                     )
 

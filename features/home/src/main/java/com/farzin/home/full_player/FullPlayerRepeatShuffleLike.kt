@@ -24,23 +24,10 @@ import com.farzin.core_ui.theme.spacing
 fun FullPlayerRepeatShuffleLike(
     onToggleLikeButton: () -> Unit,
     onRepeatClicked: () -> Unit,
-    playbackMode: PlaybackMode,
+    onShuffleClicked: () -> Unit,
+    isShuffleOn: Boolean,
+    isRepeatOn: Boolean,
 ) {
-
-
-    val painter = when (playbackMode) {
-        PlaybackMode.REPEAT -> {
-            painterResource(com.farzin.core_ui.R.drawable.ic_repeat)
-        }
-
-        PlaybackMode.REPEAT_ONE -> {
-            painterResource(com.farzin.core_ui.R.drawable.ic_repeat_one)
-        }
-
-        PlaybackMode.SHUFFLE -> {
-            painterResource(com.farzin.core_ui.R.drawable.ic_shuffle)
-        }
-    }
 
     Row(
         modifier = Modifier
@@ -79,7 +66,9 @@ fun FullPlayerRepeatShuffleLike(
                     .size(MaterialTheme.spacing.semiLarge24)
             ) {
                 Icon(
-                    painter = painter,
+                    painter = if (isRepeatOn) painterResource(com.farzin.core_ui.R.drawable.ic_repeat) else painterResource(
+                        com.farzin.core_ui.R.drawable.ic_repeat_one
+                    ),
                     contentDescription = "",
                     modifier = Modifier
                         .fillMaxSize(),
@@ -87,22 +76,22 @@ fun FullPlayerRepeatShuffleLike(
                 )
             }
 
-//            IconButton(
-//                onClick = { onShuffleClicked() },
-//                modifier = Modifier
-//                    .size(MaterialTheme.spacing.semiLarge24)
-//            ) {
-//                Icon(
-//                    painter = painterResource(com.farzin.core_ui.R.drawable.ic_shuffle),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .fillMaxSize(),
-//                    tint = if (playbackMode == PlaybackMode.SHUFFLE)
-//                        MaterialTheme.colorScheme.WhiteDarkBlue
-//                    else
-//                        MaterialTheme.colorScheme.DarkGray
-//                )
-//            }
+            IconButton(
+                onClick = { onShuffleClicked() },
+                modifier = Modifier
+                    .size(MaterialTheme.spacing.semiLarge24)
+            ) {
+                Icon(
+                    painter = painterResource(com.farzin.core_ui.R.drawable.ic_shuffle),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    tint = if (isShuffleOn)
+                        MaterialTheme.colorScheme.WhiteDarkBlue
+                    else
+                        MaterialTheme.colorScheme.DarkGray
+                )
+            }
 
         }
 

@@ -91,4 +91,24 @@ class HomeViewmodel @Inject constructor(
 
     fun seekTo(position: Long) = musicServiceConnection.seekTo(position)
 
+    fun setRepeatMode(value:Int){
+        viewModelScope.launch {
+            preferencesUseCases.setRepeatModeUseCase(value)
+        }
+    }
+
+    fun getRepeatMode()=
+        preferencesUseCases.getRepeatModeUseCase()
+
+    fun setShuffleMode(value:Int){
+        viewModelScope.launch {
+            preferencesUseCases.setShuffleModeUseCase(value)
+        }
+    }
+
+    fun getShuffleMode()=
+            preferencesUseCases.getShuffleModeUseCase()
+
+
+
 }

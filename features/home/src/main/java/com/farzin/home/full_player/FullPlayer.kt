@@ -38,6 +38,7 @@ fun FullPlayer(
     onSkipToIndex: (Int) -> Unit,
     onBackClicked:()->Unit,
     onRepeatClicked:()->Unit,
+    onShuffleClicked:()->Unit,
     onToggleLikeButton:()->Unit,
     currentPosition:Long,
     musicState: MusicState,
@@ -45,7 +46,10 @@ fun FullPlayer(
     playbackMode: PlaybackMode,
     onPrevClicked:()->Unit,
     onNextClicked:()->Unit,
-    onPlayPauseClicked:()->Unit
+    onPlayPauseClicked:()->Unit,
+    isRepeatOn:Boolean,
+    isShuffleOn:Boolean,
+
 ) {
 
     val context = LocalContext.current
@@ -157,7 +161,9 @@ fun FullPlayer(
         FullPlayerRepeatShuffleLike(
             onToggleLikeButton = onToggleLikeButton,
             onRepeatClicked = onRepeatClicked,
-            playbackMode=playbackMode
+            onShuffleClicked = onShuffleClicked,
+            isRepeatOn = isRepeatOn,
+            isShuffleOn =isShuffleOn
         )
 
         Spacer(Modifier.height(60.dp))
