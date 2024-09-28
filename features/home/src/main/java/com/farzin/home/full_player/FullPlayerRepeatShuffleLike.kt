@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.farzin.core_model.PlaybackMode
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
@@ -23,11 +22,16 @@ import com.farzin.core_ui.theme.spacing
 @Composable
 fun FullPlayerRepeatShuffleLike(
     onToggleLikeButton: () -> Unit,
-    onRepeatClicked: () -> Unit,
-    onShuffleClicked: () -> Unit,
-    isShuffleOn: Boolean,
-    isRepeatOn: Boolean,
+    onPlaybackModeClicked: () -> Unit,
+    playbackMode:Int
 ) {
+
+    val painter = when(playbackMode){
+        1-> painterResource(com.farzin.core_ui.R.drawable.ic_repeat)
+        2->painterResource(com.farzin.core_ui.R.drawable.ic_repeat_one)
+        3->painterResource(com.farzin.core_ui.R.drawable.ic_shuffle)
+        else -> null
+    }
 
     Row(
         modifier = Modifier
@@ -61,14 +65,12 @@ fun FullPlayerRepeatShuffleLike(
         ) {
 
             IconButton(
-                onClick = { onRepeatClicked() },
+                onClick = { onPlaybackModeClicked() },
                 modifier = Modifier
                     .size(MaterialTheme.spacing.semiLarge24)
             ) {
                 Icon(
-                    painter = if (isRepeatOn) painterResource(com.farzin.core_ui.R.drawable.ic_repeat) else painterResource(
-                        com.farzin.core_ui.R.drawable.ic_repeat_one
-                    ),
+                    painter =painter!!,
                     contentDescription = "",
                     modifier = Modifier
                         .fillMaxSize(),
@@ -76,22 +78,22 @@ fun FullPlayerRepeatShuffleLike(
                 )
             }
 
-            IconButton(
-                onClick = { onShuffleClicked() },
-                modifier = Modifier
-                    .size(MaterialTheme.spacing.semiLarge24)
-            ) {
-                Icon(
-                    painter = painterResource(com.farzin.core_ui.R.drawable.ic_shuffle),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    tint = if (isShuffleOn)
-                        MaterialTheme.colorScheme.WhiteDarkBlue
-                    else
-                        MaterialTheme.colorScheme.DarkGray
-                )
-            }
+//            IconButton(
+//                onClick = { onShuffleClicked() },
+//                modifier = Modifier
+//                    .size(MaterialTheme.spacing.semiLarge24)
+//            ) {
+//                Icon(
+//                    painter = painterResource(com.farzin.core_ui.R.drawable.ic_shuffle),
+//                    contentDescription = "",
+//                    modifier = Modifier
+//                        .fillMaxSize(),
+//                    tint = if (isShuffleOn)
+//                        MaterialTheme.colorScheme.WhiteDarkBlue
+//                    else
+//                        MaterialTheme.colorScheme.DarkGray
+//                )
+//            }
 
         }
 

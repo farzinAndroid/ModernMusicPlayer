@@ -2,7 +2,6 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -24,8 +23,8 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,9 +52,7 @@ import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -116,33 +113,22 @@ fun Home(
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
     val userData by homeViewmodel.userData.collectAsStateWithLifecycle()
 
-    var playbackMode by remember { mutableStateOf(PlaybackMode.REPEAT) }
-
-    var repeatMode by remember { mutableStateOf(false) }
+    var playbackMode by remember { mutableIntStateOf(1) }
     LaunchedEffect(true) {
-        repeatMode = homeViewmodel.getRepeatMode() == 1
-        when(repeatMode){
-            true -> {
-                homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
-            }
-            false -> {
-                homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
-            }
+        playbackMode = homeViewmodel.getRepeatMode()
+        applyPlaybackMode(homeViewmodel, playbackMode)
+    }
+    fun togglePlaybackMode() {
+        playbackMode = getNextPlaybackMode(playbackMode)
+        homeViewmodel.setRepeatMode(playbackMode)
+        scope.launch {
+            delay(200)
+            applyPlaybackMode(homeViewmodel, playbackMode)
         }
-
     }
 
-    var shuffleMode by remember { mutableStateOf(false) }
-    LaunchedEffect(true) {
-        shuffleMode = homeViewmodel.getShuffleMode() == 0
-        when(shuffleMode){
-            true -> {
-                homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
-            }
-            false -> {}
-        }
 
-    }
+
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
@@ -225,38 +211,18 @@ fun Home(
                                 scope.launch {
                                     sheetState.bottomSheetState.partialExpand()
                                 }
-                            }else {
+                            } else {
                                 activity.moveTaskToBack(true)
                             }
                         },
                         currentPosition = currentPosition,
                         onToggleLikeButton = {},
-                        onRepeatClicked = {
-                            repeatMode = !repeatMode
-
-                            if (repeatMode) {
-                                homeViewmodel.setRepeatMode(1)
-                            } else {
-                                homeViewmodel.setRepeatMode(0)
-                            }
-
-                            scope.launch {
-                                delay(200)
-                                when(repeatMode){
-                                    true -> {
-
-                                        homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
-                                    }
-                                    false -> {
-                                        homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
-                                    }
-                                }
-                            }
+                        onPlaybackModeClicked = {
+                            togglePlaybackMode()
                         },
                         onSeekTo = {
                             homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
                         },
-                        playbackMode = playbackMode,
                         onPrevClicked = {
                             homeViewmodel.skipPrevious()
                         },
@@ -266,27 +232,7 @@ fun Home(
                         onPlayPauseClicked = {
                             homeViewmodel.pausePlay(!musicState.playWhenReady)
                         },
-                        isShuffleOn = shuffleMode,
-                        isRepeatOn = repeatMode,
-                        onShuffleClicked = {
-                            shuffleMode = !shuffleMode
-
-                            if (shuffleMode) {
-                                homeViewmodel.setShuffleMode(1)
-                            } else {
-                                homeViewmodel.setShuffleMode(0)
-                            }
-
-                            scope.launch {
-                                delay(200)
-                                when(shuffleMode){
-                                    true -> {
-                                        homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
-                                    }
-                                    false -> {}
-                                }
-                            }
-                        }
+                        playbackMode = playbackMode
                     )
 
                 },
@@ -335,6 +281,28 @@ fun Home(
 
         }
     )
+}
 
 
+/**
+ * Get the next playback mode in the cycle.
+ */
+private fun getNextPlaybackMode(currentMode: Int): Int {
+    return when (currentMode) {
+        1 -> 2
+        2 -> 3
+        3 -> 1
+        else -> 1
+    }
+}
+
+/**
+ * Apply the specified playback mode to the viewmodel.
+ */
+private fun applyPlaybackMode(homeViewmodel: HomeViewmodel, mode: Int) {
+    when (mode) {
+        1 -> homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
+        2 -> homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+        3 -> homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
+    }
 }
