@@ -20,8 +20,6 @@ interface SharedPreferencesRepository {
 
     suspend fun setRepeatMode(value:Int)
     fun getRepeatMode() : Int
-    suspend fun setShuffleMode(value:Int)
-    fun getShuffleMode() : Int
 
 
     companion object{

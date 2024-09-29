@@ -14,14 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
 @Composable
 fun HomeTopBar(
     onMenuClicked:()->Unit,
-    onSearchClicked:()->Unit
+    onFilterClicked:()->Unit
 ) {
 
 
@@ -46,12 +45,12 @@ fun HomeTopBar(
 
 
         Icon(
-            painter = painterResource(com.farzin.core_ui.R.drawable.search),
+            painter = painterResource(com.farzin.core_ui.R.drawable.filter),
             contentDescription = "",
             tint = MaterialTheme.colorScheme.WhiteDarkBlue,
             modifier = Modifier
                 .size(MaterialTheme.spacing.semiLarge24)
-                .clickable { onSearchClicked() }
+                .clickable { onFilterClicked() }
         )
     }
 

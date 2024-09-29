@@ -7,6 +7,7 @@ import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_media_service.MusicServiceConnection
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
+import com.farzin.core_model.SortOrder
 import com.farzin.core_model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -61,6 +62,15 @@ class HomeViewmodel @Inject constructor(
         }
     }
 
+    fun setSortOrder(sortOrder: SortOrder){
+        viewModelScope.launch {
+            preferencesUseCases.setSortOrderUseCase(sortOrder)
+            _homeState.update { return@update HomeState.Loading }
+            getSongs()
+            _userData.value = getUserData()
+        }
+    }
+
     private suspend fun getSongs() {
         mediaUseCases.getSongsUseCase().collectLatest { songs ->
             _homeState.update {
@@ -99,15 +109,6 @@ class HomeViewmodel @Inject constructor(
 
     fun getRepeatMode()=
         preferencesUseCases.getRepeatModeUseCase()
-
-    fun setShuffleMode(value:Int){
-        viewModelScope.launch {
-            preferencesUseCases.setShuffleModeUseCase(value)
-        }
-    }
-
-    fun getShuffleMode()=
-            preferencesUseCases.getShuffleModeUseCase()
 
 
 

@@ -10,8 +10,6 @@ data class PreferencesUseCases(
     val getPlaybackModeUseCase: GetPlaybackModeUseCase,
     val getPlayQueueIndexUseCase: GetPlayingQueueIndexUseCase,
     val getPlayingQueueIdsUseCase: GetPlayingQueueIdsUseCase,
-    val setShuffleModeUseCase: SetShuffleModeUseCase,
-    val getShuffleModeUseCase: GetShuffleModeUseCase,
     val setRepeatModeUseCase: SetRepeatModeUseCase,
     val getRepeatModeUseCase: GetRepeatModeUseCase,
 )

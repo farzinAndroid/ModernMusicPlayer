@@ -80,17 +80,6 @@ class DefaultPreferences @Inject constructor(
             sharedPreferences.getInt(SharedPreferencesRepository.REPEAT_MODE, 1)
 
 
-    override suspend fun setShuffleMode(value: Int) {
-        withContext(Dispatchers.IO) {
-            sharedPreferences
-                .edit()
-                .putInt(SharedPreferencesRepository.SHUFFLE_MODE, value)
-                .apply()
-        }
-    }
-
-    override fun getShuffleMode() : Int =
-        sharedPreferences.getInt(SharedPreferencesRepository.SHUFFLE_MODE, 1)
 
 
     override suspend fun getUserData(): Flow<UserData> =
@@ -107,9 +96,9 @@ class DefaultPreferences @Inject constructor(
                 sharedPreferences.getString(SharedPreferencesRepository.PLAY_BACK_MODE_KEY, null)
                     ?: ""
             val savedSortOrder =
-                sharedPreferences.getString(SharedPreferencesRepository.SORT_ORDER_KEY, null) ?: ""
+                sharedPreferences.getString(SharedPreferencesRepository.SORT_ORDER_KEY, SortOrder.ASCENDING.name) ?: ""
             val savedSortBy =
-                sharedPreferences.getString(SharedPreferencesRepository.SORT_BY_KEY, null) ?: ""
+                sharedPreferences.getString(SharedPreferencesRepository.SORT_BY_KEY, SortBy.TITLE.name) ?: ""
 
             val userData = UserData(
                 playingQueueIds = savedPlayingQueueIdsList,

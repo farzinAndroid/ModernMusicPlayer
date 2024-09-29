@@ -14,4 +14,8 @@
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="player_timestamp_format" translatable="false">%1$s:%2$s</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="sort_order">Sort order</string>
+    <string name="sort_by">Sort by</string>
 </resources>

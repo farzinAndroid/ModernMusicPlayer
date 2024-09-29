@@ -2,6 +2,7 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -38,11 +39,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
+import com.farzin.core_model.SortOrder
 import com.farzin.core_ui.common_components.Loading
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.utils.showToast
+import com.farzin.home.components.FilterSection
 import com.farzin.home.components.HomePager
 import com.farzin.home.components.HomeTopBar
 import com.farzin.home.components.MiniMusicController
@@ -53,6 +56,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -97,6 +101,8 @@ fun Home(
 
     val activity = LocalContext.current as Activity
 
+    var showFilter by remember { mutableStateOf(false) }
+
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(
         initialValue = DrawerValue.Closed,
@@ -112,6 +118,13 @@ fun Home(
     val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
     val userData by homeViewmodel.userData.collectAsStateWithLifecycle()
+    var sortOrder by remember { mutableStateOf(SortOrder.ASCENDING) }
+    LaunchedEffect(homeViewmodel.getUserData()) {
+        userData.collectLatest {
+            sortOrder = it.sortOrder
+            Log.e("TAG", "Home: $sortOrder")
+        }
+    }
 
     var playbackMode by remember { mutableIntStateOf(1) }
     LaunchedEffect(true) {
@@ -252,11 +265,15 @@ fun Home(
                                     drawerState.open()
                                 }
                             },
-                            onSearchClicked = {
-                                scope.launch {
-                                    sheetState.bottomSheetState.expand()
-                                }
+                            onFilterClicked = {
+                                showFilter = !showFilter
                             }
+                        )
+
+                        FilterSection(
+                            showFilter = showFilter,
+                            sortOrder = sortOrder,
+                            homeViewmodel = homeViewmodel
                         )
 
                         if (loading) {

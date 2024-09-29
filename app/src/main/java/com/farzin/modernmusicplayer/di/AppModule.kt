@@ -16,14 +16,12 @@ import com.farzin.core_domain.usecases.preferences.GetPlaybackModeUseCase
 import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIdsUseCase
 import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIndexUseCase
 import com.farzin.core_domain.usecases.preferences.GetRepeatModeUseCase
-import com.farzin.core_domain.usecases.preferences.GetShuffleModeUseCase
 import com.farzin.core_domain.usecases.preferences.GetUserDataUseCase
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_domain.usecases.preferences.SetPlaybackModeUseCase
 import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIdsUseCase
 import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIndexUseCase
 import com.farzin.core_domain.usecases.preferences.SetRepeatModeUseCase
-import com.farzin.core_domain.usecases.preferences.SetShuffleModeUseCase
 import com.farzin.core_domain.usecases.preferences.SetSortByUseCase
 import com.farzin.core_domain.usecases.preferences.SetSortOrderUseCase
 import com.farzin.media_store.source.MediaStoreSource
@@ -56,8 +54,6 @@ object AppModule {
         getPlayingQueueIdsUseCase = GetPlayingQueueIdsUseCase(defaultPreferences),
         getRepeatModeUseCase = GetRepeatModeUseCase(defaultPreferences),
         setRepeatModeUseCase = SetRepeatModeUseCase(defaultPreferences),
-        getShuffleModeUseCase = GetShuffleModeUseCase(defaultPreferences),
-        setShuffleModeUseCase = SetShuffleModeUseCase(defaultPreferences),
     )
 
     @Provides
