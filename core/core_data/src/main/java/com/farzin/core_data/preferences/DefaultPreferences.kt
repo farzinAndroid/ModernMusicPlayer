@@ -67,18 +67,6 @@ class DefaultPreferences @Inject constructor(
         }
     }
 
-    override suspend fun setRepeatMode(value: Int) {
-        withContext(Dispatchers.IO) {
-            sharedPreferences
-                .edit()
-                .putInt(SharedPreferencesRepository.REPEAT_MODE, value)
-                .apply()
-        }
-    }
-
-    override fun getRepeatMode() : Int =
-            sharedPreferences.getInt(SharedPreferencesRepository.REPEAT_MODE, 1)
-
 
 
 

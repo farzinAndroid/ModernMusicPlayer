@@ -127,14 +127,16 @@ fun Home(
         }
     }
 
-    var playbackMode by remember { mutableIntStateOf(1) }
+    var playbackMode by remember { mutableStateOf(PlaybackMode.REPEAT) }
     LaunchedEffect(true) {
-        playbackMode = homeViewmodel.getRepeatMode()
+        preferencesViewmodel.getPlaybackMode().collectLatest {
+            playbackMode = it
+        }
         applyPlaybackMode(preferencesViewmodel, playbackMode)
     }
     fun togglePlaybackMode() {
         playbackMode = getNextPlaybackMode(playbackMode)
-        homeViewmodel.setRepeatMode(playbackMode)
+        preferencesViewmodel.setPlayBackMode(playbackMode)
         scope.launch {
             delay(200)
             applyPlaybackMode(preferencesViewmodel, playbackMode)
@@ -305,22 +307,22 @@ fun Home(
 /**
  * Get the next playback mode in the cycle.
  */
-private fun getNextPlaybackMode(currentMode: Int): Int {
+private fun getNextPlaybackMode(currentMode: PlaybackMode): PlaybackMode {
     return when (currentMode) {
-        1 -> 2
-        2 -> 3
-        3 -> 1
-        else -> 1
+        PlaybackMode.REPEAT -> PlaybackMode.REPEAT_ONE
+        PlaybackMode.REPEAT_ONE -> PlaybackMode.SHUFFLE
+        PlaybackMode.SHUFFLE -> PlaybackMode.REPEAT
+        else -> PlaybackMode.REPEAT
     }
 }
 
 /**
  * Apply the specified playback mode to the viewmodel.
  */
-private fun applyPlaybackMode(preferencesViewmodel: PreferencesViewmodel, mode: Int) {
+private fun applyPlaybackMode(preferencesViewmodel: PreferencesViewmodel, mode: PlaybackMode) {
     when (mode) {
-        1 -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
-        2 -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
-        3 -> preferencesViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
+        PlaybackMode.REPEAT -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
+        PlaybackMode.REPEAT_ONE -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+        PlaybackMode.SHUFFLE -> preferencesViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
     }
 }

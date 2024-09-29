@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.farzin.core_model.MusicState
+import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
@@ -44,7 +45,7 @@ fun FullPlayer(
     onPrevClicked:()->Unit,
     onNextClicked:()->Unit,
     onPlayPauseClicked:()->Unit,
-    playbackMode:Int,
+    playbackMode:PlaybackMode,
 
     ) {
 

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.farzin.core_model.PlaybackMode
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
@@ -23,13 +24,13 @@ import com.farzin.core_ui.theme.spacing
 fun FullPlayerRepeatShuffleLike(
     onToggleLikeButton: () -> Unit,
     onPlaybackModeClicked: () -> Unit,
-    playbackMode:Int
+    playbackMode:PlaybackMode
 ) {
 
     val painter = when(playbackMode){
-        1-> painterResource(com.farzin.core_ui.R.drawable.ic_repeat)
-        2->painterResource(com.farzin.core_ui.R.drawable.ic_repeat_one)
-        3->painterResource(com.farzin.core_ui.R.drawable.ic_shuffle)
+        PlaybackMode.REPEAT-> painterResource(com.farzin.core_ui.R.drawable.ic_repeat)
+        PlaybackMode.REPEAT_ONE->painterResource(com.farzin.core_ui.R.drawable.ic_repeat_one)
+        PlaybackMode.SHUFFLE->painterResource(com.farzin.core_ui.R.drawable.ic_shuffle)
         else -> null
     }
 

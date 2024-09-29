@@ -55,4 +55,7 @@ class PreferencesViewmodel @Inject constructor(
         }
     }
 
+    fun getPlaybackMode()=
+        preferencesUseCases.getPlaybackModeUseCase()
+
 }

@@ -18,8 +18,6 @@ interface SharedPreferencesRepository {
 
 
 
-    suspend fun setRepeatMode(value:Int)
-    fun getRepeatMode() : Int
 
 
     companion object{
