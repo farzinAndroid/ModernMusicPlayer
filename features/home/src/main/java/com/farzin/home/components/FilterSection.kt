@@ -11,26 +11,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.sp
 import com.farzin.core_model.SortOrder
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
-import com.farzin.home.home.HomeViewmodel
+import com.farzin.home.home.PreferencesViewmodel
 import java.util.Locale
 
 @Composable
 fun FilterSection(
     showFilter:Boolean,
     sortOrder: SortOrder,
-    homeViewmodel: HomeViewmodel
+    preferencesViewmodel: PreferencesViewmodel
 ) {
 
     val sortOrderRadioList = listOf(
@@ -80,9 +78,9 @@ fun FilterSection(
                             onOptionSelected(text)
 
                             if (text == SortOrder.ASCENDING){
-                                homeViewmodel.setSortOrder(SortOrder.ASCENDING)
+                                preferencesViewmodel.setSortOrder(SortOrder.ASCENDING)
                             }else{
-                                homeViewmodel.setSortOrder(SortOrder.DESCENDING)
+                                preferencesViewmodel.setSortOrder(SortOrder.DESCENDING)
                             }
                         }
                     )

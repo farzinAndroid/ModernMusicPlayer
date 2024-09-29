@@ -97,6 +97,7 @@ fun HomeScreen() {
 @Composable
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
+    preferencesViewmodel: PreferencesViewmodel = hiltViewModel()
 ) {
 
     val activity = LocalContext.current as Activity
@@ -117,9 +118,9 @@ fun Home(
 
     val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
-    val userData by homeViewmodel.userData.collectAsStateWithLifecycle()
+    val userData by preferencesViewmodel.userData.collectAsStateWithLifecycle()
     var sortOrder by remember { mutableStateOf(SortOrder.ASCENDING) }
-    LaunchedEffect(homeViewmodel.getUserData()) {
+    LaunchedEffect(preferencesViewmodel.getUserData()) {
         userData.collectLatest {
             sortOrder = it.sortOrder
             Log.e("TAG", "Home: $sortOrder")
@@ -129,14 +130,14 @@ fun Home(
     var playbackMode by remember { mutableIntStateOf(1) }
     LaunchedEffect(true) {
         playbackMode = homeViewmodel.getRepeatMode()
-        applyPlaybackMode(homeViewmodel, playbackMode)
+        applyPlaybackMode(preferencesViewmodel, playbackMode)
     }
     fun togglePlaybackMode() {
         playbackMode = getNextPlaybackMode(playbackMode)
         homeViewmodel.setRepeatMode(playbackMode)
         scope.launch {
             delay(200)
-            applyPlaybackMode(homeViewmodel, playbackMode)
+            applyPlaybackMode(preferencesViewmodel, playbackMode)
         }
     }
 
@@ -273,7 +274,7 @@ fun Home(
                         FilterSection(
                             showFilter = showFilter,
                             sortOrder = sortOrder,
-                            homeViewmodel = homeViewmodel
+                            preferencesViewmodel = preferencesViewmodel
                         )
 
                         if (loading) {
@@ -316,10 +317,10 @@ private fun getNextPlaybackMode(currentMode: Int): Int {
 /**
  * Apply the specified playback mode to the viewmodel.
  */
-private fun applyPlaybackMode(homeViewmodel: HomeViewmodel, mode: Int) {
+private fun applyPlaybackMode(preferencesViewmodel: PreferencesViewmodel, mode: Int) {
     when (mode) {
-        1 -> homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
-        2 -> homeViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
-        3 -> homeViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
+        1 -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
+        2 -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
+        3 -> preferencesViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
     }
 }

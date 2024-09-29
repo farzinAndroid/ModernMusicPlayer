@@ -32,11 +32,6 @@ class HomeViewmodel @Inject constructor(
     val musicState = musicServiceConnection.musicState
     val currentPosition = musicServiceConnection.currentPosition
 
-    private val _userData = MutableStateFlow<Flow<UserData>>(emptyFlow())
-    val userData: StateFlow<Flow<UserData>> = _userData
-
-
-
 
     private val _homeState = MutableStateFlow<HomeState>(HomeState.Loading)
     val homeState: StateFlow<HomeState> = _homeState
@@ -44,30 +39,6 @@ class HomeViewmodel @Inject constructor(
     init {
         viewModelScope.launch {
             getSongs()
-            _userData.value = getUserData()
-        }
-    }
-
-    fun setPlayBackMode(playbackMode: PlaybackMode){
-        viewModelScope.launch {
-            preferencesUseCases.setPlaybackModeUseCase(playbackMode)
-            musicServiceConnection.setPlaybackMode(playbackMode)
-            _userData.value = getUserData()
-        }
-    }
-
-    fun getUserData(): Flow<UserData> {
-        return runBlocking {
-            preferencesUseCases.getUserDataUseCase()
-        }
-    }
-
-    fun setSortOrder(sortOrder: SortOrder){
-        viewModelScope.launch {
-            preferencesUseCases.setSortOrderUseCase(sortOrder)
-            _homeState.update { return@update HomeState.Loading }
-            getSongs()
-            _userData.value = getUserData()
         }
     }
 
