@@ -27,6 +27,10 @@ serialization = "1.6.3"
 accompanist = "0.36.0"
 kotlinx-coroutines = "1.8.0"
 
+protobuf = "4.26.1"
+protobuf-plugin = "0.9.4"
+androidx-datastore = "1.1.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -58,6 +62,11 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
 
+
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
+protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
+protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -65,6 +74,7 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 android-library = { id = "com.android.library", version.ref = "agp" }
 devtools-ksp = {id = "com.google.devtools.ksp",version.ref = "kspVersion"}
 hiltPlugin = {id = "com.google.dagger.hilt.android",version.ref = "hiltAndroid"}
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
