@@ -31,7 +31,11 @@ class HomeViewmodel @Inject constructor(
 ) : ViewModel() {
 
     val musicState = musicServiceConnection.musicState
-    val currentPosition = musicServiceConnection.currentPosition
+    val currentPosition = musicServiceConnection.currentPosition.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = 0L
+    )
 
     private val songs = mediaUseCases.getSongsUseCase().stateIn(
         scope = viewModelScope,

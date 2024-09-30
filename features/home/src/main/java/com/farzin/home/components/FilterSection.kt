@@ -28,7 +28,6 @@ import java.util.Locale
 fun FilterSection(
     showFilter:Boolean,
     sortOrder: SortOrder,
-    preferencesViewmodel: PreferencesViewmodel
 ) {
 
     val sortOrderRadioList = listOf(
@@ -76,12 +75,6 @@ fun FilterSection(
                         isSelected = selectedOption == text,
                         onClick = {
                             onOptionSelected(text)
-
-                            if (text == SortOrder.ASCENDING){
-                                preferencesViewmodel.setSortOrder(SortOrder.ASCENDING)
-                            }else{
-                                preferencesViewmodel.setSortOrder(SortOrder.DESCENDING)
-                            }
                         }
                     )
                 }

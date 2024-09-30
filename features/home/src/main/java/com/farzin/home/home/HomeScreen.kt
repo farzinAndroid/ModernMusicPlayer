@@ -122,9 +122,7 @@ fun Home(
 
     val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
-
-
-
+    val playbackMode by preferencesViewmodel.playbackMode.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
@@ -217,6 +215,7 @@ fun Home(
                             currentPosition = currentPosition,
                             onToggleLikeButton = {},
                             onPlaybackModeClicked = {
+                                preferencesViewmodel.onTogglePlaybackMode()
                             },
                             onSeekTo = {
                                 homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
@@ -230,7 +229,7 @@ fun Home(
                             onPlayPauseClicked = {
                                 homeViewmodel.pausePlay(!musicState.playWhenReady)
                             },
-                            playbackMode = PlaybackMode.SHUFFLE
+                            playbackMode = playbackMode
                         )
                     }
 
