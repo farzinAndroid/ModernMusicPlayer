@@ -16,8 +16,6 @@
 
 package com.farzin.core_model
 
-import com.farzin.core_model.Song
-
 data class Artist(
     val id: Long,
     val name: String,

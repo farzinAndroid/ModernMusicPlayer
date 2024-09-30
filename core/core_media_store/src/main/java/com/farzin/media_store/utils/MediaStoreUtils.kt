@@ -1,7 +1,6 @@
 package com.farzin.media_store.utils
 
 import android.content.ContentResolver
-import android.database.ContentObservable
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build

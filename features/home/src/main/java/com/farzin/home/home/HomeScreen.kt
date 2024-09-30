@@ -2,11 +2,10 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,9 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,11 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
+import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_ui.common_components.Loading
 import com.farzin.core_ui.common_components.convertToPosition
@@ -57,11 +53,7 @@ import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
-import java.util.Date
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -101,7 +93,7 @@ fun HomeScreen() {
 @Composable
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
-    preferencesViewmodel: PreferencesViewmodel = hiltViewModel()
+    preferencesViewmodel: PreferencesViewmodel = hiltViewModel(),
 ) {
 
     val activity = LocalContext.current as Activity
@@ -123,12 +115,15 @@ fun Home(
     val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by preferencesViewmodel.playbackMode.collectAsStateWithLifecycle()
+    val playingQueueSongs by homeViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
 
 
     var loading by remember { mutableStateOf(false) }
+    var sortOrder by remember { mutableStateOf(SortOrder.DESCENDING) }
+    var sortby by remember { mutableStateOf(SortBy.DATE_ADDED) }
     var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
     val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
     when (val state = homeState) {
@@ -139,6 +134,8 @@ fun Home(
         is HomeState.Success -> {
             loading = false
             songs = state.songs
+            sortby = state.sortBy
+            sortOrder = state.sortOrder
         }
     }
 
@@ -169,37 +166,46 @@ fun Home(
                                 .height(72.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            if (songs.isNotEmpty()){
-                                MiniMusicController(
-                                    progress = progress,
-                                    song = songs[musicState.currentSongIndex],
-                                    onNextClicked = {
-                                        homeViewmodel.skipNext()
-                                    },
-                                    onPrevClicked = {
-                                        homeViewmodel.skipPrevious()
-                                    },
-                                    onPlayPauseClicked = {
-                                        homeViewmodel.pausePlay(!musicState.playWhenReady)
-                                    },
-                                    onMiniMusicControllerClicked = {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(MaterialTheme.colorScheme.BackgroundColor)
+                                    .clickable {
                                         scope.launch {
                                             sheetState.bottomSheetState.expand()
                                         }
-                                    },
-                                    musicState = musicState
-                                )
+                                    }
+                            ) {
+                                if (songs.isNotEmpty()) {
+                                    MiniMusicController(
+                                        progress = progress,
+                                        song = playingQueueSongs[musicState.currentSongIndex],
+                                        onNextClicked = {
+                                            homeViewmodel.skipNext()
+                                        },
+                                        onPrevClicked = {
+                                            homeViewmodel.skipPrevious()
+                                        },
+                                        onPlayPauseClicked = {
+                                            homeViewmodel.pausePlay(!musicState.playWhenReady)
+                                        },
+                                        musicState = musicState,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                    )
+                                }
                             }
+
                         }
                     }
 
 
 
 
-                    if (songs.isNotEmpty()){
+                    if (songs.isNotEmpty()) {
                         FullPlayer(
                             musicState = musicState,
-                            songs = songs,
+                            songs = playingQueueSongs,
                             onSkipToIndex = {
                                 homeViewmodel.skipToIndex(it)
                             },
@@ -252,14 +258,22 @@ fun Home(
                             },
                             onFilterClicked = {
                                 showFilter = !showFilter
-                            }
+                            },
+                            showFilter = showFilter
                         )
 
-                        /*FilterSection(
+
+                        FilterSection(
                             showFilter = showFilter,
                             sortOrder = sortOrder,
-                            preferencesViewmodel = preferencesViewmodel
-                        )*/
+                            sortBy = sortby,
+                            onSortOrderClicked = {
+                                preferencesViewmodel.onChangeSortOrder(it)
+                            },
+                            onSortByClicked = {
+                                preferencesViewmodel.onChangeSortBy(it)
+                            }
+                        )
 
                         if (loading) {
                             Loading()

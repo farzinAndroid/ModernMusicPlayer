@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.core.graphics.drawable.toBitmap
 import coil.ImageLoader
 import coil.request.ImageRequest
-import com.farzin.core_media_notifications.R
 
 internal suspend fun Uri.asArtworkBitmap(context: Context): Bitmap? {
     val loader = ImageLoader(context)

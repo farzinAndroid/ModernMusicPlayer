@@ -2,8 +2,8 @@
 
 package com.farzin.core_media_service.mapper
 
-import com.farzin.core_model.Song
 import com.farzin.core_media_service.util.buildPlayableMediaItem
+import com.farzin.core_model.Song
 
 internal fun Song.asMediaItem() = buildPlayableMediaItem(
     mediaId = mediaId,

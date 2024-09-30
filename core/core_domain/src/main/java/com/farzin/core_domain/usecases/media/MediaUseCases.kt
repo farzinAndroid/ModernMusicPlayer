@@ -5,4 +5,5 @@ data class MediaUseCases(
     val getArtistsUseCase: GetArtistUseCase,
     val getAlbumsUseCase: GetAlbumsUseCase,
     val getFoldersUseCase: GetFoldersUseCase,
+    val getPlayingQueueSongsUseCase: GetPlayingQueueSongsUseCase,
 )

@@ -4,7 +4,6 @@ import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_model.PlaybackMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class GetPlaybackModeUseCase @Inject constructor(

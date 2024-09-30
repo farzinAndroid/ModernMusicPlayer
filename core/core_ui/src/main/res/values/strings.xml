@@ -18,4 +18,9 @@
     <string name="descending">Descending</string>
     <string name="sort_order">Sort order</string>
     <string name="sort_by">Sort by</string>
+    <string name="title">Title</string>
+    <string name="duration">Duration</string>
+    <string name="date_added">Date added</string>
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
 </resources>

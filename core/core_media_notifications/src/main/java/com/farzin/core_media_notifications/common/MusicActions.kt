@@ -7,7 +7,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaNotification
 import androidx.media3.session.MediaSession
-import com.farzin.core_media_notifications.R
 import com.farzin.core_media_notifications.util.asNotificationAction
 
 @OptIn(UnstableApi::class)

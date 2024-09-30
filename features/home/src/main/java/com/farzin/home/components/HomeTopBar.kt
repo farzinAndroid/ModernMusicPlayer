@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,7 +22,8 @@ import com.farzin.core_ui.theme.spacing
 @Composable
 fun HomeTopBar(
     onMenuClicked:()->Unit,
-    onFilterClicked:()->Unit
+    onFilterClicked:()->Unit,
+    showFilter:Boolean
 ) {
 
 
@@ -44,14 +47,25 @@ fun HomeTopBar(
         )
 
 
-        Icon(
-            painter = painterResource(com.farzin.core_ui.R.drawable.filter),
-            contentDescription = "",
-            tint = MaterialTheme.colorScheme.WhiteDarkBlue,
-            modifier = Modifier
-                .size(MaterialTheme.spacing.semiLarge24)
-                .clickable { onFilterClicked() }
-        )
+        if (showFilter){
+            Icon(
+                imageVector = Icons.Rounded.Close,
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.WhiteDarkBlue,
+                modifier = Modifier
+                    .size(MaterialTheme.spacing.semiLarge24)
+                    .clickable { onFilterClicked() }
+            )
+        }else{
+            Icon(
+                painter = painterResource(com.farzin.core_ui.R.drawable.filter),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.WhiteDarkBlue,
+                modifier = Modifier
+                    .size(MaterialTheme.spacing.semiLarge24)
+                    .clickable { onFilterClicked() }
+            )
+        }
     }
 
 

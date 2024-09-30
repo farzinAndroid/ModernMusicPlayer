@@ -2,19 +2,15 @@ package com.farzin.core_data.repository
 
 import com.farzin.core_datastore.PreferencesDataSource
 import com.farzin.core_domain.repository.MediaRepository
-import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_model.Album
 import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
-import com.farzin.core_model.UserData
 import com.farzin.media_store.source.MediaStoreSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MediaRepositoryImpl @Inject constructor(

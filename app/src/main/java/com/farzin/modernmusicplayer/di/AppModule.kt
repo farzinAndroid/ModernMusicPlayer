@@ -8,6 +8,7 @@ import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_domain.usecases.media.GetAlbumsUseCase
 import com.farzin.core_domain.usecases.media.GetArtistUseCase
 import com.farzin.core_domain.usecases.media.GetFoldersUseCase
+import com.farzin.core_domain.usecases.media.GetPlayingQueueSongsUseCase
 import com.farzin.core_domain.usecases.media.GetSongsUseCase
 import com.farzin.core_domain.usecases.media.MediaUseCases
 import com.farzin.core_domain.usecases.preferences.GetPlaybackModeUseCase
@@ -52,12 +53,14 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMediaUseCases(
-        mediaRepository: MediaRepository
+        mediaRepository: MediaRepository,
+        sharedPreferencesRepository: SharedPreferencesRepository
     ) = MediaUseCases(
         getSongsUseCase = GetSongsUseCase(mediaRepository),
         getArtistsUseCase = GetArtistUseCase(mediaRepository),
         getAlbumsUseCase = GetAlbumsUseCase(mediaRepository),
-        getFoldersUseCase = GetFoldersUseCase(mediaRepository)
+        getFoldersUseCase = GetFoldersUseCase(mediaRepository),
+        getPlayingQueueSongsUseCase = GetPlayingQueueSongsUseCase(mediaRepository,sharedPreferencesRepository)
     )
 
 
