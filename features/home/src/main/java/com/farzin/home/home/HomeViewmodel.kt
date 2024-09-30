@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -32,23 +33,31 @@ class HomeViewmodel @Inject constructor(
     val musicState = musicServiceConnection.musicState
     val currentPosition = musicServiceConnection.currentPosition
 
+    private val songs = mediaUseCases.getSongsUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
 
-    private val _homeState = MutableStateFlow<HomeState>(HomeState.Loading)
-    val homeState: StateFlow<HomeState> = _homeState
+    val homeState = combine(
+        songs,
+        mediaUseCases.getArtistsUseCase(),
+        mediaUseCases.getAlbumsUseCase(),
+        mediaUseCases.getFoldersUseCase(),
+        preferencesUseCases.getUserDataUseCase()
+    ) { songs, artists, albums, folders, userData ->
+        HomeState.Success(
+            songs = songs,
+            albums = albums,
+            sortOrder = userData.sortOrder,
+            sortBy = userData.sortBy
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = HomeState.Loading
+    )
 
-    init {
-        viewModelScope.launch {
-            getSongs()
-        }
-    }
-
-    private suspend fun getSongs() {
-        mediaUseCases.getSongsUseCase().collectLatest { songs ->
-            _homeState.update {
-                return@update HomeState.Success(songs)
-            }
-        }
-    }
 
     fun play(
         songs: List<Song>,

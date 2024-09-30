@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":core:core_media_store"))
     implementation(project(":core:core_model"))
     implementation(project(":core:core_common"))
+    implementation(project(":core:core_datastore"))
     implementation(project(":core:core_ui"))
     implementation(project(":features:home"))
 

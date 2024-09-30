@@ -9,11 +9,7 @@ class GetPlayingQueueIndexUseCase @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository
 ) {
     operator fun invoke() =
-        runBlocking {
-            sharedPreferencesRepository.getUserData().map {
-                it.playingQueueIndex
-            }
-        }
+        sharedPreferencesRepository.userData.map { it.playingQueueIndex }
 
 
 }

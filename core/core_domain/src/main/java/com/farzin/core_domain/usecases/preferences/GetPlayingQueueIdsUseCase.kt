@@ -8,10 +8,6 @@ import javax.inject.Inject
 class GetPlayingQueueIdsUseCase @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository,
 ) {
-    suspend operator fun invoke() = runBlocking {
-        sharedPreferencesRepository.getUserData().map {
-            it.playingQueueIds
-        }
-    }
+    operator fun invoke() = sharedPreferencesRepository.userData.map { it.playingQueueIds }
 
 }

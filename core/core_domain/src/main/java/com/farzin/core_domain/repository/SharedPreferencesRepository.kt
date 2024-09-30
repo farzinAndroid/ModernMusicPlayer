@@ -8,13 +8,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface SharedPreferencesRepository {
 
-    suspend fun getUserData(): Flow<UserData>
+    val userData: Flow<UserData>
 
     suspend fun setPlayingQueueIds(playingQueueIds: List<String>)
     suspend fun setPlayingQueueIndex(playingQueueIndex: Int)
     suspend fun setPlaybackMode(playbackMode: PlaybackMode)
     suspend fun setSortOrder(sortOrder: SortOrder)
     suspend fun setSortBy(sortBy: SortBy)
+    suspend fun toggleFavoriteSong(id: String, isFavorite: Boolean)
 
 
 

@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import com.farzin.core_data.domain.usecases.TurnPlayQueueIdToListUseCase
 import com.farzin.core_data.preferences.DefaultPreferences
 import com.farzin.core_data.repository.MediaRepositoryImpl
+import com.farzin.core_data.repository.SettingsRepositoryImpl
+import com.farzin.core_datastore.PreferencesDataSource
 import com.farzin.core_domain.repository.MediaRepository
 import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_domain.usecases.media.GetAlbumsUseCase
@@ -73,24 +75,23 @@ object AppModule {
     @Singleton
     fun provideTurnPlayQueueIdToListUseCase() = TurnPlayQueueIdToListUseCase()
 
+
     @Provides
     @Singleton
-    fun provideDefaultPreferences(
-        sharedPreferences: SharedPreferences,
-        turnPlayQueueIdToListUseCase: TurnPlayQueueIdToListUseCase
-    ) : SharedPreferencesRepository = DefaultPreferences(
-        sharedPreferences = sharedPreferences,
-        turnPlayQueueIdToListUseCase = turnPlayQueueIdToListUseCase
+    fun provideSettingsRepository(
+        preferencesDataSource: PreferencesDataSource
+    ) : SharedPreferencesRepository = SettingsRepositoryImpl(
+        preferencesDataSource = preferencesDataSource
     )
 
     @Provides
     @Singleton
     fun provideMediaRepositoryImpl(
         mediaStoreSource: MediaStoreSource,
-        preferencesRepository: SharedPreferencesRepository
+        preferencesDataSource: PreferencesDataSource
     ) : MediaRepository = MediaRepositoryImpl(
         mediaStoreSource = mediaStoreSource,
-        defaultPreferences = preferencesRepository
+        preferencesDataSource = preferencesDataSource
     )
 
 }

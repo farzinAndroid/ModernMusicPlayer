@@ -11,10 +11,6 @@ class GetPlaybackModeUseCase @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository,
 ) {
     operator fun invoke(): Flow<PlaybackMode> {
-        return runBlocking {
-            sharedPreferencesRepository.getUserData().map {
-                it.playbackMode
-            }
-        }
+        return sharedPreferencesRepository.userData.map { it.playbackMode }
     }
 }

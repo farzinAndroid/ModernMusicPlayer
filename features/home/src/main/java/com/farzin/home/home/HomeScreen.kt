@@ -2,6 +2,7 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.farzin.core_model.PlaybackMode
@@ -58,6 +60,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.util.Date
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -118,30 +122,6 @@ fun Home(
 
     val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
-    val userData by preferencesViewmodel.userData.collectAsStateWithLifecycle()
-    var sortOrder by remember { mutableStateOf(SortOrder.ASCENDING) }
-    LaunchedEffect(preferencesViewmodel.getUserData()) {
-        userData.collectLatest {
-            sortOrder = it.sortOrder
-            Log.e("TAG", "Home: $sortOrder")
-        }
-    }
-
-    var playbackMode by remember { mutableStateOf(PlaybackMode.REPEAT) }
-    LaunchedEffect(true) {
-        preferencesViewmodel.getPlaybackMode().collectLatest {
-            playbackMode = it
-        }
-        applyPlaybackMode(preferencesViewmodel, playbackMode)
-    }
-    fun togglePlaybackMode() {
-        playbackMode = getNextPlaybackMode(playbackMode)
-        preferencesViewmodel.setPlayBackMode(playbackMode)
-        scope.launch {
-            delay(200)
-            applyPlaybackMode(preferencesViewmodel, playbackMode)
-        }
-    }
 
 
 
@@ -191,65 +171,68 @@ fun Home(
                                 .height(72.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            MiniMusicController(
-                                progress = progress,
-                                song = songs[musicState.currentSongIndex],
-                                onNextClicked = {
-                                    homeViewmodel.skipNext()
-                                },
-                                onPrevClicked = {
-                                    homeViewmodel.skipPrevious()
-                                },
-                                onPlayPauseClicked = {
-                                    homeViewmodel.pausePlay(!musicState.playWhenReady)
-                                },
-                                onMiniMusicControllerClicked = {
-                                    scope.launch {
-                                        sheetState.bottomSheetState.expand()
-                                    }
-                                },
-                                musicState = musicState
-                            )
+                            if (songs.isNotEmpty()){
+                                MiniMusicController(
+                                    progress = progress,
+                                    song = songs[musicState.currentSongIndex],
+                                    onNextClicked = {
+                                        homeViewmodel.skipNext()
+                                    },
+                                    onPrevClicked = {
+                                        homeViewmodel.skipPrevious()
+                                    },
+                                    onPlayPauseClicked = {
+                                        homeViewmodel.pausePlay(!musicState.playWhenReady)
+                                    },
+                                    onMiniMusicControllerClicked = {
+                                        scope.launch {
+                                            sheetState.bottomSheetState.expand()
+                                        }
+                                    },
+                                    musicState = musicState
+                                )
+                            }
                         }
                     }
 
 
 
 
-                    FullPlayer(
-                        musicState = musicState,
-                        songs = songs,
-                        onSkipToIndex = {
-                            homeViewmodel.skipToIndex(it)
-                        },
-                        onBackClicked = {
-                            if (isExpanded) {
-                                scope.launch {
-                                    sheetState.bottomSheetState.partialExpand()
+                    if (songs.isNotEmpty()){
+                        FullPlayer(
+                            musicState = musicState,
+                            songs = songs,
+                            onSkipToIndex = {
+                                homeViewmodel.skipToIndex(it)
+                            },
+                            onBackClicked = {
+                                if (isExpanded) {
+                                    scope.launch {
+                                        sheetState.bottomSheetState.partialExpand()
+                                    }
+                                } else {
+                                    activity.moveTaskToBack(true)
                                 }
-                            } else {
-                                activity.moveTaskToBack(true)
-                            }
-                        },
-                        currentPosition = currentPosition,
-                        onToggleLikeButton = {},
-                        onPlaybackModeClicked = {
-                            togglePlaybackMode()
-                        },
-                        onSeekTo = {
-                            homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
-                        },
-                        onPrevClicked = {
-                            homeViewmodel.skipPrevious()
-                        },
-                        onNextClicked = {
-                            homeViewmodel.skipNext()
-                        },
-                        onPlayPauseClicked = {
-                            homeViewmodel.pausePlay(!musicState.playWhenReady)
-                        },
-                        playbackMode = playbackMode
-                    )
+                            },
+                            currentPosition = currentPosition,
+                            onToggleLikeButton = {},
+                            onPlaybackModeClicked = {
+                            },
+                            onSeekTo = {
+                                homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
+                            },
+                            onPrevClicked = {
+                                homeViewmodel.skipPrevious()
+                            },
+                            onNextClicked = {
+                                homeViewmodel.skipNext()
+                            },
+                            onPlayPauseClicked = {
+                                homeViewmodel.pausePlay(!musicState.playWhenReady)
+                            },
+                            playbackMode = PlaybackMode.SHUFFLE
+                        )
+                    }
 
                 },
                 scaffoldState = sheetState,
@@ -273,11 +256,11 @@ fun Home(
                             }
                         )
 
-                        FilterSection(
+                        /*FilterSection(
                             showFilter = showFilter,
                             sortOrder = sortOrder,
                             preferencesViewmodel = preferencesViewmodel
-                        )
+                        )*/
 
                         if (loading) {
                             Loading()
@@ -301,28 +284,4 @@ fun Home(
 
         }
     )
-}
-
-
-/**
- * Get the next playback mode in the cycle.
- */
-private fun getNextPlaybackMode(currentMode: PlaybackMode): PlaybackMode {
-    return when (currentMode) {
-        PlaybackMode.REPEAT -> PlaybackMode.REPEAT_ONE
-        PlaybackMode.REPEAT_ONE -> PlaybackMode.SHUFFLE
-        PlaybackMode.SHUFFLE -> PlaybackMode.REPEAT
-        else -> PlaybackMode.REPEAT
-    }
-}
-
-/**
- * Apply the specified playback mode to the viewmodel.
- */
-private fun applyPlaybackMode(preferencesViewmodel: PreferencesViewmodel, mode: PlaybackMode) {
-    when (mode) {
-        PlaybackMode.REPEAT -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT)
-        PlaybackMode.REPEAT_ONE -> preferencesViewmodel.setPlayBackMode(PlaybackMode.REPEAT_ONE)
-        PlaybackMode.SHUFFLE -> preferencesViewmodel.setPlayBackMode(PlaybackMode.SHUFFLE)
-    }
 }
