@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/core_common" />
             <option value="$PROJECT_DIR$/core/core_data" />
+            <option value="$PROJECT_DIR$/core/core_datastore" />
             <option value="$PROJECT_DIR$/core/core_domain" />
             <option value="$PROJECT_DIR$/core/core_media_notifications" />
             <option value="$PROJECT_DIR$/core/core_media_service" />

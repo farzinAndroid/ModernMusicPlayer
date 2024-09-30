@@ -25,8 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewmodel @Inject constructor(
-    private val preferencesUseCases: PreferencesUseCases,
-    private val mediaUseCases: MediaUseCases,
+    preferencesUseCases: PreferencesUseCases,
+    mediaUseCases: MediaUseCases,
     private val musicServiceConnection: MusicServiceConnection,
 ) : ViewModel() {
 

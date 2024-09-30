@@ -1,4 +1,4 @@
-package com.farzin.core_data.repository
+package com.farzin.core_data.preferences
 
 import com.farzin.core_datastore.PreferencesDataSource
 import com.farzin.core_domain.repository.SharedPreferencesRepository

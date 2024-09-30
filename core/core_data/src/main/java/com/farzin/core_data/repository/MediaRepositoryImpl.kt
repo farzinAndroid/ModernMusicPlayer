@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class MediaRepositoryImpl @Inject constructor(
     private val mediaStoreSource: MediaStoreSource,
-    private val preferencesDataSource: PreferencesDataSource,
+    preferencesDataSource: PreferencesDataSource,
 ) : MediaRepository {
 
 

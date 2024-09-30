@@ -1,11 +1,7 @@
 package com.farzin.modernmusicplayer.di
 
-import android.content.Context
-import android.content.SharedPreferences
-import com.farzin.core_data.domain.usecases.TurnPlayQueueIdToListUseCase
-import com.farzin.core_data.preferences.DefaultPreferences
+import com.farzin.core_data.preferences.SettingsRepositoryImpl
 import com.farzin.core_data.repository.MediaRepositoryImpl
-import com.farzin.core_data.repository.SettingsRepositoryImpl
 import com.farzin.core_datastore.PreferencesDataSource
 import com.farzin.core_domain.repository.MediaRepository
 import com.farzin.core_domain.repository.SharedPreferencesRepository
@@ -28,7 +24,6 @@ import com.farzin.media_store.source.MediaStoreSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -41,17 +36,17 @@ object AppModule {
     @Provides
     @Singleton
     fun providePreferencesUseCases(
-        defaultPreferences: SharedPreferencesRepository
+        sharedPreferencesRepository: SharedPreferencesRepository
     ) = PreferencesUseCases(
-        getUserDataUseCase = GetUserDataUseCase(defaultPreferences),
-        setPlaybackModeUseCase = SetPlaybackModeUseCase(defaultPreferences),
-        setSortOrderUseCase = SetSortOrderUseCase(defaultPreferences),
-        setSortByUseCase = SetSortByUseCase(defaultPreferences),
-        setPlayingQueueIndexUseCase = SetPlayingQueueIndexUseCase(defaultPreferences),
-        setPlayingQueueIdsUseCase = SetPlayingQueueIdsUseCase(defaultPreferences),
-        getPlaybackModeUseCase = GetPlaybackModeUseCase(defaultPreferences),
-        getPlayQueueIndexUseCase = GetPlayingQueueIndexUseCase(defaultPreferences),
-        getPlayingQueueIdsUseCase = GetPlayingQueueIdsUseCase(defaultPreferences),
+        getUserDataUseCase = GetUserDataUseCase(sharedPreferencesRepository),
+        setPlaybackModeUseCase = SetPlaybackModeUseCase(sharedPreferencesRepository),
+        setSortOrderUseCase = SetSortOrderUseCase(sharedPreferencesRepository),
+        setSortByUseCase = SetSortByUseCase(sharedPreferencesRepository),
+        setPlayingQueueIndexUseCase = SetPlayingQueueIndexUseCase(sharedPreferencesRepository),
+        setPlayingQueueIdsUseCase = SetPlayingQueueIdsUseCase(sharedPreferencesRepository),
+        getPlaybackModeUseCase = GetPlaybackModeUseCase(sharedPreferencesRepository),
+        getPlayQueueIndexUseCase = GetPlayingQueueIndexUseCase(sharedPreferencesRepository),
+        getPlayingQueueIdsUseCase = GetPlayingQueueIdsUseCase(sharedPreferencesRepository),
     )
 
     @Provides
@@ -64,16 +59,6 @@ object AppModule {
         getAlbumsUseCase = GetAlbumsUseCase(mediaRepository),
         getFoldersUseCase = GetFoldersUseCase(mediaRepository)
     )
-
-    @Provides
-    @Singleton
-    fun provideSharedPreferences(
-        @ApplicationContext context: Context
-    ) : SharedPreferences = context.getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
-
-    @Provides
-    @Singleton
-    fun provideTurnPlayQueueIdToListUseCase() = TurnPlayQueueIdToListUseCase()
 
 
     @Provides
