@@ -53,6 +53,7 @@ import com.farzin.home.permission.PermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -89,7 +90,7 @@ fun HomeScreen() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
@@ -176,7 +177,7 @@ fun Home(
                                         }
                                     }
                             ) {
-                                if (songs.isNotEmpty()) {
+                                if (songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
                                     MiniMusicController(
                                         progress = progress,
                                         song = playingQueueSongs[musicState.currentSongIndex],
@@ -202,7 +203,7 @@ fun Home(
 
 
 
-                    if (songs.isNotEmpty()) {
+                    if (songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
                         FullPlayer(
                             musicState = musicState,
                             songs = playingQueueSongs,
