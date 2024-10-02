@@ -1,4 +1,4 @@
-package com.farzin.home.components
+package com.farzin.home.components.songs
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize

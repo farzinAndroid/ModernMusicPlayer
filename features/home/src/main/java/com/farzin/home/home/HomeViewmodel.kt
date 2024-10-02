@@ -1,10 +1,12 @@
 package com.farzin.home.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.media.MediaUseCases
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_media_service.MusicServiceConnection
+import com.farzin.core_model.Album
 import com.farzin.core_model.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,6 +26,12 @@ class HomeViewmodel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = 0L
+    )
+
+    val albumById = mediaUseCases.getAlbumByIdUseCase(2265521633247135750).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = Album()
     )
 
     val playingQueueSongs = mediaUseCases.getPlayingQueueSongsUseCase().stateIn(

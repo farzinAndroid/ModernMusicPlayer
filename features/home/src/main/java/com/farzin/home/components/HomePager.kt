@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.farzin.core_model.Album
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.TextMedium
@@ -23,15 +24,20 @@ import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.home.components.albums.Albums
+import com.farzin.home.components.songs.Songs
 import com.farzin.home.home.MediaTab
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomePager(
     onSongClick: (Int) -> Unit,
+    onAlbumClick: (Int) -> Unit,
     currentPlayingSongId: String,
     songs: List<Song>,
-    musicState: MusicState
+    musicState: MusicState,
+    albums: List<Album>,
+    albumByID:Album
 ) {
 
     val scope = rememberCoroutineScope()
@@ -73,7 +79,7 @@ fun HomePager(
         },
         divider = {},
         containerColor = MaterialTheme.colorScheme.BackgroundColor,
-        indicator = {tabPositions ->
+        indicator = { tabPositions ->
             if (selectedTabIndex < tabPositions.size) {
                 TabRowDefaults.SecondaryIndicator(
                     modifier = Modifier
@@ -102,13 +108,20 @@ fun HomePager(
                 )
             }
 
+            MediaTab.Albums.ordinal -> {
+                Albums(
+                    albums = albums,
+                    albumByID = albumByID,
+                    onClick = { songIndex ->
+                        onAlbumClick(songIndex)
+                    }
+                )
+            }
+
             MediaTab.Artists.ordinal -> {
 
             }
 
-            MediaTab.Albums.ordinal -> {
-
-            }
 
             MediaTab.Folders.ordinal -> {
 

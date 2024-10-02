@@ -2,6 +2,7 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -35,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.farzin.core_model.Album
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
@@ -126,6 +128,8 @@ fun Home(
     var sortOrder by remember { mutableStateOf(SortOrder.DESCENDING) }
     var sortby by remember { mutableStateOf(SortBy.DATE_ADDED) }
     var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
+    var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
+    val albumByID by homeViewmodel.albumById.collectAsStateWithLifecycle()
     val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
     when (val state = homeState) {
         HomeState.Loading -> {
@@ -135,6 +139,7 @@ fun Home(
         is HomeState.Success -> {
             loading = false
             songs = state.songs
+            albums = state.albums
             sortby = state.sortBy
             sortOrder = state.sortOrder
         }
@@ -282,13 +287,18 @@ fun Home(
                             HomePager(
                                 currentPlayingSongId = musicState.currentMediaId,
                                 songs = songs,
+                                albums = albums,
                                 onSongClick = { index ->
                                     homeViewmodel.play(
                                         songs,
                                         index
                                     )
                                 },
-                                musicState = musicState
+                                onAlbumClick = { index ->
+
+                                },
+                                musicState = musicState,
+                                albumByID = albumByID
                             )
                         }
                     }
