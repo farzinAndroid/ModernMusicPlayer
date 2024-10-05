@@ -36,7 +36,6 @@ fun Albums(
                     album = album,
                     onAlbumClicked = {
                         onClick(album.id)
-                        Log.e("TAG",album.id.toString())
                     }
                 )
             }

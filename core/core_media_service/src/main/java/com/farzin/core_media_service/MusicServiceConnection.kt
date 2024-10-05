@@ -112,17 +112,18 @@ class MusicServiceConnection @Inject constructor(
         startIndex: Int = 0,
         startPositionMs: Long = 0L,
     ) {
-        mediaController?.run {
-            setMediaItems(songs.map(Song::asMediaItem), startIndex, startPositionMs)
-            prepare()
-            play()
-        }
         coroutineScope.launch {
             preferencesUseCases.setPlayingQueueIdsUseCase(
                 playingQueueIds = songs.map(
                     Song::mediaId
                 )
             )
+
+            mediaController?.run {
+                setMediaItems(songs.map(Song::asMediaItem), startIndex, startPositionMs)
+                prepare()
+                play()
+            }
         }
     }
 

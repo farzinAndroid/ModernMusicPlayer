@@ -294,11 +294,7 @@ fun Home(
                                 songs = songs,
                                 albums = albums,
                                 onSongClick = { index ->
-                                    scope.launch {
-                                        homeViewmodel.setPlayingQueue(songs)
-                                        delay(1000)
                                         homeViewmodel.play(songs,index)
-                                    }
                                 },
                                 onAlbumClick = { albumId ->
                                     navController.navigate(Screens.Album(albumId))

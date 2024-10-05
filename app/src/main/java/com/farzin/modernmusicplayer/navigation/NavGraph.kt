@@ -27,7 +27,10 @@ fun NavGraph(
 
         composable<Screens.Album> {
             val args = it.toRoute<Screens.Album>()
-            AlbumScreen(args.albumId)
+            AlbumScreen(
+                albumId = args.albumId,
+                navController = navHostController
+            )
         }
 
 

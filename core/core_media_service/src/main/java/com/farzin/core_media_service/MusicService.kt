@@ -98,18 +98,18 @@ class MusicService : MediaSessionService() {
             mediaSession?.player?.run {
                 when (it) {
                     PlaybackMode.REPEAT -> {
-                        Log.e("TAG", "repeat mode : ${this.repeatMode}")
+//                        Log.e("TAG", "repeat mode : ${this.repeatMode}")
                         this.shuffleModeEnabled = false
                         this.repeatMode = Player.REPEAT_MODE_ALL
                     }
 
                     PlaybackMode.REPEAT_ONE -> {
-                        Log.e("TAG", "repeat mode : ${this.repeatMode}")
+//                        Log.e("TAG", "repeat mode : ${this.repeatMode}")
                         this.repeatMode = Player.REPEAT_MODE_ONE
                     }
 
                     PlaybackMode.SHUFFLE -> {
-                        Log.e("TAG", "shuffle mode : ${this.shuffleModeEnabled}")
+//                        Log.e("TAG", "shuffle mode : ${this.shuffleModeEnabled}")
                         this.repeatMode = Player.REPEAT_MODE_ALL
                         this.shuffleModeEnabled = true
                     }

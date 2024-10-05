@@ -25,8 +25,4 @@ class AlbumViewmodel @Inject constructor(
 
     fun getAlbumById(albumId: Long) = mediaUseCases.getAlbumByIdUseCase(albumId)
 
-    fun setPlayingQueue(album: Album) = viewModelScope.launch {
-        preferencesUseCases.setPlayingQueueIdsUseCase(album.songs.map { it.mediaId })
-    }
-
 }

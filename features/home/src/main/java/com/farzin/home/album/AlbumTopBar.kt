@@ -16,12 +16,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
+import com.farzin.core_ui.common_components.TextBold
+import com.farzin.core_ui.common_components.TextMedium
+import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
 @Composable
 fun AlbumTopBar(
-    onBackClicked:()->Unit
+    onBackClicked:()->Unit,
+    albumName:String
 ) {
 
     Row(
@@ -31,7 +37,7 @@ fun AlbumTopBar(
             .padding(top = MaterialTheme.spacing.large32)
             .padding(horizontal = MaterialTheme.spacing.semiLarge24),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
             onClick = { onBackClicked() },
@@ -46,6 +52,24 @@ fun AlbumTopBar(
                 tint = MaterialTheme.colorScheme.WhiteDarkBlue
             )
         }
+
+        TextMedium(
+            text = albumName,
+            color = MaterialTheme.colorScheme.WhiteDarkBlue,
+            maxLine = 1,
+            overflow = TextOverflow.Ellipsis,
+            fontSize = 20.sp,
+            modifier = Modifier
+                .padding(horizontal = MaterialTheme.spacing.medium16)
+        )
+
+        // place holder
+        Icon(
+            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+            contentDescription = "",
+            modifier = Modifier,
+            tint = MaterialTheme.colorScheme.BackgroundColor
+        )
     }
 
 }

@@ -22,7 +22,7 @@ fun AlbumDetailImage(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(MaterialTheme.spacing.medium16))
-            .size(242.dp),
+            .size(240.dp),
         contentAlignment = Alignment.Center
     ){
 

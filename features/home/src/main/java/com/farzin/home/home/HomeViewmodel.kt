@@ -23,10 +23,6 @@ class HomeViewmodel @Inject constructor(
     private val musicServiceConnection: MusicServiceConnection,
 ) : ViewModel() {
 
-    fun setPlayingQueue(song:List<Song>) = viewModelScope.launch {
-        preferencesUseCases.setPlayingQueueIdsUseCase(song.map { it.mediaId })
-    }
-
     val musicState = musicServiceConnection.musicState
     val currentPosition = musicServiceConnection.currentPosition.stateIn(
         scope = viewModelScope,
