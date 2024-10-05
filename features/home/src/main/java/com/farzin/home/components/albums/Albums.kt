@@ -18,7 +18,7 @@ import com.farzin.core_ui.theme.spacing
 @Composable
 fun Albums(
     albums: List<Album>,
-    onClick: (songIndex:Int) -> Unit,
+    onClick: (Long) -> Unit,
     albumByID:Album,
     modifier: Modifier = Modifier
 ) {
@@ -35,7 +35,7 @@ fun Albums(
                     modifier = Modifier,
                     album = album,
                     onAlbumClicked = {
-                        onClick(index)
+                        onClick(album.id)
                         Log.e("TAG",album.id.toString())
                     }
                 )

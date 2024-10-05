@@ -36,10 +36,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.farzin.core_model.Album
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
+import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.Loading
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
@@ -60,7 +62,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController
+) {
 
     val context = LocalContext.current
 
@@ -75,7 +79,7 @@ fun HomeScreen() {
 
     when (permissionState.status.isGranted) {
         true -> {
-            Home()
+            Home(navController = navController)
         }
 
         false -> {
@@ -97,6 +101,7 @@ fun HomeScreen() {
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
     preferencesViewmodel: PreferencesViewmodel = hiltViewModel(),
+    navController: NavController
 ) {
 
     val activity = LocalContext.current as Activity
@@ -289,13 +294,14 @@ fun Home(
                                 songs = songs,
                                 albums = albums,
                                 onSongClick = { index ->
-                                    homeViewmodel.play(
-                                        songs,
-                                        index
-                                    )
+                                    scope.launch {
+                                        homeViewmodel.setPlayingQueue(songs)
+                                        delay(1000)
+                                        homeViewmodel.play(songs,index)
+                                    }
                                 },
-                                onAlbumClick = { index ->
-
+                                onAlbumClick = { albumId ->
+                                    navController.navigate(Screens.Album(albumId))
                                 },
                                 musicState = musicState,
                                 albumByID = albumByID

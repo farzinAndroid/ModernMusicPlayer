@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePager(
     onSongClick: (Int) -> Unit,
-    onAlbumClick: (Int) -> Unit,
+    onAlbumClick: (Long) -> Unit,
     currentPlayingSongId: String,
     songs: List<Song>,
     musicState: MusicState,
@@ -112,8 +112,8 @@ fun HomePager(
                 Albums(
                     albums = albums,
                     albumByID = albumByID,
-                    onClick = { songIndex ->
-                        onAlbumClick(songIndex)
+                    onClick = { albumId ->
+                        onAlbumClick(albumId)
                     }
                 )
             }

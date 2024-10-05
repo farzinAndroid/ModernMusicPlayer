@@ -80,5 +80,11 @@ dependencies {
     // coil compose
     implementation(libs.coil.compose)
 
+    // serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    //compose navigation
+    implementation(libs.androidx.navigation.compose)
+
 
 }

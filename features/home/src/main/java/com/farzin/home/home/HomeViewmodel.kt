@@ -11,15 +11,21 @@ import com.farzin.core_model.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewmodel @Inject constructor(
-    preferencesUseCases: PreferencesUseCases,
+    private val preferencesUseCases: PreferencesUseCases,
     mediaUseCases: MediaUseCases,
     private val musicServiceConnection: MusicServiceConnection,
 ) : ViewModel() {
+
+    fun setPlayingQueue(song:List<Song>) = viewModelScope.launch {
+        preferencesUseCases.setPlayingQueueIdsUseCase(song.map { it.mediaId })
+    }
 
     val musicState = musicServiceConnection.musicState
     val currentPosition = musicServiceConnection.currentPosition.stateIn(
