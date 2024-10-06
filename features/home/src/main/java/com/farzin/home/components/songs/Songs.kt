@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.NoSongText
+import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.theme.spacing
 
 @Composable

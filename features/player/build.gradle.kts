@@ -1,26 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hiltPlugin)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.farzin.modernmusicplayer"
+    namespace = "com.farzin.player"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.farzin.modernmusicplayer"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -54,46 +47,25 @@ android {
 
 dependencies {
 
-    implementation(project(":core:core_data"))
-    implementation(project(":core:core_domain"))
     implementation(project(":core:core_media_service"))
-    implementation(project(":core:core_media_store"))
+    implementation(project(":core:core_domain"))
     implementation(project(":core:core_model"))
-    implementation(project(":core:core_common"))
-    implementation(project(":core:core_datastore"))
     implementation(project(":core:core_ui"))
-    implementation(project(":features:home"))
-    implementation(project(":features:album"))
-    implementation(project(":features:player"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    // compose
-    implementation(libs.bundles.composeBundle)
 
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    //hilt navigation
-    implementation(libs.androidx.hilt.navigation.compose)
+    // compose
+    implementation(libs.bundles.composeBundle)
 
-    // coil
+    // coil compose
     implementation(libs.coil.compose)
-
-    // serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    //compose navigation
-    implementation(libs.androidx.navigation.compose)
-
 }

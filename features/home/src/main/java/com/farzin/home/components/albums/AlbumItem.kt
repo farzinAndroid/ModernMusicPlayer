@@ -2,7 +2,6 @@ package com.farzin.home.components.albums
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,7 +38,7 @@ import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.core_ui.utils.PaletteGenerator
-import com.farzin.home.full_player.advancedShadow
+import com.farzin.player.player.advancedShadow
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable

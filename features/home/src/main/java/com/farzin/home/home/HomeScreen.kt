@@ -2,7 +2,6 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -50,14 +49,14 @@ import com.farzin.core_ui.utils.showToast
 import com.farzin.home.components.FilterSection
 import com.farzin.home.components.HomePager
 import com.farzin.home.components.HomeTopBar
-import com.farzin.home.components.MiniMusicController
-import com.farzin.home.full_player.FullPlayer
+import com.farzin.player.player.MiniMusicController
+import com.farzin.player.player.FullPlayer
 import com.farzin.home.permission.AudioPermission
 import com.farzin.home.permission.PermissionScreen
+import com.farzin.player.PlayerViewmodel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -100,7 +99,7 @@ fun HomeScreen(
 @Composable
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
-    preferencesViewmodel: PreferencesViewmodel = hiltViewModel(),
+    playerViewmodel: PlayerViewmodel = hiltViewModel(),
     navController: NavController
 ) {
 
@@ -120,9 +119,9 @@ fun Home(
     }
 
 
-    val currentPosition by homeViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
-    val musicState by homeViewmodel.musicState.collectAsStateWithLifecycle()
-    val playbackMode by preferencesViewmodel.playbackMode.collectAsStateWithLifecycle()
+    val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
+    val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
+    val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
     val playingQueueSongs by homeViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
@@ -192,13 +191,13 @@ fun Home(
                                         progress = progress,
                                         song = playingQueueSongs[musicState.currentSongIndex],
                                         onNextClicked = {
-                                            homeViewmodel.skipNext()
+                                            playerViewmodel.skipNext()
                                         },
                                         onPrevClicked = {
-                                            homeViewmodel.skipPrevious()
+                                            playerViewmodel.skipPrevious()
                                         },
                                         onPlayPauseClicked = {
-                                            homeViewmodel.pausePlay(!musicState.playWhenReady)
+                                            playerViewmodel.pausePlay(!musicState.playWhenReady)
                                         },
                                         musicState = musicState,
                                         modifier = Modifier
@@ -218,7 +217,7 @@ fun Home(
                             musicState = musicState,
                             songs = playingQueueSongs,
                             onSkipToIndex = {
-                                homeViewmodel.skipToIndex(it)
+                                playerViewmodel.skipToIndex(it)
                             },
                             onBackClicked = {
                                 if (isExpanded) {
@@ -232,19 +231,19 @@ fun Home(
                             currentPosition = currentPosition,
                             onToggleLikeButton = {},
                             onPlaybackModeClicked = {
-                                preferencesViewmodel.onTogglePlaybackMode()
+                                playerViewmodel.onTogglePlaybackMode()
                             },
                             onSeekTo = {
-                                homeViewmodel.seekTo(convertToPosition(it, musicState.duration))
+                                playerViewmodel.seekTo(convertToPosition(it, musicState.duration))
                             },
                             onPrevClicked = {
-                                homeViewmodel.skipPrevious()
+                                playerViewmodel.skipPrevious()
                             },
                             onNextClicked = {
-                                homeViewmodel.skipNext()
+                                playerViewmodel.skipNext()
                             },
                             onPlayPauseClicked = {
-                                homeViewmodel.pausePlay(!musicState.playWhenReady)
+                                playerViewmodel.pausePlay(!musicState.playWhenReady)
                             },
                             playbackMode = playbackMode
                         )
@@ -279,10 +278,10 @@ fun Home(
                             sortOrder = sortOrder,
                             sortBy = sortby,
                             onSortOrderClicked = {
-                                preferencesViewmodel.onChangeSortOrder(it)
+                                playerViewmodel.onChangeSortOrder(it)
                             },
                             onSortByClicked = {
-                                preferencesViewmodel.onChangeSortBy(it)
+                                playerViewmodel.onChangeSortBy(it)
                             }
                         )
 
@@ -294,7 +293,7 @@ fun Home(
                                 songs = songs,
                                 albums = albums,
                                 onSongClick = { index ->
-                                        homeViewmodel.play(songs,index)
+                                    playerViewmodel.play(songs,index)
                                 },
                                 onAlbumClick = { albumId ->
                                     navController.navigate(Screens.Album(albumId))

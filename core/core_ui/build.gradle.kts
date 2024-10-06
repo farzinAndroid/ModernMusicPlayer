@@ -46,6 +46,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core:core_model"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
