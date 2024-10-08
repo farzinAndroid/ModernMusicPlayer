@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.farzin.core_model.Album
 import com.farzin.core_model.Artist
+import com.farzin.core_model.Folder
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.TextMedium
@@ -27,6 +28,7 @@ import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.home.components.albums.Albums
 import com.farzin.home.components.artists.Artists
+import com.farzin.home.components.folders.Folders
 import com.farzin.home.components.songs.Songs
 import com.farzin.home.home.MediaTab
 import kotlinx.coroutines.launch
@@ -36,11 +38,13 @@ fun HomePager(
     onSongClick: (Int) -> Unit,
     onAlbumClick: (Long) -> Unit,
     onArtistClick: (Long) -> Unit,
+    onFolderClick: (String) -> Unit,
     currentPlayingSongId: String,
     songs: List<Song>,
     musicState: MusicState,
     albums: List<Album>,
-    artists: List<Artist>
+    artists: List<Artist>,
+    folders:List<Folder>
 ) {
 
     val scope = rememberCoroutineScope()
@@ -129,7 +133,10 @@ fun HomePager(
 
 
             MediaTab.Folders.ordinal -> {
-
+                Folders(
+                    folders = folders,
+                    onFolderClick = onFolderClick
+                )
             }
 
         }

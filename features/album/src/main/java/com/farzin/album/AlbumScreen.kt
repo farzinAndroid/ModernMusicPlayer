@@ -205,7 +205,8 @@ fun AlbumScreen(
                             song = song,
                             musicState = musicState,
                             onToggleFavorite = {},
-                            isPlaying = song.mediaId == musicState.currentMediaId
+                            isPlaying = song.mediaId == musicState.currentMediaId,
+                            shouldShowPic = false
                         )
                     }
                 }

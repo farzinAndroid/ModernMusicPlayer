@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
@@ -47,7 +48,7 @@ fun ArtistItem(
             .padding(horizontal = MaterialTheme.spacing.medium16)
     ) {
         Image(
-            painter = painterResource(com.farzin.core_ui.R.drawable.music_logo),
+            painter = painterResource(com.farzin.core_ui.R.drawable.artist_background),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -67,7 +68,9 @@ fun ArtistItem(
             TextBold(
                 text = artist.name,
                 color = MaterialTheme.colorScheme.WhiteDarkBlue,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                maxLine = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             TextRegular(

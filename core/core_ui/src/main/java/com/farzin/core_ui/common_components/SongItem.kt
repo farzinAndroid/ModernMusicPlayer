@@ -1,5 +1,6 @@
 package com.farzin.core_ui.common_components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
+import com.farzin.core_ui.R
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.WhiteDarkBlue
@@ -40,6 +43,8 @@ fun SongItem(
     onClick: () -> Unit,
     onToggleFavorite: () -> Unit,
     musicState: MusicState,
+    shouldUseDefaultPic: Boolean = false,
+    shouldShowPic: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
 
@@ -60,18 +65,31 @@ fun SongItem(
             modifier = Modifier
                 .weight(1f)
         ) {
-            SubcomposeAsyncImage(
-                model = song.artworkUri,
-                contentDescription = "",
-                loading = null,
-                error = {
-                    ErrorImage()
-                },
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(RoundedCornerShape(12.dp))
-            )
+            if (shouldShowPic){
+                if (shouldUseDefaultPic){
+                    Image(
+                        painter = painterResource(R.drawable.music_logo),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(60.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }else{
+                    SubcomposeAsyncImage(
+                        model = song.artworkUri,
+                        contentDescription = "",
+                        loading = null,
+                        error = {
+                            ErrorImage()
+                        },
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(60.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
+            }
 
             Spacer(Modifier.width(MaterialTheme.spacing.medium16))
 

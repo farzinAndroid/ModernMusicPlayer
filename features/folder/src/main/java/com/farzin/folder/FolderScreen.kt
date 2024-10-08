@@ -1,4 +1,4 @@
-package com.farzin.artist
+package com.farzin.folder
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -31,9 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.farzin.core_model.Album
 import com.farzin.core_model.Artist
-import com.farzin.core_ui.Screens
+import com.farzin.core_model.Folder
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
@@ -48,27 +47,26 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArtistScreen(
-    artistId:Long,
+fun FolderScreen(
+    folderName: String,
     navController: NavController,
-    playerViewmodel: PlayerViewmodel = hiltViewModel(),
-    artistViewmodel: ArtistViewmodel = hiltViewModel()
+    folderViewmodel: FolderViewmodel = hiltViewModel(),
+    playerViewmodel: PlayerViewmodel = hiltViewModel()
 ) {
-
     val scope = rememberCoroutineScope()
 
     val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
-    val playingQueueSongs by artistViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
+    val playingQueueSongs by folderViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
 
-    var artist by remember { mutableStateOf(Artist()) }
-    LaunchedEffect(artistId) {
-        artistViewmodel.getArtistById(artistId).collectLatest {
-            artist = it
+    var folder by remember { mutableStateOf(Folder()) }
+    LaunchedEffect(folderName) {
+        folderViewmodel.getFolderByName(folderName).collectLatest {
+            folder = it
         }
     }
 
@@ -100,7 +98,7 @@ fun ArtistScreen(
                                 }
                             }
                     ) {
-                        if (artist.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+                        if (folder.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
                             MiniMusicController(
                                 progress = progress,
                                 song = playingQueueSongs[musicState.currentSongIndex],
@@ -126,7 +124,7 @@ fun ArtistScreen(
 
 
 
-            if (artist.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+            if (folder.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
                 FullPlayer(
                     musicState = musicState,
                     songs = playingQueueSongs,
@@ -180,7 +178,7 @@ fun ArtistScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = artist.name
+                    text = folder.name
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
@@ -190,20 +188,20 @@ fun ArtistScreen(
                         .fillMaxSize()
 
                 ) {
-                    itemsIndexed(artist.songs) { index, song ->
+                    itemsIndexed(folder.songs) { index, song ->
                         Spacer(Modifier.height(MaterialTheme.spacing.small8))
                         SongItem(
                             onClick = {
                                 playerViewmodel.play(
-                                    artist.songs,
+                                    folder.songs,
                                     index
                                 )
                             },
                             song = song,
                             musicState = musicState,
                             onToggleFavorite = {},
-                            shouldUseDefaultPic = true,
-                            isPlaying = song.mediaId == musicState.currentMediaId
+                            isPlaying = song.mediaId == musicState.currentMediaId,
+                            shouldUseDefaultPic = true
                         )
                     }
                 }
@@ -211,5 +209,4 @@ fun ArtistScreen(
             }
         }
     )
-
 }

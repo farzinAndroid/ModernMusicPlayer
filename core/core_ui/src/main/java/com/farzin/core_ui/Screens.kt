@@ -16,5 +16,9 @@ sealed interface Screens {
     data class Artist(val artistId: Long) : Screens
 
 
+    @Serializable
+    data class Folder(val folderName: String) : Screens
+
+
 
 }

@@ -157,7 +157,7 @@ fun Home(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = false,
+        gesturesEnabled = !isExpanded,
         drawerContent = {
             Column(
                 modifier = Modifier
@@ -307,6 +307,10 @@ fun Home(
                                 artists = artists,
                                 onArtistClick = {artistId->
                                     navController.navigate(Screens.Artist(artistId))
+                                },
+                                folders = folders,
+                                onFolderClick = {name->
+                                    navController.navigate(Screens.Folder(name))
                                 }
                             )
                         }
