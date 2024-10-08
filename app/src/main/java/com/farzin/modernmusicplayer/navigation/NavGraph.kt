@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.farzin.core_ui.Screens
 import com.farzin.album.AlbumScreen
+import com.farzin.artist.ArtistScreen
 import com.farzin.home.home.HomeScreen
 
 @Composable
@@ -27,8 +28,17 @@ fun NavGraph(
 
         composable<Screens.Album> {
             val args = it.toRoute<Screens.Album>()
-            com.farzin.album.AlbumScreen(
+            AlbumScreen(
                 albumId = args.albumId,
+                navController = navHostController
+            )
+        }
+
+
+        composable<Screens.Artist> {
+            val args = it.toRoute<Screens.Artist>()
+            ArtistScreen(
+                artistId = args.artistId,
                 navController = navHostController
             )
         }

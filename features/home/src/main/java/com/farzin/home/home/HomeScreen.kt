@@ -305,7 +305,9 @@ fun Home(
                                 },
                                 musicState = musicState,
                                 artists = artists,
-                                onArtistClick = {}
+                                onArtistClick = {artistId->
+                                    navController.navigate(Screens.Artist(artistId))
+                                }
                             )
                         }
                     }

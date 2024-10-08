@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":features:home"))
     implementation(project(":features:album"))
     implementation(project(":features:player"))
+    implementation(project(":features:artist"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

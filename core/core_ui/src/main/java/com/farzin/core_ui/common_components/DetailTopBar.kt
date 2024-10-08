@@ -1,4 +1,4 @@
-package com.farzin.album
+package com.farzin.core_ui.common_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,15 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
 @Composable
-fun AlbumTopBar(
+fun DetailTopBar(
     onBackClicked:()->Unit,
-    albumName:String
+    text:String
 ) {
 
     Row(
@@ -53,7 +52,7 @@ fun AlbumTopBar(
         }
 
         TextMedium(
-            text = albumName,
+            text = text,
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
             maxLine = 1,
             overflow = TextOverflow.Ellipsis,

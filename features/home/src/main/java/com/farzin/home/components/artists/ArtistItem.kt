@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
@@ -70,7 +71,7 @@ fun ArtistItem(
             )
 
             TextRegular(
-                text = artist.name,
+                text = stringResource(com.farzin.core_ui.R.string.artist),
                 color = MaterialTheme.colorScheme.Gray,
                 fontSize = 12.sp
             )

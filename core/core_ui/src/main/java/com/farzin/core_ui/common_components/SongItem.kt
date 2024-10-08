@@ -50,8 +50,7 @@ fun SongItem(
             .height(60.dp)
             .background(if (isPlaying) MaterialTheme.colorScheme.DarkGray else Color.Transparent)
             .clickable { onClick() }
-            .padding(horizontal = MaterialTheme.spacing.medium16)
-            .clip(RoundedCornerShape(12.dp)),
+            .padding(horizontal = MaterialTheme.spacing.medium16),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {
@@ -71,7 +70,7 @@ fun SongItem(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(60.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(12.dp))
             )
 
             Spacer(Modifier.width(MaterialTheme.spacing.medium16))

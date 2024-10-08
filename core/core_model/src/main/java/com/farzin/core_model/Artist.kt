@@ -3,7 +3,7 @@
 package com.farzin.core_model
 
 data class Artist(
-    val id: Long,
-    val name: String,
-    val songs: List<Song>
+    val id: Long = -1L,
+    val name: String = "",
+    val songs: List<Song> = emptyList()
 )

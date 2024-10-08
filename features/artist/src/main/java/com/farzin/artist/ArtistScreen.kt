@@ -1,4 +1,4 @@
-package com.farzin.album
+package com.farzin.artist
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Album
+import com.farzin.core_model.Artist
+import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
@@ -46,11 +48,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumScreen(
-    albumId: Long,
-    albumViewModel: AlbumViewmodel = hiltViewModel(),
+fun ArtistScreen(
+    artistId:Long,
+    navController: NavController,
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
-    navController: NavController
+    artistViewmodel: ArtistViewmodel = hiltViewModel()
 ) {
 
     val scope = rememberCoroutineScope()
@@ -58,15 +60,15 @@ fun AlbumScreen(
     val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
-    val playingQueueSongs by albumViewModel.playingQueueSongs.collectAsStateWithLifecycle()
+    val playingQueueSongs by artistViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
 
-    var album by remember { mutableStateOf(Album()) }
-    LaunchedEffect(albumId) {
-        albumViewModel.getAlbumById(albumId).collectLatest {
-            album = it
+    var artist by remember { mutableStateOf(Artist()) }
+    LaunchedEffect(artistId) {
+        artistViewmodel.getArtistById(artistId).collectLatest {
+            artist = it
         }
     }
 
@@ -98,7 +100,7 @@ fun AlbumScreen(
                                 }
                             }
                     ) {
-                        if (album.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+                        if (artist.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
                             MiniMusicController(
                                 progress = progress,
                                 song = playingQueueSongs[musicState.currentSongIndex],
@@ -124,7 +126,7 @@ fun AlbumScreen(
 
 
 
-            if (album.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+            if (artist.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
                 FullPlayer(
                     musicState = musicState,
                     songs = playingQueueSongs,
@@ -173,32 +175,27 @@ fun AlbumScreen(
                     .background(MaterialTheme.colorScheme.BackgroundColor),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 DetailTopBar(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = album.name
+                    text = artist.name
                 )
 
-                Spacer(Modifier.height(MaterialTheme.spacing.semiLarge24))
-
-                AlbumDetailImage(
-                    artworkUri = album.artworkUri.toString()
-                )
-
-                Spacer(Modifier.height(MaterialTheme.spacing.large32))
+                Spacer(Modifier.height(MaterialTheme.spacing.medium16))
 
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
 
                 ) {
-                    itemsIndexed(album.songs) { index, song ->
+                    itemsIndexed(artist.songs) { index, song ->
                         Spacer(Modifier.height(MaterialTheme.spacing.small8))
                         SongItem(
                             onClick = {
                                 playerViewmodel.play(
-                                    album.songs,
+                                    artist.songs,
                                     index
                                 )
                             },
@@ -213,8 +210,5 @@ fun AlbumScreen(
             }
         }
     )
-
-
-
 
 }
