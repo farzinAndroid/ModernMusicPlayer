@@ -12,7 +12,9 @@ import com.farzin.core_ui.R
 import com.farzin.core_ui.theme.WhiteDarkBlue
 
 @Composable
-fun NoSongText() {
+fun EmptySectionText(
+    text:String
+) {
 
 
     Box(
@@ -21,7 +23,7 @@ fun NoSongText() {
         contentAlignment = Alignment.Center
     ){
         TextMedium(
-            text = stringResource(R.string.no_songs),
+            text = text,
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
             fontSize = 20.sp
         )

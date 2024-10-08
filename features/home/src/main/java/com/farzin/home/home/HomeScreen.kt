@@ -37,6 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Album
+import com.farzin.core_model.Artist
+import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
@@ -133,7 +135,8 @@ fun Home(
     var sortby by remember { mutableStateOf(SortBy.DATE_ADDED) }
     var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
     var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
-    val albumByID by homeViewmodel.albumById.collectAsStateWithLifecycle()
+    var artists by remember { mutableStateOf<List<Artist>>(emptyList()) }
+    var folders by remember { mutableStateOf<List<Folder>>(emptyList()) }
     val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
     when (val state = homeState) {
         HomeState.Loading -> {
@@ -144,6 +147,8 @@ fun Home(
             loading = false
             songs = state.songs
             albums = state.albums
+            artists = state.artists
+            folders = state.folders
             sortby = state.sortBy
             sortOrder = state.sortOrder
         }
@@ -299,7 +304,8 @@ fun Home(
                                     navController.navigate(Screens.Album(albumId))
                                 },
                                 musicState = musicState,
-                                albumByID = albumByID
+                                artists = artists,
+                                onArtistClick = {}
                             )
                         }
                     }

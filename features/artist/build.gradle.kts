@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.farzin.album"
+    namespace = "com.farzin.artist"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -78,5 +78,4 @@ dependencies {
 
     //compose navigation
     implementation(libs.androidx.navigation.compose)
-
 }

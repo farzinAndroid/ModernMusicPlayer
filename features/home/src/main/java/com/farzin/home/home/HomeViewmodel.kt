@@ -17,14 +17,6 @@ class HomeViewmodel @Inject constructor(
     mediaUseCases: MediaUseCases,
 ) : ViewModel() {
 
-
-
-    val albumById = mediaUseCases.getAlbumByIdUseCase(2265521633247135750).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = Album()
-    )
-
     val playingQueueSongs = mediaUseCases.getPlayingQueueSongsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
@@ -47,6 +39,8 @@ class HomeViewmodel @Inject constructor(
         HomeState.Success(
             songs = songs,
             albums = albums,
+            artists = artists,
+            folders = folders,
             sortOrder = userData.sortOrder,
             sortBy = userData.sortBy
         )

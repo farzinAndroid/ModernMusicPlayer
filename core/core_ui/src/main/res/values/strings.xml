@@ -7,6 +7,9 @@
     <string name="albums">Albums</string>
     <string name="folders">Folders</string>
     <string name="no_songs">No Songs</string>
+    <string name="no_albums">No Albums</string>
+    <string name="no_artist">No Artists</string>
+    <string name="no_Folder">No Folders</string>
     <string name="loading">Loading</string>
     <string name="playing">Playing</string>
     <string name="prev">Previous</string>
