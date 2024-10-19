@@ -24,8 +24,10 @@
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/album" />
             <option value="$PROJECT_DIR$/features/artist" />
+            <option value="$PROJECT_DIR$/features/folder" />
             <option value="$PROJECT_DIR$/features/home" />
             <option value="$PROJECT_DIR$/features/player" />
+            <option value="$PROJECT_DIR$/features/search" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

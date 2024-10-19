@@ -21,7 +21,7 @@ import com.farzin.core_ui.theme.spacing
 
 @Composable
 fun HomeTopBar(
-    onMenuClicked:()->Unit,
+    onSearchClicked:()->Unit,
     onFilterClicked:()->Unit,
     showFilter:Boolean
 ) {
@@ -38,12 +38,13 @@ fun HomeTopBar(
     ) {
 
         Icon(
-            painter = painterResource(com.farzin.core_ui.R.drawable.menu),
+            painter = painterResource(com.farzin.core_ui.R.drawable.search),
             contentDescription = "",
             tint = MaterialTheme.colorScheme.WhiteDarkBlue,
             modifier = Modifier
+                .clickable { onSearchClicked() }
                 .size(MaterialTheme.spacing.semiLarge24)
-                .clickable { onMenuClicked() }
+
         )
 
 

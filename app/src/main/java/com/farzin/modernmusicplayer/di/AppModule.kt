@@ -14,6 +14,7 @@ import com.farzin.core_domain.usecases.media.GetFoldersUseCase
 import com.farzin.core_domain.usecases.media.GetPlayingQueueSongsUseCase
 import com.farzin.core_domain.usecases.media.GetSongsUseCase
 import com.farzin.core_domain.usecases.media.MediaUseCases
+import com.farzin.core_domain.usecases.media.SearchUseCase
 import com.farzin.core_domain.usecases.preferences.GetPlaybackModeUseCase
 import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIdsUseCase
 import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIndexUseCase
@@ -67,6 +68,7 @@ object AppModule {
         getAlbumByIdUseCase = GetAlbumByIdUseCase(mediaRepository),
         getArtistByIdUseCase = GetArtistByIdUseCase(mediaRepository),
         getFolderByNameUseCase = GetFolderByNameUseCase(mediaRepository),
+        searchUseCase = SearchUseCase(mediaRepository)
     )
 
 

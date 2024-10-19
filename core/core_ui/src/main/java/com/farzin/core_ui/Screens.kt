@@ -20,5 +20,9 @@ sealed interface Screens {
     data class Folder(val folderName: String) : Screens
 
 
+    @Serializable
+    data object Search : Screens
+
+
 
 }

@@ -10,6 +10,7 @@ import com.farzin.album.AlbumScreen
 import com.farzin.artist.ArtistScreen
 import com.farzin.folder.FolderScreen
 import com.farzin.home.home.HomeScreen
+import com.farzin.search.search.SearchScreen
 
 @Composable
 fun NavGraph(
@@ -50,6 +51,13 @@ fun NavGraph(
             val args = it.toRoute<Screens.Folder>()
             FolderScreen(
                 folderName = args.folderName,
+                navController = navHostController
+            )
+        }
+
+
+        composable<Screens.Search> {
+            SearchScreen(
                 navController = navHostController
             )
         }

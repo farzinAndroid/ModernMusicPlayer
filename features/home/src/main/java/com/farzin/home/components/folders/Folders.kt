@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.farzin.core_model.Folder
 import com.farzin.core_ui.common_components.EmptySectionText
+import com.farzin.core_ui.common_components.FolderItem
 import com.farzin.core_ui.theme.spacing
 
 @Composable

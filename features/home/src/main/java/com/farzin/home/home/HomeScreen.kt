@@ -8,20 +8,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,11 +47,11 @@ import com.farzin.core_ui.utils.showToast
 import com.farzin.home.components.FilterSection
 import com.farzin.home.components.HomePager
 import com.farzin.home.components.HomeTopBar
-import com.farzin.player.player.MiniMusicController
-import com.farzin.player.player.FullPlayer
 import com.farzin.home.permission.AudioPermission
 import com.farzin.home.permission.PermissionScreen
 import com.farzin.player.PlayerViewmodel
+import com.farzin.player.player.FullPlayer
+import com.farzin.player.player.MiniMusicController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -64,7 +60,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
 ) {
 
     val context = LocalContext.current
@@ -102,7 +98,7 @@ fun HomeScreen(
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
 ) {
 
     val activity = LocalContext.current as Activity
@@ -110,9 +106,6 @@ fun Home(
     var showFilter by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(
-        initialValue = DrawerValue.Closed,
-    )
     val sheetState = rememberBottomSheetScaffoldState()
     val isExpanded = when (sheetState.bottomSheetState.targetValue) {
         SheetValue.Hidden -> false
@@ -154,171 +147,149 @@ fun Home(
         }
     }
 
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        gesturesEnabled = !isExpanded,
-        drawerContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.7f)
-                    .background(Color.White)
+    BottomSheetScaffold(
+        sheetContent = {
+            AnimatedVisibility(
+                visible = !isExpanded,
             ) {
-                Text("Hello")
-            }
-        },
-        content = {
-
-            BottomSheetScaffold(
-                sheetContent = {
-                    AnimatedVisibility(
-                        visible = !isExpanded,
-                    ) {
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(72.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(MaterialTheme.colorScheme.BackgroundColor)
-                                    .clickable {
-                                        scope.launch {
-                                            sheetState.bottomSheetState.expand()
-                                        }
-                                    }
-                            ) {
-                                if (songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
-                                    MiniMusicController(
-                                        progress = progress,
-                                        song = playingQueueSongs[musicState.currentSongIndex],
-                                        onNextClicked = {
-                                            playerViewmodel.skipNext()
-                                        },
-                                        onPrevClicked = {
-                                            playerViewmodel.skipPrevious()
-                                        },
-                                        onPlayPauseClicked = {
-                                            playerViewmodel.pausePlay(!musicState.playWhenReady)
-                                        },
-                                        musicState = musicState,
-                                        modifier = Modifier
-                                            .weight(1f)
-                                    )
-                                }
-                            }
-
-                        }
-                    }
-
-
-
-
-                    if (songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
-                        FullPlayer(
-                            musicState = musicState,
-                            songs = playingQueueSongs,
-                            onSkipToIndex = {
-                                playerViewmodel.skipToIndex(it)
-                            },
-                            onBackClicked = {
-                                if (isExpanded) {
-                                    scope.launch {
-                                        sheetState.bottomSheetState.partialExpand()
-                                    }
-                                } else {
-                                    activity.moveTaskToBack(true)
-                                }
-                            },
-                            currentPosition = currentPosition,
-                            onToggleLikeButton = {},
-                            onPlaybackModeClicked = {
-                                playerViewmodel.onTogglePlaybackMode()
-                            },
-                            onSeekTo = {
-                                playerViewmodel.seekTo(convertToPosition(it, musicState.duration))
-                            },
-                            onPrevClicked = {
-                                playerViewmodel.skipPrevious()
-                            },
-                            onNextClicked = {
-                                playerViewmodel.skipNext()
-                            },
-                            onPlayPauseClicked = {
-                                playerViewmodel.pausePlay(!musicState.playWhenReady)
-                            },
-                            playbackMode = playbackMode
-                        )
-                    }
-
-                },
-                scaffoldState = sheetState,
-                sheetPeekHeight = 60.dp,
-                sheetDragHandle = null,
-                sheetShape = RoundedCornerShape(0.dp),
-                content = {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(72.dp),
+                    contentAlignment = Alignment.Center
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.BackgroundColor)
-                    ) {
-                        HomeTopBar(
-                            onMenuClicked = {
+                            .clickable {
                                 scope.launch {
-                                    drawerState.open()
+                                    sheetState.bottomSheetState.expand()
                                 }
-                            },
-                            onFilterClicked = {
-                                showFilter = !showFilter
-                            },
-                            showFilter = showFilter
-                        )
-
-
-                        FilterSection(
-                            showFilter = showFilter,
-                            sortOrder = sortOrder,
-                            sortBy = sortby,
-                            onSortOrderClicked = {
-                                playerViewmodel.onChangeSortOrder(it)
-                            },
-                            onSortByClicked = {
-                                playerViewmodel.onChangeSortBy(it)
                             }
-                        )
-
-                        if (loading) {
-                            Loading()
-                        } else {
-                            HomePager(
-                                currentPlayingSongId = musicState.currentMediaId,
-                                songs = songs,
-                                albums = albums,
-                                onSongClick = { index ->
-                                    playerViewmodel.play(songs,index)
+                    ) {
+                        if (songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+                            MiniMusicController(
+                                progress = progress,
+                                song = playingQueueSongs[musicState.currentSongIndex],
+                                onNextClicked = {
+                                    playerViewmodel.skipNext()
                                 },
-                                onAlbumClick = { albumId ->
-                                    navController.navigate(Screens.Album(albumId))
+                                onPrevClicked = {
+                                    playerViewmodel.skipPrevious()
+                                },
+                                onPlayPauseClicked = {
+                                    playerViewmodel.pausePlay(!musicState.playWhenReady)
                                 },
                                 musicState = musicState,
-                                artists = artists,
-                                onArtistClick = {artistId->
-                                    navController.navigate(Screens.Artist(artistId))
-                                },
-                                folders = folders,
-                                onFolderClick = {name->
-                                    navController.navigate(Screens.Folder(name))
-                                }
+                                modifier = Modifier
+                                    .weight(1f)
                             )
                         }
                     }
+
                 }
-            )
+            }
 
 
+
+
+            if (songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+                FullPlayer(
+                    musicState = musicState,
+                    songs = playingQueueSongs,
+                    onSkipToIndex = {
+                        playerViewmodel.skipToIndex(it)
+                    },
+                    onBackClicked = {
+                        if (isExpanded) {
+                            scope.launch {
+                                sheetState.bottomSheetState.partialExpand()
+                            }
+                        } else {
+                            activity.moveTaskToBack(true)
+                        }
+                    },
+                    currentPosition = currentPosition,
+                    onToggleLikeButton = {},
+                    onPlaybackModeClicked = {
+                        playerViewmodel.onTogglePlaybackMode()
+                    },
+                    onSeekTo = {
+                        playerViewmodel.seekTo(convertToPosition(it, musicState.duration))
+                    },
+                    onPrevClicked = {
+                        playerViewmodel.skipPrevious()
+                    },
+                    onNextClicked = {
+                        playerViewmodel.skipNext()
+                    },
+                    onPlayPauseClicked = {
+                        playerViewmodel.pausePlay(!musicState.playWhenReady)
+                    },
+                    playbackMode = playbackMode
+                )
+            }
+
+        },
+        scaffoldState = sheetState,
+        sheetPeekHeight = 60.dp,
+        sheetDragHandle = null,
+        sheetShape = RoundedCornerShape(0.dp),
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.BackgroundColor)
+            ) {
+                HomeTopBar(
+                    onSearchClicked = {
+                        navController.navigate(Screens.Search)
+                    },
+                    onFilterClicked = {
+                        showFilter = !showFilter
+                    },
+                    showFilter = showFilter
+                )
+
+
+                FilterSection(
+                    showFilter = showFilter,
+                    sortOrder = sortOrder,
+                    sortBy = sortby,
+                    onSortOrderClicked = {
+                        playerViewmodel.onChangeSortOrder(it)
+                    },
+                    onSortByClicked = {
+                        playerViewmodel.onChangeSortBy(it)
+                    }
+                )
+
+                if (loading) {
+                    Loading()
+                } else {
+                    HomePager(
+                        currentPlayingSongId = musicState.currentMediaId,
+                        songs = songs,
+                        albums = albums,
+                        onSongClick = { index ->
+                            playerViewmodel.play(songs, index)
+                        },
+                        onAlbumClick = { albumId ->
+                            navController.navigate(Screens.Album(albumId))
+                        },
+                        musicState = musicState,
+                        artists = artists,
+                        onArtistClick = { artistId ->
+                            navController.navigate(Screens.Artist(artistId))
+                        },
+                        folders = folders,
+                        onFolderClick = { name ->
+                            navController.navigate(Screens.Folder(name))
+                        }
+                    )
+                }
+            }
         }
     )
 }
