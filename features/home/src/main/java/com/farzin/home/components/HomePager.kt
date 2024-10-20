@@ -28,6 +28,7 @@ import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.home.components.albums.Albums
 import com.farzin.home.components.artists.Artists
+import com.farzin.home.components.favorites.Favorites
 import com.farzin.home.components.folders.Folders
 import com.farzin.home.components.songs.Songs
 import com.farzin.home.home.MediaTab
@@ -36,11 +37,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePager(
     onSongClick: (Int) -> Unit,
+    onFavoriteSongClick: (Int) -> Unit,
     onAlbumClick: (Long) -> Unit,
     onArtistClick: (Long) -> Unit,
     onFolderClick: (String) -> Unit,
+    onFavoriteClick: (id:String,isFavorite:Boolean) -> Unit,
     currentPlayingSongId: String,
     songs: List<Song>,
+    favoriteSongs: List<Song>,
     musicState: MusicState,
     albums: List<Album>,
     artists: List<Artist>,
@@ -109,9 +113,9 @@ fun HomePager(
                 Songs(
                     onClick = onSongClick,
                     currentPlayingSongId = currentPlayingSongId,
-                    onToggleFavorite = {},
                     songs = songs,
-                    musicState = musicState
+                    musicState = musicState,
+                    onToggleFavorite = onFavoriteClick,
                 )
             }
 
@@ -136,6 +140,15 @@ fun HomePager(
                 Folders(
                     folders = folders,
                     onFolderClick = onFolderClick
+                )
+            }
+
+            MediaTab.Favorites.ordinal->{
+                Favorites(
+                    favoriteSongs = favoriteSongs,
+                    onClick = onFavoriteSongClick,
+                    onToggleFavorite = onFavoriteClick,
+                    currentPlayingSongId = currentPlayingSongId
                 )
             }
 

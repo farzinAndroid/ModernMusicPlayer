@@ -1,4 +1,4 @@
-package com.farzin.home.components.songs
+package com.farzin.home.components.favorites
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,21 +16,20 @@ import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.theme.spacing
 
 @Composable
-fun Songs(
-    songs: List<Song>,
+fun Favorites(
+    favoriteSongs:List<Song>,
     currentPlayingSongId: String,
     onClick: (Int) -> Unit,
     onToggleFavorite: (id:String,isFavorite:Boolean) -> Unit,
-    musicState: MusicState,
     modifier: Modifier = Modifier
 ) {
 
-    if (songs.isNotEmpty()){
+    if (favoriteSongs.isNotEmpty()){
         LazyColumn(
             modifier = modifier
                 .fillMaxSize(),
         ) {
-            itemsIndexed(songs, key = {_,song->song.mediaId}){ index, song ->
+            itemsIndexed(favoriteSongs, key = {_,song->song.mediaId}){ index, song ->
                 Spacer(Modifier.height(MaterialTheme.spacing.small8))
                 SongItem(
                     song = song,
@@ -43,7 +42,7 @@ fun Songs(
             }
         }
     }else{
-        EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs))
+        EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_favorite_songs))
     }
 
 }

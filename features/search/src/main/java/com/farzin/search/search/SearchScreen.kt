@@ -70,8 +70,8 @@ fun SearchScreen(
                                     )
                                 },
                                 isPlaying = false,
-                                musicState = musicState,
-                                onToggleFavorite = {}
+                                onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                                isFavorite = song.isFavorite,
                             )
                         }
                     )

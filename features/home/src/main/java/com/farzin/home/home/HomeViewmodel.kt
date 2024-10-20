@@ -5,10 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.media.MediaUseCases
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_model.Album
+import com.farzin.core_model.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +35,14 @@ class HomeViewmodel @Inject constructor(
         initialValue = emptyList()
     )
 
+    val favoriteSongs = mediaUseCases.getSongsUseCase()
+        .map { songs -> songs.filter { it.isFavorite } }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList()
+        )
+
     val homeState = combine(
         songs,
         mediaUseCases.getArtistsUseCase(),
@@ -42,11 +56,14 @@ class HomeViewmodel @Inject constructor(
             artists = artists,
             folders = folders,
             sortOrder = userData.sortOrder,
-            sortBy = userData.sortBy
+            sortBy = userData.sortBy,
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = HomeState.Loading
     )
+
+
+
 }

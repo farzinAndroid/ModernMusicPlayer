@@ -6,4 +6,5 @@ data class UserData(
     val playbackMode: PlaybackMode = PlaybackMode.REPEAT,
     val sortOrder: SortOrder = SortOrder.DESCENDING,
     val sortBy: SortBy = SortBy.TITLE,
+    val favoriteSongs: Set<String>,
 )

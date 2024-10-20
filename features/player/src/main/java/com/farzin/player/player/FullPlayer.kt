@@ -38,7 +38,7 @@ fun FullPlayer(
     onSkipToIndex: (Int) -> Unit,
     onBackClicked:()->Unit,
     onPlaybackModeClicked:()->Unit,
-    onToggleLikeButton:()->Unit,
+    onToggleLikeButton:(id:String,isFavorite:Boolean)->Unit,
     currentPosition:Long,
     musicState: MusicState,
     onSeekTo:(Float)->Unit,
@@ -156,9 +156,10 @@ fun FullPlayer(
         Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
         FullPlayerRepeatShuffleLike(
-            onToggleLikeButton = onToggleLikeButton,
+            onToggleLikeButton = { onToggleLikeButton(currentSong.mediaId,it) },
             onPlaybackModeClicked = onPlaybackModeClicked,
-            playbackMode = playbackMode
+            playbackMode = playbackMode,
+            isFavorite = currentSong.isFavorite
         )
 
         Spacer(Modifier.height(60.dp))

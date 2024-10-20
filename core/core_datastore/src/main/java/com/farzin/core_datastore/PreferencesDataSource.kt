@@ -26,7 +26,7 @@ class PreferencesDataSource @Inject constructor(
             playbackMode = preferences.playbackMode.asPlaybackMode(),
             sortOrder = preferences.sortOrder.asSortOrder(),
             sortBy = preferences.sortBy.asSortBy(),
-//            favoriteSongs = preferences.favoriteSongIdsMap.keys,
+            favoriteSongs = preferences.favoriteSongIdsMap.keys,
         )
     }
 

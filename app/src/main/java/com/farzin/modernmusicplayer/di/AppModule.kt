@@ -20,6 +20,7 @@ import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIdsUseCase
 import com.farzin.core_domain.usecases.preferences.GetPlayingQueueIndexUseCase
 import com.farzin.core_domain.usecases.preferences.GetUserDataUseCase
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
+import com.farzin.core_domain.usecases.preferences.SetFavoriteUseCase
 import com.farzin.core_domain.usecases.preferences.SetPlaybackModeUseCase
 import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIdsUseCase
 import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIndexUseCase
@@ -52,6 +53,7 @@ object AppModule {
         getPlaybackModeUseCase = GetPlaybackModeUseCase(sharedPreferencesRepository),
         getPlayQueueIndexUseCase = GetPlayingQueueIndexUseCase(sharedPreferencesRepository),
         getPlayingQueueIdsUseCase = GetPlayingQueueIdsUseCase(sharedPreferencesRepository),
+        setFavoriteUseCase = SetFavoriteUseCase(sharedPreferencesRepository)
     )
 
     @Provides

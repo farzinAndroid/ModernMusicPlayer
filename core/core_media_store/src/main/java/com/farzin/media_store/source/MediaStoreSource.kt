@@ -25,7 +25,8 @@ class MediaStoreSource @Inject constructor(
 
     fun getSongs(
         sortBy: SortBy,
-        sortOrder: SortOrder
+        sortOrder: SortOrder,
+        favoriteSongs:Set<String>
     ) = contentResolver.observe(MediaStoreUtils.Collection).map {
         buildList {
             contentResolver.query(
@@ -63,7 +64,8 @@ class MediaStoreSource @Inject constructor(
                         date = date.toLocalDateTime(),
                         mediaUri = mediaUri,
                         artworkUri = artworkUri,
-                        folder = folder
+                        folder = folder,
+                        isFavorite = id.toString() in favoriteSongs
                     ).let(::add)
                 }
             }

@@ -118,6 +118,7 @@ fun Home(
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
     val playingQueueSongs by homeViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
+    val favoriteSongs by homeViewmodel.favoriteSongs.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
@@ -211,7 +212,9 @@ fun Home(
                         }
                     },
                     currentPosition = currentPosition,
-                    onToggleLikeButton = {},
+                    onToggleLikeButton = { id, isFavorite ->
+                        playerViewmodel.setFavorite(id, isFavorite)
+                    },
                     onPlaybackModeClicked = {
                         playerViewmodel.onTogglePlaybackMode()
                     },
@@ -271,9 +274,13 @@ fun Home(
                     HomePager(
                         currentPlayingSongId = musicState.currentMediaId,
                         songs = songs,
+                        favoriteSongs = favoriteSongs,
                         albums = albums,
                         onSongClick = { index ->
                             playerViewmodel.play(songs, index)
+                        },
+                        onFavoriteSongClick = { index ->
+                            playerViewmodel.play(favoriteSongs, index)
                         },
                         onAlbumClick = { albumId ->
                             navController.navigate(Screens.Album(albumId))
@@ -286,6 +293,9 @@ fun Home(
                         folders = folders,
                         onFolderClick = { name ->
                             navController.navigate(Screens.Folder(name))
+                        },
+                        onFavoriteClick = {id: String, isFavorite: Boolean ->
+                            playerViewmodel.setFavorite(id, isFavorite)
                         }
                     )
                 }

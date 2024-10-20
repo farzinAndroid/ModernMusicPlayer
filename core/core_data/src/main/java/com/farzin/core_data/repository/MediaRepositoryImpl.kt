@@ -26,7 +26,7 @@ class MediaRepositoryImpl @Inject constructor(
                 mediaStoreSource.getSongs(
                     sortOrder = userData.sortOrder,
                     sortBy = userData.sortBy,
-//                    favoriteSongs = userData.favoriteSongs,
+                    favoriteSongs = userData.favoriteSongs,
 //                    excludedFolders = excludedFolders
                 )
             }

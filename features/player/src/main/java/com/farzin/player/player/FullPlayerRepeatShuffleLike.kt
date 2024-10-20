@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,9 +23,10 @@ import com.farzin.core_ui.theme.spacing
 
 @Composable
 fun FullPlayerRepeatShuffleLike(
-    onToggleLikeButton: () -> Unit,
+    onToggleLikeButton: (isFavorite:Boolean) -> Unit,
     onPlaybackModeClicked: () -> Unit,
-    playbackMode:PlaybackMode
+    playbackMode:PlaybackMode,
+    isFavorite:Boolean
 ) {
 
     val painter = when(playbackMode){
@@ -43,19 +45,18 @@ fun FullPlayerRepeatShuffleLike(
     ) {
 
         IconButton(
-            onClick = { onToggleLikeButton() },
+            onClick = { onToggleLikeButton(!isFavorite) },
             modifier = Modifier
                 .size(MaterialTheme.spacing.semiLarge24)
         ) {
             Icon(
-                imageVector = Icons.Default.FavoriteBorder,
+                imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxSize(),
-                tint = MaterialTheme.colorScheme.DarkGray
+                tint = if (!isFavorite) MaterialTheme.colorScheme.DarkGray else MaterialTheme.colorScheme.WhiteDarkBlue
+
             )
-
-
         }
 
 
@@ -78,23 +79,6 @@ fun FullPlayerRepeatShuffleLike(
                     tint = MaterialTheme.colorScheme.WhiteDarkBlue
                 )
             }
-
-//            IconButton(
-//                onClick = { onShuffleClicked() },
-//                modifier = Modifier
-//                    .size(MaterialTheme.spacing.semiLarge24)
-//            ) {
-//                Icon(
-//                    painter = painterResource(com.farzin.core_ui.R.drawable.ic_shuffle),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .fillMaxSize(),
-//                    tint = if (isShuffleOn)
-//                        MaterialTheme.colorScheme.WhiteDarkBlue
-//                    else
-//                        MaterialTheme.colorScheme.DarkGray
-//                )
-//            }
 
         }
 

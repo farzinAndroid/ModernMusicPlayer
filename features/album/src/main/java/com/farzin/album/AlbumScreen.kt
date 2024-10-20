@@ -50,7 +50,7 @@ fun AlbumScreen(
     albumId: Long,
     albumViewModel: AlbumViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -141,7 +141,9 @@ fun AlbumScreen(
                         }
                     },
                     currentPosition = currentPosition,
-                    onToggleLikeButton = {},
+                    onToggleLikeButton = { id, isFavorite ->
+                        playerViewmodel.setFavorite(id, isFavorite)
+                    },
                     onPlaybackModeClicked = {
                         playerViewmodel.onTogglePlaybackMode()
                     },
@@ -203,10 +205,10 @@ fun AlbumScreen(
                                 )
                             },
                             song = song,
-                            musicState = musicState,
-                            onToggleFavorite = {},
                             isPlaying = song.mediaId == musicState.currentMediaId,
-                            shouldShowPic = false
+                            shouldShowPic = false,
+                            onToggleFavorite = { playerViewmodel.setFavorite(song.mediaId, it) },
+                            isFavorite = song.isFavorite,
                         )
                     }
                 }
@@ -214,8 +216,6 @@ fun AlbumScreen(
             }
         }
     )
-
-
 
 
 }

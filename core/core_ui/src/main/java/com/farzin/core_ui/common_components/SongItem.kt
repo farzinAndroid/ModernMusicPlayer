@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
-import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.R
 import com.farzin.core_ui.theme.DarkGray
@@ -41,10 +42,10 @@ fun SongItem(
     song: Song,
     isPlaying: Boolean,
     onClick: () -> Unit,
-    onToggleFavorite: () -> Unit,
-    musicState: MusicState,
+    onToggleFavorite: (isFavorite: Boolean) -> Unit,
     shouldUseDefaultPic: Boolean = false,
     shouldShowPic: Boolean = true,
+    isFavorite: Boolean,
     modifier: Modifier = Modifier,
 ) {
 
@@ -65,8 +66,8 @@ fun SongItem(
             modifier = Modifier
                 .weight(1f)
         ) {
-            if (shouldShowPic){
-                if (shouldUseDefaultPic){
+            if (shouldShowPic) {
+                if (shouldUseDefaultPic) {
                     Image(
                         painter = painterResource(R.drawable.music_logo),
                         contentDescription = "",
@@ -75,7 +76,7 @@ fun SongItem(
                             .size(60.dp)
                             .clip(RoundedCornerShape(12.dp))
                     )
-                }else{
+                } else {
                     SubcomposeAsyncImage(
                         model = song.artworkUri,
                         contentDescription = "",
@@ -123,13 +124,19 @@ fun SongItem(
         }
 
 
-        Icon(
-            imageVector = Icons.Rounded.FavoriteBorder,
-            contentDescription = "",
-            tint = MaterialTheme.colorScheme.WhiteDarkBlue,
+        IconButton(
             modifier = Modifier
-                .size(MaterialTheme.spacing.semiLarge24)
-        )
+                .size(MaterialTheme.spacing.semiLarge24),
+            onClick = {
+                onToggleFavorite(!isFavorite)
+            }
+        ) {
+            Icon(
+                imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.WhiteDarkBlue,
+            )
+        }
 
 
     }

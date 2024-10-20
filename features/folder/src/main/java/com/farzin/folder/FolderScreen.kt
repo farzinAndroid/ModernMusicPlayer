@@ -141,7 +141,9 @@ fun FolderScreen(
                         }
                     },
                     currentPosition = currentPosition,
-                    onToggleLikeButton = {},
+                    onToggleLikeButton = { id, isFavorite ->
+                        playerViewmodel.setFavorite(id, isFavorite)
+                    },
                     onPlaybackModeClicked = {
                         playerViewmodel.onTogglePlaybackMode()
                     },
@@ -198,10 +200,10 @@ fun FolderScreen(
                                 )
                             },
                             song = song,
-                            musicState = musicState,
-                            onToggleFavorite = {},
                             isPlaying = song.mediaId == musicState.currentMediaId,
-                            shouldUseDefaultPic = true
+                            shouldUseDefaultPic = true,
+                            onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                            isFavorite = song.isFavorite,
                         )
                     }
                 }

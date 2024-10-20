@@ -14,5 +14,6 @@ data class Song(
     val album: String = "",
     val duration: Long = -1L,
     val date: LocalDateTime= LocalDateTime(1,2,3,3,2,1),
-    val folder:String = ""
+    val folder:String = "",
+    val isFavorite:Boolean = false
 )

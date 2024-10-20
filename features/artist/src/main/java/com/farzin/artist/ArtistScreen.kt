@@ -143,7 +143,9 @@ fun ArtistScreen(
                         }
                     },
                     currentPosition = currentPosition,
-                    onToggleLikeButton = {},
+                    onToggleLikeButton = { id, isFavorite ->
+                        playerViewmodel.setFavorite(id, isFavorite)
+                    },
                     onPlaybackModeClicked = {
                         playerViewmodel.onTogglePlaybackMode()
                     },
@@ -200,8 +202,8 @@ fun ArtistScreen(
                                 )
                             },
                             song = song,
-                            musicState = musicState,
-                            onToggleFavorite = {},
+                            onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                            isFavorite = song.isFavorite,
                             shouldUseDefaultPic = true,
                             isPlaying = song.mediaId == musicState.currentMediaId
                         )

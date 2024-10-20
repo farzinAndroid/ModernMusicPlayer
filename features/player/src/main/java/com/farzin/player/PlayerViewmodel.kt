@@ -72,4 +72,8 @@ class PlayerViewmodel @Inject constructor(
     fun onChangeSortBy(sortBy: SortBy) =
         viewModelScope.launch { preferencesUseCases.setSortByUseCase(sortBy) }
 
+    fun setFavorite(id:String,isFavorite:Boolean) = viewModelScope.launch {
+        preferencesUseCases.setFavoriteUseCase(id,isFavorite)
+    }
+
 }
