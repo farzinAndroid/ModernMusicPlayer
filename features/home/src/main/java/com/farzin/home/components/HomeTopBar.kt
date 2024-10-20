@@ -38,12 +38,12 @@ fun HomeTopBar(
     ) {
 
         Icon(
-            painter = painterResource(com.farzin.core_ui.R.drawable.search),
+            painter = painterResource(com.farzin.core_ui.R.drawable.search) ,
             contentDescription = "",
             tint = MaterialTheme.colorScheme.WhiteDarkBlue,
             modifier = Modifier
-                .clickable { onSearchClicked() }
                 .size(MaterialTheme.spacing.semiLarge24)
+                .clickable { onSearchClicked() }
 
         )
 

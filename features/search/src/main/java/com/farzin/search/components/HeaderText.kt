@@ -2,10 +2,8 @@ package com.farzin.search.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -14,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.farzin.core_ui.common_components.TextBold
 import com.farzin.core_ui.theme.BackgroundColor
@@ -23,10 +20,8 @@ import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
 @Composable
-fun <T> InitLazyColumn(
+fun HeaderText(
     headerText: String,
-    list: List<T>,
-    itemContent: @Composable (Int, T) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -46,15 +41,5 @@ fun <T> InitLazyColumn(
                 textAlign = TextAlign.Start
             )
         )
-    }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(MaterialTheme.colorScheme.BackgroundColor)
-    ) {
-        itemsIndexed(list) { index, item: T ->
-            itemContent(index, item)
-        }
     }
 }

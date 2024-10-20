@@ -23,3 +23,7 @@ val ColorScheme.Gray: Color
 val ColorScheme.DarkGray: Color
     @Composable
     get() = Color(0xff555B6A)
+
+val ColorScheme.SearchTextFieldColor: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) Color(0xffF7FAFF) else Color(0xff555B6A)

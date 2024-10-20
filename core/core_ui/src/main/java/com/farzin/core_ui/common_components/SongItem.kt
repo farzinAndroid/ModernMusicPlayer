@@ -3,6 +3,7 @@ package com.farzin.core_ui.common_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,7 +55,7 @@ fun SongItem(
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
-            .background(if (isPlaying) MaterialTheme.colorScheme.DarkGray else Color.Transparent)
+            .background(if (isPlaying) MaterialTheme.colorScheme.Gray else Color.Transparent)
             .clickable { onClick() }
             .padding(horizontal = MaterialTheme.spacing.medium16),
         verticalAlignment = Alignment.CenterVertically,
@@ -113,7 +114,7 @@ fun SongItem(
                 TextMedium(
                     text = song.artist,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.Gray,
+                    color = MaterialTheme.colorScheme.DarkGray,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = MaterialTheme.spacing.medium16),

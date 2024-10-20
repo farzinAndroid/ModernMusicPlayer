@@ -2,6 +2,7 @@ package com.farzin.player.player
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -97,7 +98,7 @@ fun FullPlayerTimeSlider(
                        .height(3.dp),
                    colors = SliderDefaults.colors(
                        activeTrackColor = MaterialTheme.colorScheme.WhiteDarkBlue,
-                       inactiveTrackColor = MaterialTheme.colorScheme.DarkGray,
+                       inactiveTrackColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.DarkGray else MaterialTheme.colorScheme.Gray
                    )
                )
             },

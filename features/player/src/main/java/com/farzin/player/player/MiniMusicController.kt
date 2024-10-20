@@ -1,6 +1,7 @@
 package com.farzin.player.player
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,7 +64,7 @@ fun MiniMusicController(
             gapSize = 0.dp,
             strokeCap = StrokeCap.Square,
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
-            trackColor = MaterialTheme.colorScheme.DarkGray,
+            trackColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.DarkGray else MaterialTheme.colorScheme.Gray,
             drawStopIndicator = {}
         )
     }

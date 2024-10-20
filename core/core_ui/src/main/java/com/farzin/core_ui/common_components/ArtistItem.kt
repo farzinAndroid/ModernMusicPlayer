@@ -2,6 +2,7 @@ package com.farzin.core_ui.common_components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,14 +26,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.farzin.core_model.Artist
+import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
 @Composable
 fun ArtistItem(
-    artist:Artist,
-    onClick:(Long)->Unit
+    artist: Artist,
+    onClick: (Long) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -42,7 +46,8 @@ fun ArtistItem(
             .padding(horizontal = MaterialTheme.spacing.medium16)
     ) {
         Image(
-            painter = painterResource(com.farzin.core_ui.R.drawable.artist_background),
+            painter = if (isSystemInDarkTheme()) painterResource(com.farzin.core_ui.R.drawable.artist_white) else
+                painterResource(com.farzin.core_ui.R.drawable.artist_blue),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier

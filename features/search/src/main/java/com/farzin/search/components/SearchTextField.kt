@@ -28,7 +28,9 @@ import com.farzin.core_ui.R
 import com.farzin.core_ui.common_components.TextRegular
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.Gray
+import com.farzin.core_ui.theme.SearchTextFieldColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
+import com.farzin.core_ui.theme.spacing
 
 
 @Composable
@@ -43,7 +45,8 @@ fun SearchTextField(
     TextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = MaterialTheme.spacing.medium16)
+            .padding(top = MaterialTheme.spacing.medium16)
             .height(60.dp),
         value = value,
         onValueChange = onValueChange,
@@ -79,8 +82,8 @@ fun SearchTextField(
         singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colorScheme.WhiteDarkBlue,
-            focusedContainerColor = MaterialTheme.colorScheme.WhiteDarkBlue,
+            unfocusedContainerColor = MaterialTheme.colorScheme.SearchTextFieldColor,
+            focusedContainerColor = MaterialTheme.colorScheme.SearchTextFieldColor,
             focusedTextColor = MaterialTheme.colorScheme.BackgroundColor,
             unfocusedTextColor = MaterialTheme.colorScheme.BackgroundColor,
             cursorColor = MaterialTheme.colorScheme.BackgroundColor,

@@ -2,6 +2,7 @@ package com.farzin.core_ui.common_components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,7 +43,8 @@ fun LinearAlbumItem(
             .padding(horizontal = MaterialTheme.spacing.medium16)
     ) {
         Image(
-            painter = painterResource(com.farzin.core_ui.R.drawable.album_background),
+            painter = if (isSystemInDarkTheme()) painterResource(com.farzin.core_ui.R.drawable.album_white) else
+                painterResource(com.farzin.core_ui.R.drawable.album_blue),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier

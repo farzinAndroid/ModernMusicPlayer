@@ -2,6 +2,7 @@ package com.farzin.core_ui.common_components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +40,8 @@ fun FolderItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(com.farzin.core_ui.R.drawable.folder_background),
+            painter = if (isSystemInDarkTheme()) painterResource(com.farzin.core_ui.R.drawable.folder_white) else
+                painterResource(com.farzin.core_ui.R.drawable.folder_blue),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
