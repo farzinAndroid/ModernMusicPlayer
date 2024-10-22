@@ -1,4 +1,4 @@
-package com.farzin.home.components.folders
+package com.farzin.home.components.recently_added
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,34 +11,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.farzin.core_model.Folder
+import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.EmptySectionText
-import com.farzin.core_ui.common_components.FolderItem
+import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.theme.spacing
 
 @Composable
-fun Folders(
-    folders: List<Folder>,
-    onFolderClick: (String) -> Unit,
+fun RecentlyAdded(
+    recentSongs: List<Song>,
+    currentPlayingSongId: String,
+    onClick: (Int,List<Song>) -> Unit,
+    onToggleFavorite: (id:String,isFavorite:Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (folders.isNotEmpty()){
+
+    if (recentSongs.isNotEmpty()){
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
                 .padding(bottom = 64.dp),
         ) {
-            itemsIndexed(folders, key = { _, folder->folder.name}){ index, folder ->
+            itemsIndexed(recentSongs, key = { _, song->song.mediaId}){ index, song ->
                 Spacer(Modifier.height(MaterialTheme.spacing.small8))
-                FolderItem(
-                    folder = folder,
-                    onClick = onFolderClick,
+                SongItem(
+                    song = song,
+                    onClick = { onClick(index,recentSongs) },
+                    onToggleFavorite = { onToggleFavorite(song.mediaId,it) },
+                    isPlaying = song.mediaId == currentPlayingSongId,
+                    isFavorite = song.isFavorite,
                     modifier =Modifier
                         .animateItem()
                 )
+
             }
         }
     }else{
-        EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_folder))
+        EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_recently_added_songs))
     }
+
 }

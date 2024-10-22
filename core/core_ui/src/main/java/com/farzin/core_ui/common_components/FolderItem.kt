@@ -26,11 +26,12 @@ import com.farzin.core_ui.theme.spacing
 @Composable
 fun FolderItem(
     folder: Folder,
-    onClick: (String) -> Unit
+    onClick: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
             .clickable {

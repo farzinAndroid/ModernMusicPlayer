@@ -18,6 +18,7 @@ kspVersion = "1.9.20-1.0.14"
 androidx-media3 = "1.4.1"
 coil = "2.6.0"
 compileSdk = "34"
+materialIconsExtended = "1.7.4"
 navigationCompose = "2.8.0"
 paletteKtx = "1.0.0"
 targetSdk = "34"
@@ -34,6 +35,7 @@ androidx-datastore = "1.1.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = "paletteKtx" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }

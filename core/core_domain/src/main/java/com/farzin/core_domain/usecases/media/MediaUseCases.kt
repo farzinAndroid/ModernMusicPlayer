@@ -10,4 +10,5 @@ data class MediaUseCases(
     val getArtistByIdUseCase: GetArtistByIdUseCase,
     val getFolderByNameUseCase: GetFolderByNameUseCase,
     val searchUseCase: SearchUseCase,
+    val getRecentlyAddedSongsUseCase: GetRecentlyAddedSongsUseCase
 )

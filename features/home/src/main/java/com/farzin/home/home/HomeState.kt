@@ -13,6 +13,8 @@ sealed class HomeState {
     data object Loading : HomeState()
     data class Success(
         val songs: List<Song> = emptyList(),
+        val recentSongs: List<Song> = emptyList(),
+        val favoriteSongs: List<Song> = emptyList(),
         val albums:List<Album> = emptyList(),
         val artists:List<Artist> = emptyList(),
         val folders:List<Folder> = emptyList(),

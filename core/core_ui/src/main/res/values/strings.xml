@@ -7,8 +7,10 @@
     <string name="albums">Albums</string>
     <string name="folders">Folders</string>
     <string name="favorites">Favorites</string>
+    <string name="recently_added">Recently added</string>
     <string name="no_songs">No Songs</string>
-    <string name="no_favorite_songs">No Favorite songs</string>
+    <string name="no_recently_added_songs">No recently added song</string>
+    <string name="no_favorite_songs">No favorite songs</string>
     <string name="no_albums">No Albums</string>
     <string name="no_artist">No Artists</string>
     <string name="no_folder">No Folders</string>

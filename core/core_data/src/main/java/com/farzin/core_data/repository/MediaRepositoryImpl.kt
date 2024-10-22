@@ -3,6 +3,7 @@ package com.farzin.core_data.repository
 import com.farzin.core_datastore.PreferencesDataSource
 import com.farzin.core_domain.repository.MediaRepository
 import com.farzin.core_model.Album
+import kotlin.time.Duration.Companion.days
 import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
@@ -11,6 +12,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import java.time.Duration
 import javax.inject.Inject
 
 class MediaRepositoryImpl @Inject constructor(
@@ -30,6 +37,16 @@ class MediaRepositoryImpl @Inject constructor(
 //                    excludedFolders = excludedFolders
                 )
             }
+
+
+    override val recentlyAdded: Flow<List<Song>> =songs.map { songList ->
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        songList.filter { song ->
+            val daysSinceAdded = Duration.between(song.date.toJavaLocalDateTime(), now.toJavaLocalDateTime()).toDays()
+            daysSinceAdded <= 30
+        }
+    }
+
 
 
     override val artists: Flow<List<Artist>> = songs.map { songs ->

@@ -88,6 +88,8 @@ fun SearchScreen(
                                 isPlaying = false,
                                 onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
                                 isFavorite = song.isFavorite,
+                                modifier =Modifier
+                                    .animateItem()
                             )
                         }
                     }
@@ -103,7 +105,9 @@ fun SearchScreen(
                                 album = album,
                                 onClick = {
                                     navController.navigate(Screens.Album(album.id))
-                                }
+                                },
+                                modifier =Modifier
+                                    .animateItem()
                             )
                         }
                     }
@@ -119,7 +123,9 @@ fun SearchScreen(
                                 artist = artist,
                                 onClick = {
                                     navController.navigate(Screens.Artist(artist.id))
-                                }
+                                },
+                                modifier =Modifier
+                                    .animateItem()
                             )
                         }
                     }
@@ -135,7 +141,9 @@ fun SearchScreen(
                                 folder=folder,
                                 onClick = {
                                     navController.navigate(Screens.Folder(folder.name))
-                                }
+                                },
+                                modifier =Modifier
+                                    .animateItem()
                             )
                         }
                     }

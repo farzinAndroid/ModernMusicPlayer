@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -118,7 +116,6 @@ fun Home(
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
     val playingQueueSongs by homeViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
-    val favoriteSongs by homeViewmodel.favoriteSongs.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
@@ -126,8 +123,10 @@ fun Home(
 
     var loading by remember { mutableStateOf(false) }
     var sortOrder by remember { mutableStateOf(SortOrder.DESCENDING) }
-    var sortby by remember { mutableStateOf(SortBy.DATE_ADDED) }
+    var sortBy by remember { mutableStateOf(SortBy.DATE_ADDED) }
     var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
+    var recentSongs by remember { mutableStateOf<List<Song>>(emptyList()) }
+    var favoriteSongs by remember { mutableStateOf<List<Song>>(emptyList()) }
     var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
     var artists by remember { mutableStateOf<List<Artist>>(emptyList()) }
     var folders by remember { mutableStateOf<List<Folder>>(emptyList()) }
@@ -143,8 +142,10 @@ fun Home(
             albums = state.albums
             artists = state.artists
             folders = state.folders
-            sortby = state.sortBy
+            sortBy = state.sortBy
             sortOrder = state.sortOrder
+            recentSongs = state.recentSongs
+            favoriteSongs = state.favoriteSongs
         }
     }
 
@@ -259,7 +260,7 @@ fun Home(
                 FilterSection(
                     showFilter = showFilter,
                     sortOrder = sortOrder,
-                    sortBy = sortby,
+                    sortBy = sortBy,
                     onSortOrderClicked = {
                         playerViewmodel.onChangeSortOrder(it)
                     },
@@ -276,11 +277,8 @@ fun Home(
                         songs = songs,
                         favoriteSongs = favoriteSongs,
                         albums = albums,
-                        onSongClick = { index ->
-                            playerViewmodel.play(songs, index)
-                        },
-                        onFavoriteSongClick = { index ->
-                            playerViewmodel.play(favoriteSongs, index)
+                        onSongClick = { index,songsList ->
+                            playerViewmodel.play(songsList, index)
                         },
                         onAlbumClick = { albumId ->
                             navController.navigate(Screens.Album(albumId))
@@ -296,7 +294,8 @@ fun Home(
                         },
                         onFavoriteClick = {id: String, isFavorite: Boolean ->
                             playerViewmodel.setFavorite(id, isFavorite)
-                        }
+                        },
+                        recentSongs = recentSongs
                     )
                 }
             }

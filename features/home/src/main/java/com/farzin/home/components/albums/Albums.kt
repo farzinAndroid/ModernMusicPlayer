@@ -1,12 +1,14 @@
 package com.farzin.home.components.albums
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.farzin.core_model.Album
 import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.home.R
@@ -21,13 +23,15 @@ fun Albums(
     if (albums.isNotEmpty()){
         LazyVerticalGrid(
             modifier = modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(bottom = 64.dp),
             columns = GridCells.Fixed(2)
         ) {
             itemsIndexed(albums, key = { _, album->album.id}){ index, album ->
 
                 AlbumItem(
-                    modifier = Modifier,
+                    modifier = Modifier
+                        .animateItem(),
                     album = album,
                     onAlbumClicked = {
                         onClick(album.id)

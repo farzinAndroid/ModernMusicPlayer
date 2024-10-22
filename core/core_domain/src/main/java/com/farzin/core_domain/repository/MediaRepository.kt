@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {
     val songs: Flow<List<Song>>
+    val recentlyAdded: Flow<List<Song>>
     val artists: Flow<List<Artist>>
     val albums: Flow<List<Album>>
     val folders: Flow<List<Folder>>

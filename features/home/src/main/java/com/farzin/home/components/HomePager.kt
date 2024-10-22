@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.farzin.core_model.Album
@@ -30,14 +31,14 @@ import com.farzin.home.components.albums.Albums
 import com.farzin.home.components.artists.Artists
 import com.farzin.home.components.favorites.Favorites
 import com.farzin.home.components.folders.Folders
+import com.farzin.home.components.recently_added.RecentlyAdded
 import com.farzin.home.components.songs.Songs
 import com.farzin.home.home.MediaTab
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomePager(
-    onSongClick: (Int) -> Unit,
-    onFavoriteSongClick: (Int) -> Unit,
+    onSongClick: (index:Int,songs:List<Song>) -> Unit,
     onAlbumClick: (Long) -> Unit,
     onArtistClick: (Long) -> Unit,
     onFolderClick: (String) -> Unit,
@@ -48,7 +49,8 @@ fun HomePager(
     musicState: MusicState,
     albums: List<Album>,
     artists: List<Artist>,
-    folders:List<Folder>
+    folders:List<Folder>,
+    recentSongs: List<Song>,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -75,10 +77,11 @@ fun HomePager(
                     selected = selected,
                     content = {
                         TextMedium(
-                            text = mediaTab.name,
+                            text = stringResource(mediaTab.titleResource),
                             fontSize = 16.sp,
                             color = if (selected) MaterialTheme.colorScheme.WhiteDarkBlue else MaterialTheme.colorScheme.Gray,
                             modifier = Modifier
+                                .padding(horizontal = MaterialTheme.spacing.small8)
                                 .padding(vertical = 14.dp)
                         )
                     },
@@ -114,7 +117,6 @@ fun HomePager(
                     onClick = onSongClick,
                     currentPlayingSongId = currentPlayingSongId,
                     songs = songs,
-                    musicState = musicState,
                     onToggleFavorite = onFavoriteClick,
                 )
             }
@@ -146,12 +148,20 @@ fun HomePager(
             MediaTab.Favorites.ordinal->{
                 Favorites(
                     favoriteSongs = favoriteSongs,
-                    onClick = onFavoriteSongClick,
+                    onClick = onSongClick,
                     onToggleFavorite = onFavoriteClick,
                     currentPlayingSongId = currentPlayingSongId
                 )
             }
 
+            MediaTab.RecentlyAdded.ordinal->{
+                RecentlyAdded(
+                    onClick = onSongClick,
+                    currentPlayingSongId = currentPlayingSongId,
+                    recentSongs = recentSongs,
+                    onToggleFavorite = onFavoriteClick,
+                )
+            }
         }
     }
 }

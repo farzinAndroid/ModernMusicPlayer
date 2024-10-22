@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -53,6 +55,8 @@ fun MiniMusicController(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
             trackColor = MaterialTheme.colorScheme.DarkGray,
+            gapSize = 0.dp,
+            strokeCap = StrokeCap.Square,
         )
     } else {
         LinearProgressIndicator(

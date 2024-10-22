@@ -9,6 +9,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Repeat
+import androidx.compose.material.icons.filled.RepeatOne
+import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.RepeatOne
+import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.WhiteDarkBlue
@@ -30,9 +37,9 @@ fun FullPlayerRepeatShuffleLike(
 ) {
 
     val painter = when(playbackMode){
-        PlaybackMode.REPEAT-> painterResource(com.farzin.core_ui.R.drawable.ic_repeat)
-        PlaybackMode.REPEAT_ONE->painterResource(com.farzin.core_ui.R.drawable.ic_repeat_one)
-        PlaybackMode.SHUFFLE->painterResource(com.farzin.core_ui.R.drawable.ic_shuffle)
+        PlaybackMode.REPEAT-> Icons.Rounded.Repeat
+        PlaybackMode.REPEAT_ONE->Icons.Rounded.RepeatOne
+        PlaybackMode.SHUFFLE->Icons.Rounded.Shuffle
         else -> null
     }
 
@@ -69,10 +76,10 @@ fun FullPlayerRepeatShuffleLike(
             IconButton(
                 onClick = { onPlaybackModeClicked() },
                 modifier = Modifier
-                    .size(MaterialTheme.spacing.semiLarge24)
+                    .size(26.dp)
             ) {
                 Icon(
-                    painter =painter!!,
+                    imageVector =painter!!,
                     contentDescription = "",
                     modifier = Modifier
                         .fillMaxSize(),

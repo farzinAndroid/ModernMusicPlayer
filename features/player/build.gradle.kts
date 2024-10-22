@@ -68,4 +68,7 @@ dependencies {
 
     // coil compose
     implementation(libs.coil.compose)
+
+    // icons extended
+    implementation(libs.androidx.material.icons.extended)
 }

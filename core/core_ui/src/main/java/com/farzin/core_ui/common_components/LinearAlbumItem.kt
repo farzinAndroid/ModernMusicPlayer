@@ -31,10 +31,11 @@ import com.farzin.core_ui.theme.spacing
 @Composable
 fun LinearAlbumItem(
     album:Album,
-    onClick:(Long)->Unit
+    onClick:(Long)->Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
             .clickable {
