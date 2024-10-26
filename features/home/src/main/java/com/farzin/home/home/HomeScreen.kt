@@ -6,11 +6,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -157,7 +159,7 @@ fun Home(
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .height(72.dp),
+                        .height(64.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
@@ -237,7 +239,7 @@ fun Home(
 
         },
         scaffoldState = sheetState,
-        sheetPeekHeight = 60.dp,
+        sheetPeekHeight = 64.dp,
         sheetDragHandle = null,
         sheetShape = RoundedCornerShape(0.dp),
         content = {

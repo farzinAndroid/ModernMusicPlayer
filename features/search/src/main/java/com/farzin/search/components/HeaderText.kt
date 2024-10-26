@@ -34,7 +34,7 @@ fun HeaderText(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = MaterialTheme.spacing.small8)
-                .padding(vertical = MaterialTheme.spacing.extraSmall4),
+                .padding(vertical = MaterialTheme.spacing.small8),
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
             fontSize = 18.sp,
             textStyle = TextStyle(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -85,7 +86,7 @@ fun FolderScreen(
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .height(72.dp),
+                        .height(64.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
@@ -165,7 +166,7 @@ fun FolderScreen(
 
         },
         scaffoldState = sheetState,
-        sheetPeekHeight = 60.dp,
+        sheetPeekHeight = 64.dp,
         sheetDragHandle = null,
         sheetShape = RoundedCornerShape(0.dp),
         content = {
@@ -188,6 +189,7 @@ fun FolderScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(bottom = 64.dp)
 
                 ) {
                     itemsIndexed(folder.songs) { index, song ->
@@ -204,6 +206,8 @@ fun FolderScreen(
                             shouldUseDefaultPic = true,
                             onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
                             isFavorite = song.isFavorite,
+                            modifier =Modifier
+                                .animateItem()
                         )
                     }
                 }

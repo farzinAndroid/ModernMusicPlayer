@@ -75,7 +75,7 @@ fun MiniMusicController(
 
     Row(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         if (musicState.playbackState == PlaybackState.READY) {
             SubcomposeAsyncImage(
