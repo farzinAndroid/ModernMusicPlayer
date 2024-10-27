@@ -9,6 +9,7 @@ A Music player developed based on clean architecture and multi modular rules.
 - MVVM Architecture.
 - Flows
 - Media 3
+- Datastore
 
 
 
