@@ -11,6 +11,14 @@ A Music player developed based on clean architecture and multi modular rules.
 - Media 3
 - Datastore
 
+- ## Features:
+
+- Play music
+- Create favorites
+- Recently added feature
+- search
+- Find the songs lyrics (credit to 'https://github.com/khaouitiabdelhakim/LyricsAI')
+
 
 
 ![eeee](https://github.com/user-attachments/assets/afe98acb-45c2-4e32-9660-4d8818666d04)
