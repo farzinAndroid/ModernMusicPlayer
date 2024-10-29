@@ -1,5 +1,6 @@
 package com.farzin.player.player
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,39 +20,50 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
+import com.farzin.player.PlayerViewmodel
+import com.farzin.player.components.LyricsDialogContent
 import kotlin.math.absoluteValue
 
 @Composable
 fun FullPlayer(
     songs: List<Song>,
     onSkipToIndex: (Int) -> Unit,
-    onBackClicked:()->Unit,
-    onPlaybackModeClicked:()->Unit,
-    onToggleLikeButton:(id:String,isFavorite:Boolean)->Unit,
-    currentPosition:Long,
+    onBackClicked: () -> Unit,
+    onPlaybackModeClicked: () -> Unit,
+    onToggleLikeButton: (id: String, isFavorite: Boolean) -> Unit,
+    currentPosition: Long,
     musicState: MusicState,
-    onSeekTo:(Float)->Unit,
-    onPrevClicked:()->Unit,
-    onNextClicked:()->Unit,
-    onPlayPauseClicked:()->Unit,
-    playbackMode:PlaybackMode,
-
-    ) {
+    onSeekTo: (Float) -> Unit,
+    onPrevClicked: () -> Unit,
+    onNextClicked: () -> Unit,
+    onPlayPauseClicked: () -> Unit,
+    playbackMode: PlaybackMode,
+    playerViewmodel: PlayerViewmodel = hiltViewModel(),
+) {
 
     val context = LocalContext.current
-
     val currentSong = songs[musicState.currentSongIndex]
+
+    var showLyricsDialog by remember { mutableStateOf(false) }
+    val lyrics by playerViewmodel.lyrics.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(
         pageCount = { songs.size.coerceAtLeast(1) },
@@ -91,14 +103,28 @@ fun FullPlayer(
 
         FullPlayerTopBar(
             onBackClicked = onBackClicked,
-            albumName = currentSong.album
+            onLyricsClicked = {
+                showLyricsDialog = true
+                playerViewmodel.getLyrics(currentSong)
+            },
+            song = currentSong
         )
+
+        if (showLyricsDialog){
+            Dialog(
+                onDismissRequest = {showLyricsDialog = false},
+            ) {
+                LyricsDialogContent(
+                    lyrics=lyrics
+                )
+            }
+        }
 
 
         Box(
             modifier = Modifier
                 .wrapContentSize()
-        ){
+        ) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
@@ -156,7 +182,7 @@ fun FullPlayer(
         Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
         FullPlayerRepeatShuffleLike(
-            onToggleLikeButton = { onToggleLikeButton(currentSong.mediaId,it) },
+            onToggleLikeButton = { onToggleLikeButton(currentSong.mediaId, it) },
             onPlaybackModeClicked = onPlaybackModeClicked,
             playbackMode = playbackMode,
             isFavorite = currentSong.isFavorite

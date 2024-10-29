@@ -2,7 +2,7 @@ package com.farzin.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.farzin.core_domain.usecases.media.MediaUseCases
+import com.abdelhakim.lyricsai.LyricsAI
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_media_service.MusicServiceConnection
 import com.farzin.core_model.PlaybackMode
@@ -10,6 +10,9 @@ import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -27,6 +30,8 @@ class PlayerViewmodel @Inject constructor(
         started = SharingStarted.Eagerly,
         initialValue = 0L
     )
+
+    val lyrics = MutableStateFlow("")
 
     fun play(
         songs: List<Song>,
@@ -75,5 +80,12 @@ class PlayerViewmodel @Inject constructor(
     fun setFavorite(id:String,isFavorite:Boolean) = viewModelScope.launch {
         preferencesUseCases.setFavoriteUseCase(id,isFavorite)
     }
+
+
+    fun getLyrics(song: Song) = viewModelScope.launch(Dispatchers.IO) {
+        lyrics.emit("")
+        lyrics.emit(LyricsAI.findLyricsBySongTitleAndArtist(song.title, song.artist))
+    }
+
 
 }
