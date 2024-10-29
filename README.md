@@ -17,6 +17,7 @@ A Music player developed based on clean architecture and multi modular rules.
 - Create favorites
 - Recently added feature
 - search
+- Filter songs based on whatever yo like
 - Find the songs lyrics (credit to 'https://github.com/khaouitiabdelhakim/LyricsAI')
 
 
