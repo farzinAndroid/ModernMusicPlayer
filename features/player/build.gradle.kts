@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":core:core_domain"))
     implementation(project(":core:core_model"))
     implementation(project(":core:core_ui"))
+    implementation(project(":core:core_common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
