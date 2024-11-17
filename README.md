@@ -19,6 +19,7 @@ A Music player developed based on clean architecture and multi modular rules.
 - search
 - Filter songs based on whatever you like
 - Find the songs lyrics (credit to 'https://github.com/khaouitiabdelhakim/LyricsAI')
+- Delete songs
 
 
 
