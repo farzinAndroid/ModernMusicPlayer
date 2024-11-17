@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,19 +16,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
@@ -47,9 +58,11 @@ fun SongItem(
     shouldUseDefaultPic: Boolean = false,
     shouldShowPic: Boolean = true,
     isFavorite: Boolean,
+    onDeleteClicked:(song:Song)->Unit,
     modifier: Modifier = Modifier,
 ) {
 
+    var isExpanded by remember { mutableStateOf(false) }
 
     Row(
         modifier = modifier
@@ -126,17 +139,40 @@ fun SongItem(
 
 
         IconButton(
+            onClick = { isExpanded = !isExpanded },
             modifier = Modifier
-                .size(MaterialTheme.spacing.semiLarge24),
-            onClick = {
-                onToggleFavorite(!isFavorite)
-            }
+                .size(26.dp)
         ) {
             Icon(
-                imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
+                imageVector = Icons.Default.MoreVert,
                 contentDescription = "",
-                tint = MaterialTheme.colorScheme.WhiteDarkBlue,
+                modifier = Modifier
+                    .fillMaxSize(),
+                tint = MaterialTheme.colorScheme.WhiteDarkBlue
             )
+        }
+
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false },
+            modifier = Modifier,
+            offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
+            containerColor = Color.White,
+        ) {
+            DropdownMenuItem(
+                text = {
+                    TextMedium(
+                        text = stringResource(com.farzin.core_ui.R.string.delete),
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    )
+                },
+                onClick = {
+                    onDeleteClicked(song)
+                    isExpanded = false
+                }
+            )
+
         }
 
 

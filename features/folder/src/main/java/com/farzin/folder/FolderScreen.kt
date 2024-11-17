@@ -1,6 +1,10 @@
 package com.farzin.folder
 
+import android.app.Activity
+import android.os.Build
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -29,18 +33,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
+import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.DetailTopBar
+import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
+import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
+import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
@@ -66,12 +76,10 @@ fun FolderScreen(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
 
-    var folder by remember { mutableStateOf(Folder()) }
-    LaunchedEffect(folderName) {
-        folderViewmodel.getFolderByName(folderName).collectLatest {
-            folder = it
-        }
+    LaunchedEffect(Unit) {
+        folderViewmodel.getFolderByName(folderName)
     }
+    val folder by folderViewmodel.folder.collectAsStateWithLifecycle()
 
     val sheetState = rememberBottomSheetScaffoldState()
     val isExpanded = when (sheetState.bottomSheetState.targetValue) {
@@ -79,6 +87,10 @@ fun FolderScreen(
         SheetValue.Expanded -> true
         SheetValue.PartiallyExpanded -> false
     }
+
+    var songToDelete by remember { mutableStateOf(Song()) }
+    val context = LocalContext.current
+    val launcher = deleteLauncher(songToDelete)
 
     BottomSheetScaffold(
         sheetContent = {
@@ -101,7 +113,7 @@ fun FolderScreen(
                                 }
                             }
                     ) {
-                        if (folder.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+                        if (playingQueueSongs.isNotEmpty()) {
                             MiniMusicController(
                                 progress = progress,
                                 song = playingQueueSongs[musicState.currentSongIndex],
@@ -127,7 +139,7 @@ fun FolderScreen(
 
 
 
-            if (folder.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+            if (playingQueueSongs.isNotEmpty()) {
                 FullPlayer(
                     musicState = musicState,
                     songs = playingQueueSongs,
@@ -183,35 +195,45 @@ fun FolderScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = folder.name
+                    text = folder?.name ?: ""
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 64.dp)
+                if (!folderViewmodel.error){
+                    folder?.let {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 64.dp)
 
-                ) {
-                    itemsIndexed(folder.songs) { index, song ->
-                        Spacer(Modifier.height(MaterialTheme.spacing.small8))
-                        SongItem(
-                            onClick = {
-                                playerViewmodel.play(
-                                    folder.songs,
-                                    index
+                        ) {
+                            itemsIndexed(it.songs) { index, song ->
+                                Spacer(Modifier.height(MaterialTheme.spacing.small8))
+                                SongItem(
+                                    onClick = {
+                                        playerViewmodel.play(
+                                            it.songs,
+                                            index
+                                        )
+                                    },
+                                    song = song,
+                                    isPlaying = song.mediaId == musicState.currentMediaId,
+                                    shouldUseDefaultPic = true,
+                                    onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                                    isFavorite = song.isFavorite,
+                                    modifier =Modifier
+                                        .animateItem(),
+                                    onDeleteClicked = {
+                                        songToDelete = it
+                                        playerViewmodel.deleteSong(songToDelete,launcher)
+                                    }
                                 )
-                            },
-                            song = song,
-                            isPlaying = song.mediaId == musicState.currentMediaId,
-                            shouldUseDefaultPic = true,
-                            onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
-                            isFavorite = song.isFavorite,
-                            modifier =Modifier
-                                .animateItem()
-                        )
+                            }
+                        }
                     }
+                }else{
+                    EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs))
                 }
 
             }

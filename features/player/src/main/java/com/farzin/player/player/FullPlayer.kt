@@ -36,10 +36,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
+import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.components.LyricsDialogContent
+import kotlinx.coroutines.flow.asFlow
 import kotlin.math.absoluteValue
 
 @Composable

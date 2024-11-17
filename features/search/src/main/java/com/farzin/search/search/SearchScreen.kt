@@ -1,5 +1,9 @@
 package com.farzin.search.search
 
+import android.app.Activity
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,8 +18,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -24,19 +33,23 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.farzin.core_model.Song
 import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.ArtistItem
 import com.farzin.core_ui.common_components.FolderItem
 import com.farzin.core_ui.common_components.LinearAlbumItem
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.TextBold
+import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.search.R
 import com.farzin.search.components.HeaderText
 import com.farzin.search.components.SearchTextField
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -46,9 +59,14 @@ fun SearchScreen(
     playerViewmodel: PlayerViewmodel = hiltViewModel()
 ) {
 
+    val scope = rememberCoroutineScope()
     val uiState by searchViewmodel.uiState.collectAsStateWithLifecycle()
+    val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
 
 
+    var songToDelete by remember { mutableStateOf(Song()) }
+    val context = LocalContext.current
+    val launcher = deleteLauncher(songToDelete)
 
     when (val state = uiState) {
         SearchUiState.Loading -> {}
@@ -91,7 +109,11 @@ fun SearchScreen(
                                 onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
                                 isFavorite = song.isFavorite,
                                 modifier =Modifier
-                                    .animateItem()
+                                    .animateItem(),
+                                onDeleteClicked = {
+                                    songToDelete = it
+                                    playerViewmodel.deleteSong(songToDelete,launcher)
+                                }
                             )
                         }
                     }

@@ -55,3 +55,9 @@ val AudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
 } else {
     Manifest.permission.READ_EXTERNAL_STORAGE
 }
+
+//val AudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//    listOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//} else {
+//    listOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//}

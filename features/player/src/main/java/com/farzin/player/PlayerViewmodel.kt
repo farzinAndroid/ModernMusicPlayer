@@ -1,5 +1,15 @@
 package com.farzin.player
 
+import android.annotation.SuppressLint
+import android.app.RecoverableSecurityException
+import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.Context
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abdelhakim.lyricsai.LyricsAI
@@ -9,9 +19,10 @@ import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
+import com.farzin.core_ui.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -21,7 +32,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewmodel @Inject constructor(
     private val musicServiceConnection: MusicServiceConnection,
-    private val preferencesUseCases: PreferencesUseCases
+    private val preferencesUseCases: PreferencesUseCases,
+    private val contentResolver: ContentResolver,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     val musicState = musicServiceConnection.musicState
@@ -77,14 +90,77 @@ class PlayerViewmodel @Inject constructor(
     fun onChangeSortBy(sortBy: SortBy) =
         viewModelScope.launch { preferencesUseCases.setSortByUseCase(sortBy) }
 
-    fun setFavorite(id:String,isFavorite:Boolean) = viewModelScope.launch {
-        preferencesUseCases.setFavoriteUseCase(id,isFavorite)
+    fun setFavorite(id: String, isFavorite: Boolean) = viewModelScope.launch {
+        preferencesUseCases.setFavoriteUseCase(id, isFavorite)
     }
 
 
     fun getLyrics(song: Song) = viewModelScope.launch(Dispatchers.IO) {
         lyrics.emit("")
         lyrics.emit(LyricsAI.findLyricsBySongTitleAndArtist(song.title, song.artist))
+    }
+
+//    fun deleteSong(
+//        song: Song,
+//        launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>,
+//    ) {
+//        val uris = listOf(song.mediaUri)
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            val pendingIntent = MediaStore.createDeleteRequest(contentResolver, uris)
+//            launcher.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
+//        } else {
+//            kotlin.runCatching {
+//                contentResolver.delete(uris[0], null, null)
+//            }.fold(
+//                onSuccess = {
+//                    viewModelScope.launch {
+//                        context.showToast(context.getString(com.farzin.core_ui.R.string.no_songs))
+//                    }
+//                },
+//                onFailure = {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && it is RecoverableSecurityException) {
+//                        launcher.launch(
+//                            IntentSenderRequest.Builder(it.userAction.actionIntent.intentSender)
+//                                .build()
+//                        )
+//                    } else {
+//                        context.showToast(context.getString(com.farzin.core_ui.R.string.sth_went_wrong))
+//                    }
+//                },
+//            )
+//        }
+//    }
+
+    fun deleteSong(
+        song: Song,
+        launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>,
+    ) {
+        val contentResolver = context.contentResolver
+        val uris = listOf(song.mediaUri)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val pendingIntent = MediaStore.createDeleteRequest(contentResolver, uris)
+            launcher.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
+        } else {
+            kotlin.runCatching {
+                for (uri in uris) contentResolver.delete(uri, null, null)
+            }.fold(
+                onSuccess = {
+                    viewModelScope.launch {
+//                        skipNext()
+                        context.showToast("song deleted")
+                    }
+                },
+                onFailure = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && it is RecoverableSecurityException) {
+                        launcher.launch(IntentSenderRequest.Builder(it.userAction.actionIntent.intentSender).build())
+                    } else {
+                        context.showToast("song not deleted")
+                    }
+                },
+            )
+        }
     }
 
 

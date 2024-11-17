@@ -1,6 +1,5 @@
 package com.farzin.album
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -29,17 +28,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Album
+import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.DetailTopBar
+import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
+import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
+import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
@@ -56,22 +61,20 @@ fun AlbumScreen(
 ) {
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
     val playingQueueSongs by albumViewModel.playingQueueSongs.collectAsStateWithLifecycle()
-    val lyrics by playerViewmodel.lyrics.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
 
-    var album by remember { mutableStateOf(Album()) }
-    LaunchedEffect(albumId) {
-        albumViewModel.getAlbumById(albumId).collectLatest {
-            album = it
-        }
+    LaunchedEffect(Unit) {
+        albumViewModel.getAlbumById(albumId)
     }
+    val album by albumViewModel.album.collectAsStateWithLifecycle()
 
     val sheetState = rememberBottomSheetScaffoldState()
     val isExpanded = when (sheetState.bottomSheetState.targetValue) {
@@ -79,6 +82,10 @@ fun AlbumScreen(
         SheetValue.Expanded -> true
         SheetValue.PartiallyExpanded -> false
     }
+
+    var songToDelete by remember { mutableStateOf(Song()) }
+    val launcher = deleteLauncher(songToDelete)
+
 
     BottomSheetScaffold(
         sheetContent = {
@@ -91,35 +98,35 @@ fun AlbumScreen(
                         .height(64.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.BackgroundColor)
-                            .clickable {
-                                scope.launch {
-                                    sheetState.bottomSheetState.expand()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.BackgroundColor)
+                                .clickable {
+                                    scope.launch {
+                                        sheetState.bottomSheetState.expand()
+                                    }
                                 }
+                        ) {
+                            if (playingQueueSongs.isNotEmpty()) {
+                                MiniMusicController(
+                                    progress = progress,
+                                    song = playingQueueSongs[musicState.currentSongIndex],
+                                    onNextClicked = {
+                                        playerViewmodel.skipNext()
+                                    },
+                                    onPrevClicked = {
+                                        playerViewmodel.skipPrevious()
+                                    },
+                                    onPlayPauseClicked = {
+                                        playerViewmodel.pausePlay(!musicState.playWhenReady)
+                                    },
+                                    musicState = musicState,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                )
                             }
-                    ) {
-                        if (album.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
-                            MiniMusicController(
-                                progress = progress,
-                                song = playingQueueSongs[musicState.currentSongIndex],
-                                onNextClicked = {
-                                    playerViewmodel.skipNext()
-                                },
-                                onPrevClicked = {
-                                    playerViewmodel.skipPrevious()
-                                },
-                                onPlayPauseClicked = {
-                                    playerViewmodel.pausePlay(!musicState.playWhenReady)
-                                },
-                                musicState = musicState,
-                                modifier = Modifier
-                                    .weight(1f)
-                            )
                         }
-                    }
 
                 }
             }
@@ -127,7 +134,7 @@ fun AlbumScreen(
 
 
 
-            if (album.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+            if (playingQueueSongs.isNotEmpty()) {
                 FullPlayer(
                     musicState = musicState,
                     songs = playingQueueSongs,
@@ -172,6 +179,7 @@ fun AlbumScreen(
         sheetDragHandle = null,
         sheetShape = RoundedCornerShape(0.dp),
         content = {
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -182,41 +190,55 @@ fun AlbumScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = album.name
+                    text = album?.name ?: ""
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.semiLarge24))
 
                 AlbumDetailImage(
-                    artworkUri = album.artworkUri.toString()
+                    artworkUri = album?.artworkUri.toString()
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 64.dp)
+                if (!albumViewModel.error){
+                    album?.let {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 64.dp)
 
-                ) {
-                    itemsIndexed(album.songs) { index, song ->
-                        Spacer(Modifier.height(MaterialTheme.spacing.small8))
-                        SongItem(
-                            onClick = {
-                                playerViewmodel.play(
-                                    album.songs,
-                                    index
+                        ) {
+                            itemsIndexed(it.songs, key = { _, song ->
+                                song.mediaId
+                            }) { index, song ->
+                                Spacer(Modifier.height(MaterialTheme.spacing.small8))
+                                SongItem(
+                                    onClick = {
+                                        playerViewmodel.play(
+                                            it.songs,
+                                            index
+                                        )
+                                    },
+                                    song = song,
+                                    isPlaying = song.mediaId == musicState.currentMediaId,
+                                    shouldShowPic = false,
+                                    onToggleFavorite = { playerViewmodel.setFavorite(song.mediaId, it) },
+                                    isFavorite = song.isFavorite,
+                                    modifier = Modifier
+                                        .animateItem(),
+                                    onDeleteClicked = {
+                                        scope.launch {
+                                            songToDelete = it
+                                            playerViewmodel.deleteSong(songToDelete, launcher)
+                                        }
+                                    }
                                 )
-                            },
-                            song = song,
-                            isPlaying = song.mediaId == musicState.currentMediaId,
-                            shouldShowPic = false,
-                            onToggleFavorite = { playerViewmodel.setFavorite(song.mediaId, it) },
-                            isFavorite = song.isFavorite,
-                            modifier =Modifier
-                                .animateItem()
-                        )
+                            }
+                        }
                     }
+                }else{
+                    EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs))
                 }
 
             }

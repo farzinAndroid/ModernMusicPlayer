@@ -1,6 +1,10 @@
 package com.farzin.artist
 
+import android.app.Activity
+import android.os.Build
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -29,19 +33,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Album
 import com.farzin.core_model.Artist
+import com.farzin.core_model.Song
 import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.DetailTopBar
+import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
+import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
+import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
@@ -68,12 +78,10 @@ fun ArtistScreen(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
 
-    var artist by remember { mutableStateOf(Artist()) }
-    LaunchedEffect(artistId) {
-        artistViewmodel.getArtistById(artistId).collectLatest {
-            artist = it
-        }
+    LaunchedEffect(Unit) {
+        artistViewmodel.getArtistById(artistId)
     }
+    val artist by artistViewmodel.artist.collectAsStateWithLifecycle()
 
     val sheetState = rememberBottomSheetScaffoldState()
     val isExpanded = when (sheetState.bottomSheetState.targetValue) {
@@ -81,6 +89,10 @@ fun ArtistScreen(
         SheetValue.Expanded -> true
         SheetValue.PartiallyExpanded -> false
     }
+
+    var songToDelete by remember { mutableStateOf(Song()) }
+    val context = LocalContext.current
+    val launcher = deleteLauncher(songToDelete)
 
     BottomSheetScaffold(
         sheetContent = {
@@ -103,7 +115,7 @@ fun ArtistScreen(
                                 }
                             }
                     ) {
-                        if (artist.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+                        if (playingQueueSongs.isNotEmpty()) {
                             MiniMusicController(
                                 progress = progress,
                                 song = playingQueueSongs[musicState.currentSongIndex],
@@ -129,7 +141,7 @@ fun ArtistScreen(
 
 
 
-            if (artist.songs.isNotEmpty() && playingQueueSongs.isNotEmpty()) {
+            if (playingQueueSongs.isNotEmpty()) {
                 FullPlayer(
                     musicState = musicState,
                     songs = playingQueueSongs,
@@ -185,35 +197,45 @@ fun ArtistScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = artist.name
+                    text = artist?.name ?: ""
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 64.dp)
+                if (!artistViewmodel.error){
+                    artist?.let {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 64.dp)
 
-                ) {
-                    itemsIndexed(artist.songs) { index, song ->
-                        Spacer(Modifier.height(MaterialTheme.spacing.small8))
-                        SongItem(
-                            onClick = {
-                                playerViewmodel.play(
-                                    artist.songs,
-                                    index
+                        ) {
+                            itemsIndexed(it.songs) { index, song ->
+                                Spacer(Modifier.height(MaterialTheme.spacing.small8))
+                                SongItem(
+                                    onClick = {
+                                        playerViewmodel.play(
+                                            it.songs,
+                                            index
+                                        )
+                                    },
+                                    song = song,
+                                    onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                                    isFavorite = song.isFavorite,
+                                    shouldUseDefaultPic = true,
+                                    isPlaying = song.mediaId == musicState.currentMediaId,
+                                    modifier =Modifier
+                                        .animateItem(),
+                                    onDeleteClicked = {
+                                        songToDelete = it
+                                        playerViewmodel.deleteSong(songToDelete,launcher)
+                                    }
                                 )
-                            },
-                            song = song,
-                            onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
-                            isFavorite = song.isFavorite,
-                            shouldUseDefaultPic = true,
-                            isPlaying = song.mediaId == musicState.currentMediaId,
-                            modifier =Modifier
-                                .animateItem()
-                        )
+                            }
+                        }
                     }
+                }else{
+                    EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs))
                 }
 
             }

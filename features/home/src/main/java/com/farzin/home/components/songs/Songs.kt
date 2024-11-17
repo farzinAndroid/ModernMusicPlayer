@@ -22,6 +22,7 @@ fun Songs(
     songs: List<Song>,
     currentPlayingSongId: String,
     onClick: (Int,List<Song>) -> Unit,
+    onDeleteClicked:(song:Song)->Unit,
     onToggleFavorite: (id:String,isFavorite:Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -41,7 +42,8 @@ fun Songs(
                     isPlaying = song.mediaId == currentPlayingSongId,
                     isFavorite = song.isFavorite,
                     modifier =Modifier
-                        .animateItem()
+                        .animateItem(),
+                    onDeleteClicked = onDeleteClicked
                 )
 
             }
