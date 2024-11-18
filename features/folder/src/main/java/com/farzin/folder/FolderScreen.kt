@@ -1,10 +1,5 @@
 package com.farzin.folder
 
-import android.app.Activity
-import android.os.Build
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -39,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.farzin.core_model.Artist
-import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.EmptySectionText
@@ -50,11 +43,9 @@ import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
-import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +54,7 @@ fun FolderScreen(
     folderName: String,
     navController: NavController,
     folderViewmodel: FolderViewmodel = hiltViewModel(),
-    playerViewmodel: PlayerViewmodel = hiltViewModel()
+    playerViewmodel: PlayerViewmodel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
 
@@ -200,7 +191,7 @@ fun FolderScreen(
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
 
-                if (!folderViewmodel.error){
+                if (!folderViewmodel.error) {
                     folder?.let {
                         LazyColumn(
                             modifier = Modifier
@@ -208,7 +199,12 @@ fun FolderScreen(
                                 .padding(bottom = 64.dp)
 
                         ) {
-                            itemsIndexed(it.songs) { index, song ->
+                            itemsIndexed(
+                                it.songs,
+                                key = { _, song ->
+                                    song.mediaId
+                                }
+                            ) { index, song ->
                                 Spacer(Modifier.height(MaterialTheme.spacing.small8))
                                 SongItem(
                                     onClick = {
@@ -220,19 +216,24 @@ fun FolderScreen(
                                     song = song,
                                     isPlaying = song.mediaId == musicState.currentMediaId,
                                     shouldUseDefaultPic = true,
-                                    onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                                    onToggleFavorite = {
+                                        playerViewmodel.setFavorite(
+                                            song.mediaId,
+                                            it
+                                        )
+                                    },
                                     isFavorite = song.isFavorite,
-                                    modifier =Modifier
+                                    modifier = Modifier
                                         .animateItem(),
                                     onDeleteClicked = {
                                         songToDelete = it
-                                        playerViewmodel.deleteSong(songToDelete,launcher)
+                                        playerViewmodel.deleteSong(songToDelete, launcher)
                                     }
                                 )
                             }
                         }
                     }
-                }else{
+                } else {
                     EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs))
                 }
 

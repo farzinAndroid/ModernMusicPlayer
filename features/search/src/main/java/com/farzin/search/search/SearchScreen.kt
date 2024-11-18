@@ -1,15 +1,9 @@
 package com.farzin.search.search
 
-import android.app.Activity
-import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -26,10 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -39,24 +30,19 @@ import com.farzin.core_ui.common_components.ArtistItem
 import com.farzin.core_ui.common_components.FolderItem
 import com.farzin.core_ui.common_components.LinearAlbumItem
 import com.farzin.core_ui.common_components.SongItem
-import com.farzin.core_ui.common_components.TextBold
 import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
-import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
-import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
-import com.farzin.search.R
 import com.farzin.search.components.HeaderText
 import com.farzin.search.components.SearchTextField
-import kotlinx.coroutines.launch
 
 
 @Composable
 fun SearchScreen(
     navController: NavController,
     searchViewmodel: SearchViewmodel = hiltViewModel(),
-    playerViewmodel: PlayerViewmodel = hiltViewModel()
+    playerViewmodel: PlayerViewmodel = hiltViewModel(),
 ) {
 
     val scope = rememberCoroutineScope()
@@ -90,12 +76,17 @@ fun SearchScreen(
                         .fillMaxSize()
                         .padding(bottom = 64.dp)
                 ) {
-                    if (state.searchDetails.songs.isNotEmpty()){
+                    if (state.searchDetails.songs.isNotEmpty()) {
                         item {
                             HeaderText(stringResource(com.farzin.core_ui.R.string.songs))
                         }
 
-                        itemsIndexed(state.searchDetails.songs){index, song ->
+                        itemsIndexed(
+                            state.searchDetails.songs,
+                            key = { _, song ->
+                                song.mediaId
+                            }
+                        ) { index, song ->
                             Spacer(Modifier.height(MaterialTheme.spacing.small8))
                             SongItem(
                                 song = song,
@@ -106,67 +97,87 @@ fun SearchScreen(
                                     )
                                 },
                                 isPlaying = false,
-                                onToggleFavorite = {playerViewmodel.setFavorite(song.mediaId, it)},
+                                onToggleFavorite = {
+                                    playerViewmodel.setFavorite(
+                                        song.mediaId,
+                                        it
+                                    )
+                                },
                                 isFavorite = song.isFavorite,
-                                modifier =Modifier
+                                modifier = Modifier
                                     .animateItem(),
                                 onDeleteClicked = {
                                     songToDelete = it
-                                    playerViewmodel.deleteSong(songToDelete,launcher)
+                                    playerViewmodel.deleteSong(songToDelete, launcher)
                                 }
                             )
                         }
                     }
 
-                    if (state.searchDetails.albums.isNotEmpty()){
+                    if (state.searchDetails.albums.isNotEmpty()) {
                         item {
                             HeaderText(stringResource(com.farzin.core_ui.R.string.albums))
                         }
 
-                        itemsIndexed(state.searchDetails.albums){index, album ->
+                        itemsIndexed(
+                            state.searchDetails.albums,
+                            key = { _, album ->
+                                album.id
+                            }
+                        ) { index, album ->
                             Spacer(Modifier.height(MaterialTheme.spacing.small8))
                             LinearAlbumItem(
                                 album = album,
                                 onClick = {
                                     navController.navigate(Screens.Album(album.id))
                                 },
-                                modifier =Modifier
+                                modifier = Modifier
                                     .animateItem()
                             )
                         }
                     }
 
-                    if (state.searchDetails.artists.isNotEmpty()){
+                    if (state.searchDetails.artists.isNotEmpty()) {
                         item {
                             HeaderText(stringResource(com.farzin.core_ui.R.string.artists))
                         }
 
-                        itemsIndexed(state.searchDetails.artists){index, artist ->
+                        itemsIndexed(
+                            state.searchDetails.artists,
+                            key = { _, artist ->
+                                artist.id
+                            }
+                        ) { index, artist ->
                             Spacer(Modifier.height(MaterialTheme.spacing.small8))
                             ArtistItem(
                                 artist = artist,
                                 onClick = {
                                     navController.navigate(Screens.Artist(artist.id))
                                 },
-                                modifier =Modifier
+                                modifier = Modifier
                                     .animateItem()
                             )
                         }
                     }
 
-                    if (state.searchDetails.folders.isNotEmpty()){
+                    if (state.searchDetails.folders.isNotEmpty()) {
                         item {
                             HeaderText(stringResource(com.farzin.core_ui.R.string.folders))
                         }
 
-                        itemsIndexed(state.searchDetails.folders){index, folder ->
+                        itemsIndexed(
+                            state.searchDetails.folders,
+                            key = { _, folder ->
+                                folder.name
+                            }
+                        ) { index, folder ->
                             Spacer(Modifier.height(MaterialTheme.spacing.small8))
                             FolderItem(
-                                folder=folder,
+                                folder = folder,
                                 onClick = {
                                     navController.navigate(Screens.Folder(folder.name))
                                 },
-                                modifier =Modifier
+                                modifier = Modifier
                                     .animateItem()
                             )
                         }
