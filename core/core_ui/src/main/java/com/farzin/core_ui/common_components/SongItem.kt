@@ -45,8 +45,10 @@ import androidx.compose.ui.window.PopupProperties
 import coil.compose.SubcomposeAsyncImage
 import com.farzin.core_model.Song
 import com.farzin.core_ui.R
+import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.Gray
+import com.farzin.core_ui.theme.MainBlue
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
@@ -164,7 +166,7 @@ fun SongItem(
                 text = {
                     TextMedium(
                         text = stringResource(com.farzin.core_ui.R.string.delete),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.MainBlue,
                         fontSize = 16.sp
                     )
                 },
@@ -182,7 +184,7 @@ fun SongItem(
                         text = if (!isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
                             com.farzin.core_ui.R.string.remove_from_fav
                         ),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.MainBlue,
                         fontSize = 16.sp
                     )
                 },
@@ -196,8 +198,7 @@ fun SongItem(
                     Icon(
                         imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
                         contentDescription = "",
-                        tint = if (!isFavorite) MaterialTheme.colorScheme.DarkGray
-                        else MaterialTheme.colorScheme.WhiteDarkBlue
+                        tint = MaterialTheme.colorScheme.MainBlue
                     )
                 }
             )

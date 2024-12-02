@@ -32,3 +32,7 @@ val ColorScheme.SearchTextFieldColor: Color
 val ColorScheme.LyricDialogColor: Color
     @Composable
     get() = if (isSystemInDarkTheme()) Color(0xff555B6A) else Color(0xffF7FAFF)
+
+val ColorScheme.MainBlue: Color
+    @Composable
+    get() = Color(0xff091227)
