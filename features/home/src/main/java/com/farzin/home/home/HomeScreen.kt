@@ -15,9 +15,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -44,6 +47,7 @@ import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_ui.Screens
+import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.Loading
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
@@ -57,6 +61,7 @@ import com.farzin.home.components.HomeTopBar
 import com.farzin.home.permission.AudioPermission
 import com.farzin.home.permission.PermissionScreen
 import com.farzin.player.PlayerViewmodel
+import com.farzin.player.components.LyricsDialogContent
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -164,6 +169,24 @@ fun Home(
 
     var songToDelete by remember { mutableStateOf(Song()) }
     val launcher = deleteLauncher(songToDelete)
+
+
+
+    if (playerViewmodel.showDeleteDialog){
+        DeleteDialog(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight(),
+            onDismiss = {
+                playerViewmodel.showDeleteDialog = false
+            },
+            onConfirm = {
+                playerViewmodel.deleteSong(songToDelete, launcher)
+                playerViewmodel.showDeleteDialog = false
+            }
+        )
+    }
+
 
     BottomSheetScaffold(
         sheetContent = {
@@ -315,7 +338,7 @@ fun Home(
                         recentSongs = recentSongs,
                         onDeleteClicked = {
                             songToDelete = it
-                            playerViewmodel.deleteSong(songToDelete, launcher)
+                            playerViewmodel.showDeleteDialog = true
                         }
                     )
                 }

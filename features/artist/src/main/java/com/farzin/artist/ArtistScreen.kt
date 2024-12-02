@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Song
+import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.SongItem
@@ -83,6 +85,21 @@ fun ArtistScreen(
     var songToDelete by remember { mutableStateOf(Song()) }
     val context = LocalContext.current
     val launcher = deleteLauncher(songToDelete)
+
+    if (playerViewmodel.showDeleteDialog){
+        DeleteDialog(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight(),
+            onDismiss = {
+                playerViewmodel.showDeleteDialog = false
+            },
+            onConfirm = {
+                playerViewmodel.deleteSong(songToDelete, launcher)
+                playerViewmodel.showDeleteDialog = false
+            }
+        )
+    }
 
     BottomSheetScaffold(
         sheetContent = {
@@ -228,7 +245,7 @@ fun ArtistScreen(
                                         .animateItem(),
                                     onDeleteClicked = {
                                         songToDelete = it
-                                        playerViewmodel.deleteSong(songToDelete, launcher)
+                                        playerViewmodel.showDeleteDialog = true
                                     }
                                 )
                             }

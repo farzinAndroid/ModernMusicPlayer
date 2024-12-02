@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +29,7 @@ import androidx.navigation.NavController
 import com.farzin.core_model.Song
 import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.ArtistItem
+import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.FolderItem
 import com.farzin.core_ui.common_components.LinearAlbumItem
 import com.farzin.core_ui.common_components.SongItem
@@ -54,6 +57,21 @@ fun SearchScreen(
     val context = LocalContext.current
     val launcher = deleteLauncher(songToDelete)
 
+    if (playerViewmodel.showDeleteDialog){
+        DeleteDialog(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight(),
+            onDismiss = {
+                playerViewmodel.showDeleteDialog = false
+            },
+            onConfirm = {
+                playerViewmodel.deleteSong(songToDelete, launcher)
+                playerViewmodel.showDeleteDialog = false
+            }
+        )
+    }
+
     when (val state = uiState) {
         SearchUiState.Loading -> {}
         is SearchUiState.Success -> {
@@ -74,7 +92,6 @@ fun SearchScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 64.dp)
                 ) {
                     if (state.searchDetails.songs.isNotEmpty()) {
                         item {
@@ -108,7 +125,7 @@ fun SearchScreen(
                                     .animateItem(),
                                 onDeleteClicked = {
                                     songToDelete = it
-                                    playerViewmodel.deleteSong(songToDelete, launcher)
+                                    playerViewmodel.showDeleteDialog = true
                                 }
                             )
                         }

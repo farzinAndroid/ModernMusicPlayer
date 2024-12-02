@@ -10,6 +10,9 @@ import android.provider.MediaStore
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abdelhakim.lyricsai.LyricsAI
@@ -100,38 +103,8 @@ class PlayerViewmodel @Inject constructor(
         lyrics.emit(LyricsAI.findLyricsBySongTitleAndArtist(song.title, song.artist))
     }
 
-//    fun deleteSong(
-//        song: Song,
-//        launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>,
-//    ) {
-//        val uris = listOf(song.mediaUri)
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            val pendingIntent = MediaStore.createDeleteRequest(contentResolver, uris)
-//            launcher.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
-//        } else {
-//            kotlin.runCatching {
-//                contentResolver.delete(uris[0], null, null)
-//            }.fold(
-//                onSuccess = {
-//                    viewModelScope.launch {
-//                        context.showToast(context.getString(com.farzin.core_ui.R.string.no_songs))
-//                    }
-//                },
-//                onFailure = {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && it is RecoverableSecurityException) {
-//                        launcher.launch(
-//                            IntentSenderRequest.Builder(it.userAction.actionIntent.intentSender)
-//                                .build()
-//                        )
-//                    } else {
-//                        context.showToast(context.getString(com.farzin.core_ui.R.string.sth_went_wrong))
-//                    }
-//                },
-//            )
-//        }
-//    }
 
+    var showDeleteDialog by mutableStateOf(false)
     fun deleteSong(
         song: Song,
         launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>,
@@ -149,14 +122,14 @@ class PlayerViewmodel @Inject constructor(
                 onSuccess = {
                     viewModelScope.launch {
 //                        skipNext()
-                        context.showToast("song deleted")
+                        context.showToast(context.getString(com.farzin.core_ui.R.string.song_deleted))
                     }
                 },
                 onFailure = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && it is RecoverableSecurityException) {
                         launcher.launch(IntentSenderRequest.Builder(it.userAction.actionIntent.intentSender).build())
                     } else {
-                        context.showToast("song not deleted")
+                        context.showToast(context.getString(com.farzin.core_ui.R.string.sth_went_wrong))
                     }
                 },
             )
