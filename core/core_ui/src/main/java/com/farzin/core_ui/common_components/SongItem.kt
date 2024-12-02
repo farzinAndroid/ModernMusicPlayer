@@ -3,11 +3,11 @@ package com.farzin.core_ui.common_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import coil.compose.SubcomposeAsyncImage
 import com.farzin.core_model.Song
 import com.farzin.core_ui.R
@@ -58,11 +59,11 @@ fun SongItem(
     shouldUseDefaultPic: Boolean = false,
     shouldShowPic: Boolean = true,
     isFavorite: Boolean,
-    onDeleteClicked:(song:Song)->Unit,
+    onDeleteClicked: (song: Song) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
-    var isExpanded by remember { mutableStateOf(false) }
+    var isMenuExpanded by remember { mutableStateOf(false) }
 
     Row(
         modifier = modifier
@@ -139,7 +140,7 @@ fun SongItem(
 
 
         IconButton(
-            onClick = { isExpanded = !isExpanded },
+            onClick = { isMenuExpanded = !isMenuExpanded },
             modifier = Modifier
                 .size(26.dp)
         ) {
@@ -153,8 +154,8 @@ fun SongItem(
         }
 
         DropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false },
+            expanded = isMenuExpanded,
+            onDismissRequest = { isMenuExpanded = false },
             modifier = Modifier,
             offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
             containerColor = Color.White,
@@ -169,7 +170,35 @@ fun SongItem(
                 },
                 onClick = {
                     onDeleteClicked(song)
-                    isExpanded = false
+                    isMenuExpanded = false
+                },
+                modifier = Modifier
+                    .height(40.dp)
+            )
+
+            DropdownMenuItem(
+                text = {
+                    TextMedium(
+                        text = if (!isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
+                            com.farzin.core_ui.R.string.remove_from_fav
+                        ),
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    )
+                },
+                onClick = {
+                    onToggleFavorite(!isFavorite)
+                    isMenuExpanded = false
+                },
+                modifier = Modifier
+                    .height(40.dp),
+                trailingIcon = {
+                    Icon(
+                        imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                        contentDescription = "",
+                        tint = if (!isFavorite) MaterialTheme.colorScheme.DarkGray
+                        else MaterialTheme.colorScheme.WhiteDarkBlue
+                    )
                 }
             )
 
