@@ -112,7 +112,9 @@ fun FullPlayer(
                 showLyricsDialog = true
                 playerViewmodel.getLyrics(currentSong)
             },
-            song = currentSong
+            song = currentSong,
+            modifier = Modifier
+                .weight(0.05f)
         )
 
         if (showLyricsDialog){
@@ -128,6 +130,7 @@ fun FullPlayer(
 
         Box(
             modifier = Modifier
+                .weight(0.55f)
                 .wrapContentSize()
         ) {
             HorizontalPager(
@@ -184,32 +187,42 @@ fun FullPlayer(
 
         }
 
-        Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
-        FullPlayerRepeatShuffleLike(
-            onToggleLikeButton = { onToggleLikeButton(currentSong.mediaId, it) },
-            onPlaybackModeClicked = onPlaybackModeClicked,
-            playbackMode = playbackMode,
-            isFavorite = currentSong.isFavorite
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.4f)
+        ) {
 
-        Spacer(Modifier.height(60.dp))
+            Spacer(Modifier.height(MaterialTheme.spacing.large32))
+
+            FullPlayerRepeatShuffleLike(
+                onToggleLikeButton = { onToggleLikeButton(currentSong.mediaId, it) },
+                onPlaybackModeClicked = onPlaybackModeClicked,
+                playbackMode = playbackMode,
+                isFavorite = currentSong.isFavorite
+            )
+
+            Spacer(Modifier.height(60.dp))
 
 
-        FullPlayerTimeSlider(
-            currentPosition = currentPosition,
-            musicState = musicState,
-            onSeekTo = onSeekTo
-        )
+            FullPlayerTimeSlider(
+                currentPosition = currentPosition,
+                musicState = musicState,
+                onSeekTo = onSeekTo
+            )
 
-        Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(40.dp))
 
-        FullPlayerMusicController(
-            onPrevClicked = onPrevClicked,
-            onNextClicked = onNextClicked,
-            onPlayPauseClicked = onPlayPauseClicked,
-            musicState = musicState
-        )
+            FullPlayerMusicController(
+                onPrevClicked = onPrevClicked,
+                onNextClicked = onNextClicked,
+                onPlayPauseClicked = onPlayPauseClicked,
+                musicState = musicState
+            )
+        }
+
+
 
 
     }

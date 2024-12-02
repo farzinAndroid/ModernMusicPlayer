@@ -45,6 +45,7 @@ fun FullPlayerTopBar(
     onBackClicked: () -> Unit,
     onLyricsClicked: () -> Unit,
     song: Song,
+    modifier: Modifier = Modifier
 ) {
 
 
@@ -52,9 +53,8 @@ fun FullPlayerTopBar(
 
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(70.dp)
             .padding(horizontal = MaterialTheme.spacing.semiLarge24),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
