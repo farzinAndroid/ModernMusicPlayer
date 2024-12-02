@@ -44,7 +44,7 @@ class MediaRepositoryImpl @Inject constructor(
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         songList.filter { song ->
             val daysSinceAdded = Duration.between(song.date.toJavaLocalDateTime(), now.toJavaLocalDateTime()).toDays()
-            daysSinceAdded <= 30
+            daysSinceAdded <= 14
         }
     }
 
