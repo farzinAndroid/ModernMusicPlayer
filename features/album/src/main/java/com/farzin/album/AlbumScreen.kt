@@ -210,10 +210,11 @@ fun AlbumScreen(
                     text = album?.name ?: ""
                 )
 
-                Spacer(Modifier.height(MaterialTheme.spacing.semiLarge24))
+                Spacer(Modifier.height(MaterialTheme.spacing.medium16))
 
                 AlbumDetailImage(
-                    artworkUri = album?.artworkUri.toString()
+                    artworkUri = album?.artworkUri.toString(),
+                    albumName = album?.name ?: ""
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.large32))

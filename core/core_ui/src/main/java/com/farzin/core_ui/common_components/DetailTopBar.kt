@@ -32,10 +32,10 @@ fun DetailTopBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
-            .padding(top = MaterialTheme.spacing.large32)
+            .padding(top = MaterialTheme.spacing.semiLarge24)
             .padding(horizontal = MaterialTheme.spacing.semiLarge24),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Start
     ) {
         IconButton(
             onClick = { onBackClicked() },
@@ -50,24 +50,6 @@ fun DetailTopBar(
                 tint = MaterialTheme.colorScheme.WhiteDarkBlue
             )
         }
-
-        TextMedium(
-            text = text,
-            color = MaterialTheme.colorScheme.WhiteDarkBlue,
-            maxLine = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontSize = 20.sp,
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.spacing.medium16)
-        )
-
-        // place holder
-        Icon(
-            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-            contentDescription = "",
-            modifier = Modifier,
-            tint = MaterialTheme.colorScheme.BackgroundColor
-        )
     }
 
 }
