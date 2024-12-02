@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerDefaults
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -136,8 +139,7 @@ fun FullPlayer(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp),
+                    .fillMaxSize(),
                 flingBehavior = PagerDefaults.flingBehavior(
                     state = pagerState,
                     pagerSnapDistance = PagerSnapDistance.atMost(0)
@@ -171,7 +173,11 @@ fun FullPlayer(
                 ) {
                     FullPlayerImage(
                         artWorkUri = songs[index].artworkUri,
-                        context = context
+                        context = context,
+                        modifier = Modifier
+                            .fillMaxHeight(0.75f)
+                            .fillMaxWidth()
+                            .align(Alignment.TopCenter)
                     )
                 }
 
@@ -182,6 +188,7 @@ fun FullPlayer(
                 artist = currentSong.artist,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+                    .padding(horizontal = MaterialTheme.spacing.medium16)
             )
 
 

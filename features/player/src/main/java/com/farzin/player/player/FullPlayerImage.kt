@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,7 @@ import com.farzin.core_ui.utils.PaletteGenerator
 fun FullPlayerImage(
     artWorkUri: Uri,
     context: Context,
+    modifier: Modifier = Modifier
 ) {
 
     var palette by remember { mutableStateOf<MutableMap<String, String>>(mutableMapOf()) }
@@ -51,7 +53,8 @@ fun FullPlayerImage(
         }
     }
     Box(
-        modifier = Modifier
+        modifier = modifier
+            .padding(top = MaterialTheme.spacing.semiLarge24)
             .advancedShadow(
                 color = palette["muted"]
                     ?.let { Color(android.graphics.Color.parseColor(it)) }
@@ -63,7 +66,6 @@ fun FullPlayerImage(
                 offsetX = 0.dp
             )
             .clip(RoundedCornerShape(MaterialTheme.spacing.large32))
-            .size(300.dp)
 
     ) {
         SubcomposeAsyncImage(

@@ -39,6 +39,7 @@ import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.player.R
 
 @Composable
 fun FullPlayerTopBar(
@@ -75,7 +76,7 @@ fun FullPlayerTopBar(
         }
 
         TextMedium(
-            text = song.album,
+            text = stringResource(com.farzin.core_ui.R.string.playing),
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
             maxLine = 1,
             overflow = TextOverflow.Ellipsis,
