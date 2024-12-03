@@ -31,6 +31,7 @@ import com.farzin.home.components.albums.Albums
 import com.farzin.home.components.artists.Artists
 import com.farzin.home.components.favorites.Favorites
 import com.farzin.home.components.folders.Folders
+import com.farzin.home.components.playlists.Playlists
 import com.farzin.home.components.recently_added.RecentlyAdded
 import com.farzin.home.components.songs.Songs
 import com.farzin.home.home.MediaTab
@@ -165,6 +166,10 @@ fun HomePager(
                     onToggleFavorite = onFavoriteClick,
                     onDeleteClicked = onDeleteClicked
                 )
+            }
+
+            MediaTab.Playlists.ordinal->{
+                Playlists()
             }
         }
     }

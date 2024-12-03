@@ -43,4 +43,5 @@
     <string name="no">No</string>
     <string name="add_to_fav">Add to favorites</string>
     <string name="remove_from_fav">Remove from favorites</string>
+    <string name="playlists">Playlists</string>
 </resources>

@@ -2,9 +2,12 @@ package com.farzin.home.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.farzin.core_domain.usecases.db.PlaylistUseCases
 import com.farzin.core_domain.usecases.media.MediaUseCases
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
 import com.farzin.core_model.Song
+import com.farzin.core_model.db.Playlist
+import com.farzin.core_model.db.PlaylistSong
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +25,7 @@ import javax.inject.Inject
 class HomeViewmodel @Inject constructor(
     private val preferencesUseCases: PreferencesUseCases,
     private val mediaUseCases: MediaUseCases,
+    private val playlistUseCases: PlaylistUseCases
 ) : ViewModel() {
 
     val playingQueueSongs = mediaUseCases.getPlayingQueueSongsUseCase().stateIn(
@@ -75,6 +79,17 @@ class HomeViewmodel @Inject constructor(
         initialValue = HomeState.Loading
     )
 
+
+    val playlists = playlistUseCases.getAllPlaylistsUseCase()
+    val songsInPlaylist = playlistUseCases.getSongsInPlaylistUseCase(1)
+
+    fun createPlaylist(playlist: Playlist) = viewModelScope.launch(Dispatchers.IO) {
+        playlistUseCases.createPlaylistUseCase(playlist)
+    }
+
+    fun insertPlaylistSong(playlistSong: List<PlaylistSong>) = viewModelScope.launch(Dispatchers.IO) {
+        playlistUseCases.insertPlaylistSongUseCase(playlistSong)
+    }
 
 
 }

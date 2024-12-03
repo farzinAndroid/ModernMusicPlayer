@@ -3,21 +3,23 @@ package com.farzin.core_data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.farzin.core_domain.repository.PlaylistRepository
 import com.farzin.core_model.db.Playlist
 import com.farzin.core_model.db.PlaylistSong
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PlaylistDao {
+interface PlaylistDao : PlaylistRepository {
 
     @Insert
-    suspend fun createPlaylist(playlist: Playlist)
+    override suspend fun createPlaylist(playlist: Playlist)
 
     @Insert
-    suspend fun insertPlaylistSongs(playlistSong: List<PlaylistSong>)
+    override suspend fun insertPlaylistSongs(playlistSong: List<PlaylistSong>)
 
     @Query("select * from playlist")
-    suspend fun getAllPlaylists() : List<Playlist>
+    override fun getAllPlaylists() : Flow<List<Playlist>>
 
     @Query("select * from playlist_song where playlistId = :playlistId")
-    suspend fun getSongsInPlaylist(playlistId: Int) : List<PlaylistSong>
+    override fun getSongsInPlaylist(playlistId: Int) : Flow<List<PlaylistSong>>
 }

@@ -1,5 +1,6 @@
 package com.farzin.home.components.songs
 
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -37,7 +38,9 @@ fun Songs(
                 Spacer(Modifier.height(MaterialTheme.spacing.small8))
                 SongItem(
                     song = song,
-                    onClick = { onClick(index,songs) },
+                    onClick = { onClick(index,songs)
+                              Log.e("TAG",song.mediaId)
+                              },
                     onToggleFavorite = { onToggleFavorite(song.mediaId,it) },
                     isPlaying = song.mediaId == currentPlayingSongId,
                     isFavorite = song.isFavorite,

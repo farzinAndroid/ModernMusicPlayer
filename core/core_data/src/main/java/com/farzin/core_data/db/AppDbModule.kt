@@ -3,6 +3,7 @@ package com.farzin.core_data.db
 import android.content.Context
 import androidx.room.Room
 import com.farzin.core_common.DbConstants
+import com.farzin.core_domain.repository.PlaylistRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +28,6 @@ object AppDbModule {
     @Singleton
     fun providePlayListDao(
         modernMusicPlayerDatabase: ModernMusicPlayerDatabase
-    ) = modernMusicPlayerDatabase.playListDao()
+    ) : PlaylistRepository = modernMusicPlayerDatabase.playListDao()
 
 }

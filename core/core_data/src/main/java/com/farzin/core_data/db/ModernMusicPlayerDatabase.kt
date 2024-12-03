@@ -7,7 +7,8 @@ import com.farzin.core_model.db.PlaylistSong
 
 @Database(
     entities = [Playlist::class, PlaylistSong::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class ModernMusicPlayerDatabase : RoomDatabase() {
 
