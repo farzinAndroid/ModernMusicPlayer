@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/features/folder" />
             <option value="$PROJECT_DIR$/features/home" />
             <option value="$PROJECT_DIR$/features/player" />
+            <option value="$PROJECT_DIR$/features/playlists" />
             <option value="$PROJECT_DIR$/features/search" />
           </set>
         </option>
