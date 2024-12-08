@@ -46,6 +46,7 @@ import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
+import com.farzin.core_model.db.Playlist
 import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.Loading
@@ -131,7 +132,6 @@ fun Home(
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
     val playingQueueSongs by homeViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
-    val lyrics by playerViewmodel.lyrics.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
@@ -146,6 +146,7 @@ fun Home(
     var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
     var artists by remember { mutableStateOf<List<Artist>>(emptyList()) }
     var folders by remember { mutableStateOf<List<Folder>>(emptyList()) }
+    var playlists by remember { mutableStateOf<List<Playlist>>(emptyList()) }
     val homeState by homeViewmodel.homeState.collectAsStateWithLifecycle()
     when (val state = homeState) {
         HomeState.Loading -> {
@@ -162,6 +163,7 @@ fun Home(
             sortOrder = state.sortOrder
             recentSongs = state.recentSongs
             favoriteSongs = state.favoriteSongs
+            playlists = state.playlists
         }
     }
 
@@ -339,6 +341,10 @@ fun Home(
                         onDeleteClicked = {
                             songToDelete = it
                             playerViewmodel.showDeleteDialog = true
+                        },
+                        playlists = playlists,
+                        onPlaylistClicked = {playlistId->
+                            navController.navigate(Screens.Playlists(playlistId))
                         }
                     )
                 }

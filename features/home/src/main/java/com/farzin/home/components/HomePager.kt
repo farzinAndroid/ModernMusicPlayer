@@ -22,6 +22,7 @@ import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
+import com.farzin.core_model.db.Playlist
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.Gray
@@ -53,6 +54,8 @@ fun HomePager(
     artists: List<Artist>,
     folders:List<Folder>,
     recentSongs: List<Song>,
+    playlists: List<Playlist>,
+    onPlaylistClicked:(id:Int) ->Unit,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -169,7 +172,10 @@ fun HomePager(
             }
 
             MediaTab.Playlists.ordinal->{
-                Playlists()
+                Playlists(
+                    playlists = playlists,
+                    onPlaylistClicked = onPlaylistClicked
+                )
             }
         }
     }

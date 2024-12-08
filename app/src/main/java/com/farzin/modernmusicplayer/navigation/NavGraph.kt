@@ -5,11 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.farzin.core_ui.Screens
 import com.farzin.album.AlbumScreen
 import com.farzin.artist.ArtistScreen
+import com.farzin.core_ui.Screens
 import com.farzin.folder.FolderScreen
 import com.farzin.home.home.HomeScreen
+import com.farzin.playlists.PlaylistsScreen
 import com.farzin.search.search.SearchScreen
 
 @Composable
@@ -60,6 +61,11 @@ fun NavGraph(
             SearchScreen(
                 navController = navHostController
             )
+        }
+
+        composable<Screens.Playlists> {
+            val args = it.toRoute<Screens.Playlists>()
+            PlaylistsScreen(playlistId = args.playlistId)
         }
 
 

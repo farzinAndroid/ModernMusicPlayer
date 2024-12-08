@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":features:playlists")
+
+
 pluginManagement {
     repositories {
         google {
