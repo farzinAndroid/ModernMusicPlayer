@@ -88,20 +88,7 @@ class HomeViewmodel @Inject constructor(
         initialValue = HomeState.Loading
     )
 
-    val songsInPlaylist = MutableStateFlow<List<PlaylistSong>>(emptyList())
-    fun getSongsInPlaylist(playlistId:Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            songsInPlaylist.emit(playlistUseCases.getSongsInPlaylistUseCase(playlistId))
-        }
-    }
 
-    fun createPlaylist(playlist: Playlist) = viewModelScope.launch(Dispatchers.IO) {
-        playlistUseCases.createPlaylistUseCase(playlist)
-    }
-
-    fun insertPlaylistSong(playlistSong: List<PlaylistSong>) = viewModelScope.launch(Dispatchers.IO) {
-        playlistUseCases.insertPlaylistSongUseCase(playlistSong)
-    }
 
 
 }

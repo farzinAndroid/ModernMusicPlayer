@@ -204,7 +204,8 @@ fun ArtistScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = artist?.name ?: ""
+                    text = artist?.name ?: "",
+                    isFromAlbumScreen = false
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))

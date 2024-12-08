@@ -207,7 +207,8 @@ fun AlbumScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = album?.name ?: ""
+                    text = album?.name ?: "",
+                    isFromAlbumScreen = true
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))

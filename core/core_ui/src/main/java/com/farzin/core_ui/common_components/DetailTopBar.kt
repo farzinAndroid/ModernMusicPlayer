@@ -24,8 +24,9 @@ import com.farzin.core_ui.theme.spacing
 
 @Composable
 fun DetailTopBar(
-    onBackClicked:()->Unit,
-    text:String
+    onBackClicked: () -> Unit,
+    text: String,
+    isFromAlbumScreen: Boolean,
 ) {
 
     Row(
@@ -35,7 +36,7 @@ fun DetailTopBar(
             .padding(top = MaterialTheme.spacing.semiLarge24)
             .padding(horizontal = MaterialTheme.spacing.semiLarge24),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = if (isFromAlbumScreen) Arrangement.Start else Arrangement.SpaceBetween
     ) {
         IconButton(
             onClick = { onBackClicked() },
@@ -50,6 +51,29 @@ fun DetailTopBar(
                 tint = MaterialTheme.colorScheme.WhiteDarkBlue
             )
         }
+
+        if (!isFromAlbumScreen) {
+
+            TextMedium(
+                text = text,
+                color = MaterialTheme.colorScheme.WhiteDarkBlue,
+                maxLine = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .padding(horizontal = MaterialTheme.spacing.medium16)
+            )
+
+            // place holder
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                contentDescription = "",
+                modifier = Modifier,
+                tint = MaterialTheme.colorScheme.BackgroundColor
+            )
+
+        }
+
     }
 
 }

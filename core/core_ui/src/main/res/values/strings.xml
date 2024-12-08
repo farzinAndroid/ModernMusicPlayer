@@ -45,4 +45,6 @@
     <string name="remove_from_fav">Remove from favorites</string>
     <string name="playlists">Playlists</string>
     <string name="no_playlists">No playlists</string>
+    <string name="playlist">Playlist</string>
+    <string name="delete_playlist">Delete playlist</string>
 </resources>

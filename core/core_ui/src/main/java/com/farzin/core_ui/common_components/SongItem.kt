@@ -1,5 +1,6 @@
 package com.farzin.core_ui.common_components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +24,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +42,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import coil.compose.SubcomposeAsyncImage
 import com.farzin.core_model.Song
 import com.farzin.core_ui.R
-import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.MainBlue
@@ -161,6 +160,7 @@ fun SongItem(
             modifier = Modifier,
             offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
             containerColor = Color.White,
+            border = BorderStroke(1.dp,MaterialTheme.colorScheme.MainBlue)
         ) {
             DropdownMenuItem(
                 text = {

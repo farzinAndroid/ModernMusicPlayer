@@ -203,7 +203,8 @@ fun FolderScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = folder?.name ?: ""
+                    text = folder?.name ?: "",
+                    isFromAlbumScreen = false
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
