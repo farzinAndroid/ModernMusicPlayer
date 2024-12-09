@@ -72,7 +72,7 @@ fun Playlists(
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
     modifier: Modifier = Modifier,
     playlists: List<Playlist>,
-    onPlaylistClicked: (id: Int) -> Unit,
+    onPlaylistClicked: (playlist:Playlist) -> Unit,
 ) {
 
 
@@ -119,7 +119,7 @@ fun Playlists(
                             subTitle = stringResource(com.farzin.core_ui.R.string.playlist),
                             modifier = Modifier
                                 .clickable {
-                                    onPlaylistClicked(playlist.id)
+                                    onPlaylistClicked(playlist)
                                 }
                                 .animateItem(),
                             lightModePic = painterResource(com.farzin.core_ui.R.drawable.vinyl_blue),

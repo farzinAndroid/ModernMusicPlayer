@@ -55,7 +55,7 @@ fun HomePager(
     folders:List<Folder>,
     recentSongs: List<Song>,
     playlists: List<Playlist>,
-    onPlaylistClicked:(id:Int) ->Unit,
+    onPlaylistClicked:(playlist:Playlist) ->Unit,
 ) {
 
     val scope = rememberCoroutineScope()

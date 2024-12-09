@@ -24,7 +24,10 @@ sealed interface Screens {
     data object Search : Screens
 
     @Serializable
-    data class Playlists(val playlistId:Int) : Screens
+    data class Playlists(
+        val playlistId:Int,
+        val playlistName:String
+    ) : Screens
 
 
 
