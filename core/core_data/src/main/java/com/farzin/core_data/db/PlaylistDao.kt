@@ -3,6 +3,7 @@ package com.farzin.core_data.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.farzin.core_domain.repository.PlaylistRepository
 import com.farzin.core_model.db.Playlist
@@ -18,7 +19,7 @@ interface PlaylistDao : PlaylistRepository {
     @Delete
     override suspend fun deletePlaylist(playlist: Playlist)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun insertPlaylistSongs(playlistSong: List<PlaylistSong>)
 
     @Query("select * from playlist")

@@ -1,5 +1,9 @@
 package com.farzin.playlists
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.db.PlaylistUseCases
@@ -20,7 +24,16 @@ class PlaylistViewmodel @Inject constructor(
     private val mediaUseCases: MediaUseCases
 ) : ViewModel() {
 
+    var showAddSongToPlaylistDialog by mutableStateOf(false)
+
     val playingQueueSongs = mediaUseCases.getPlayingQueueSongsUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
+
+
+    val songs = mediaUseCases.getSongsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList()
