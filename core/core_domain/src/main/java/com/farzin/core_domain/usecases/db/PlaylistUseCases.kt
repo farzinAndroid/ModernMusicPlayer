@@ -5,4 +5,5 @@ data class PlaylistUseCases(
     val getAllPlaylistsUseCase: GetAllPlaylistsUseCase,
     val getSongsInPlaylistUseCase: GetSongsInPlaylistUseCase,
     val insertPlaylistSongUseCase: InsertPlaylistSongUseCase,
+    val deletePlaylistUseCase: DeletePlaylistUseCase
 )

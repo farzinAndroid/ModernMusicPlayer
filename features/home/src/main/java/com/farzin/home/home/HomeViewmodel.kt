@@ -89,6 +89,18 @@ class HomeViewmodel @Inject constructor(
     )
 
 
+    fun createPlaylist(playlist: Playlist){
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistUseCases.createPlaylistUseCase(playlist)
+        }
+    }
+
+    fun deletePlaylist(playlist: Playlist){
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistUseCases.deletePlaylistUseCase(playlist)
+        }
+    }
+
 
 
 }

@@ -50,7 +50,8 @@ fun MediaItem(
     subTitle:String,
     darkModePic:Painter,
     lightModePic:Painter,
-    shouldHaveMenu:Boolean = false
+    shouldHaveMenu:Boolean = false,
+    onDeleteClicked:()->Unit = {}
 ) {
 
 
@@ -134,6 +135,7 @@ fun MediaItem(
                     },
                     onClick = {
                         isMenuExpanded = false
+                        onDeleteClicked()
                     },
                     modifier = Modifier
                         .height(40.dp)

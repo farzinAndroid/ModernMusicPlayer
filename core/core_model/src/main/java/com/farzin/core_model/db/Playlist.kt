@@ -9,5 +9,5 @@ import com.farzin.core_common.DbConstants
 data class Playlist(
     @PrimaryKey(autoGenerate = true)
     val id:Int = 0,
-    val name:String
+    val name:String = ""
 )

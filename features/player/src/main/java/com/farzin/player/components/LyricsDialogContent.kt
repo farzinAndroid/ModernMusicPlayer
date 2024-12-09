@@ -63,7 +63,7 @@ fun LyricsDialogContent(
         TextRegular(
             text = stringResource(com.farzin.core_ui.R.string.lyrics_description),
             color = MaterialTheme.colorScheme.WhiteDarkBlue,
-            fontSize = 10.sp,
+            fontSize = 12.sp,
             textStyle = TextStyle(
                 textAlign = TextAlign.Center
             ),
@@ -82,7 +82,7 @@ fun LyricsDialogContent(
             TextMedium(
                 text = text,
                 color = MaterialTheme.colorScheme.WhiteDarkBlue,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 textStyle = TextStyle(
                     textAlign = TextAlign.Center
                 ),

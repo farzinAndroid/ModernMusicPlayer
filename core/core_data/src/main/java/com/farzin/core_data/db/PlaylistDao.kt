@@ -1,6 +1,7 @@
 package com.farzin.core_data.db
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.farzin.core_domain.repository.PlaylistRepository
@@ -13,6 +14,9 @@ interface PlaylistDao : PlaylistRepository {
 
     @Insert
     override suspend fun createPlaylist(playlist: Playlist)
+
+    @Delete
+    override suspend fun deletePlaylist(playlist: Playlist)
 
     @Insert
     override suspend fun insertPlaylistSongs(playlistSong: List<PlaylistSong>)

@@ -7,6 +7,7 @@ import com.farzin.core_domain.repository.MediaRepository
 import com.farzin.core_domain.repository.PlaylistRepository
 import com.farzin.core_domain.repository.SharedPreferencesRepository
 import com.farzin.core_domain.usecases.db.CreatePlaylistUseCase
+import com.farzin.core_domain.usecases.db.DeletePlaylistUseCase
 import com.farzin.core_domain.usecases.db.GetAllPlaylistsUseCase
 import com.farzin.core_domain.usecases.db.GetSongsInPlaylistUseCase
 import com.farzin.core_domain.usecases.db.InsertPlaylistSongUseCase
@@ -108,7 +109,8 @@ object AppModule {
         createPlaylistUseCase = CreatePlaylistUseCase(playlistRepository),
         getAllPlaylistsUseCase = GetAllPlaylistsUseCase(playlistRepository),
         getSongsInPlaylistUseCase = GetSongsInPlaylistUseCase(playlistRepository),
-        insertPlaylistSongUseCase = InsertPlaylistSongUseCase(playlistRepository)
+        insertPlaylistSongUseCase = InsertPlaylistSongUseCase(playlistRepository),
+        deletePlaylistUseCase = DeletePlaylistUseCase(playlistRepository)
     )
 
 }
