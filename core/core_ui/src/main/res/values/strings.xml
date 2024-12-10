@@ -52,4 +52,6 @@
     <string name="save">Save</string>
     <string name="playlist_name">Playlist name</string>
     <string name="add_song_to_playlist_text">Choose songs to add to your playlist and then click \'Add to playlist\'.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="confirm">Confirm</string>
 </resources>

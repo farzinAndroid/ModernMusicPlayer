@@ -40,6 +40,7 @@ import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
+import com.farzin.search.search.SearchViewmodel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -50,6 +51,7 @@ fun PlaylistsScreen(
     playlistName: String,
     playlistViewmodel: PlaylistViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
+    searchViewmodel: SearchViewmodel = hiltViewModel(),
     navController: NavController,
 ) {
 
@@ -72,7 +74,6 @@ fun PlaylistsScreen(
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-
 
 
     val songs by playlistViewmodel.songs.collectAsStateWithLifecycle()
@@ -241,8 +242,11 @@ fun PlaylistsScreen(
             if (playlistViewmodel.showAddSongToPlaylistDialog) {
                 AddSongToPlaylistDialog(
                     onDismiss = { playlistViewmodel.showAddSongToPlaylistDialog = false },
-                    onConfirm = { playlistViewmodel.showAddSongToPlaylistDialog = false },
+                    onConfirm = { selectedSongs ->
+                        playlistViewmodel.showAddSongToPlaylistDialog = false
+                    },
                     songs = songs,
+                    searchViewmodel = searchViewmodel
                 )
             }
 
