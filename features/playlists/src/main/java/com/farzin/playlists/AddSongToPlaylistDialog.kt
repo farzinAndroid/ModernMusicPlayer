@@ -37,12 +37,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.farzin.core_model.Song
+import com.farzin.core_model.db.PlaylistSong
+import com.farzin.core_model.db.toSongDB
 import com.farzin.core_ui.common_components.TextBold
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.search.search.SearchViewmodel
+import kotlinx.serialization.builtins.serializer
 
 @Composable
 fun AddSongToPlaylistDialog(
@@ -50,7 +53,8 @@ fun AddSongToPlaylistDialog(
     searchViewmodel: SearchViewmodel,
     songs: List<Song>,
     onDismiss: () -> Unit,
-    onConfirm: (List<Song>) -> Unit,
+    onConfirm: (List<PlaylistSong>) -> Unit,
+    playlistId:Int
 ) {
 
     val query by searchViewmodel.query.collectAsState()
@@ -183,7 +187,11 @@ fun AddSongToPlaylistDialog(
                 DialogConfirmDismissSection(
                     onConfirm = {
                         searchViewmodel.clear()
-                        onConfirm(selectedSongs.toList())
+                        val playlistSongs = mutableListOf<PlaylistSong>()
+                        selectedSongs.forEach { song ->
+                            playlistSongs.add(PlaylistSong(song = song.toSongDB(), playlistId = playlistId))
+                        }
+                        onConfirm(playlistSongs)
                     },
                     onDismiss = {
                         searchViewmodel.clear()

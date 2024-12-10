@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,12 +30,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.db.PlaylistSong
+import com.farzin.core_model.db.toSong
 import com.farzin.core_ui.common_components.DetailTopBar
+import com.farzin.core_ui.common_components.EmptySectionText
+import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.theme.BackgroundColor
@@ -61,7 +68,6 @@ fun PlaylistsScreen(
         playlistViewmodel.getSongsInPlaylist(playlistId)
         playlistViewmodel.songsInPlaylist.collectLatest {
             songsInPlaylist = it
-            Log.e("TAG", it.toString())
         }
     }
 
@@ -204,49 +210,54 @@ fun PlaylistsScreen(
 
                 Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
-//                if (!albumViewModel.error){
-//                        LazyColumn(
-//                            modifier = Modifier
-//                                .fillMaxSize()
-//                                .padding(bottom = 64.dp)
-//
-//                        ) {
-//                            itemsIndexed(songsInPlaylist, key = { _, song ->
-//                                song.mediaId
-//                            }) { index, song ->
-//                                Spacer(Modifier.height(MaterialTheme.spacing.small8))
-//                                SongItem(
-//                                    onClick = {
-//
-//                                    },
-//                                    song = song,
-//                                    isPlaying = song.mediaId == musicState.currentMediaId,
-//                                    shouldShowPic = false,
-//                                    onToggleFavorite = { playerViewmodel.setFavorite(song.mediaId, it) },
-//                                    isFavorite = song.isFavorite,
-//                                    modifier = Modifier,
-//                                    onDeleteClicked = {
-//                                        scope.launch {
-//                                            playerViewmodel.showDeleteDialog = true
-//                                        }
-//                                    }
-//                                )
-//                            }
-//                        }
-//                }else{
-//                    EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs))
-//                }
+                if (songsInPlaylist.isNotEmpty()){
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 64.dp)
+
+                        ) {
+                            itemsIndexed(songsInPlaylist) { index, playlistSong ->
+                                Spacer(Modifier.height(MaterialTheme.spacing.small8))
+                                SongItem(
+                                    onClick = {
+
+                                    },
+                                    song = playlistSong.song.toSong(),
+                                    isPlaying = playlistSong.song.mediaId == musicState.currentMediaId,
+                                    onToggleFavorite = { playerViewmodel.setFavorite(playlistSong.song.mediaId, it) },
+                                    isFavorite = playlistSong.song.isFavorite,
+                                    modifier = Modifier
+                                        .animateItem(),
+                                    onDeleteClicked = {
+                                        scope.launch {
+                                            playerViewmodel.showDeleteDialog = true
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                }else{
+                    EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_songs_in_playlist))
+                }
 
             }
 
             if (playlistViewmodel.showAddSongToPlaylistDialog) {
                 AddSongToPlaylistDialog(
                     onDismiss = { playlistViewmodel.showAddSongToPlaylistDialog = false },
-                    onConfirm = { selectedSongs ->
-                        playlistViewmodel.showAddSongToPlaylistDialog = false
+                    onConfirm = { playlistSongs ->
+                        scope.launch {
+                            playlistViewmodel.insertPlaylistSong(
+                                playlistSongs
+                            )
+                            playlistViewmodel.getSongsInPlaylist(playlistId)
+                            playlistViewmodel.showAddSongToPlaylistDialog = false
+                        }
                     },
                     songs = songs,
-                    searchViewmodel = searchViewmodel
+                    searchViewmodel = searchViewmodel,
+                    playlistId = playlistId
                 )
             }
 

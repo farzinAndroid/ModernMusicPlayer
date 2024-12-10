@@ -39,13 +39,13 @@ abstract class ModernMusicPlayerDatabase : RoomDatabase() {
 //            """
 //                )
 //
-//                // 2. Copy data from the old table to the new table, transforming songId to Song
+//                // 2. Copy data from the old table to the new table, transforming songId to SongDB
 //                db.execSQL(
 //                    """
 //            INSERT INTO PlaylistSong_New (id, song_mediaId, song_title, song_artist, song_album, song_duration, song_uri, playlistId)
 //            SELECT ps.id, s.mediaId, s.title, s.artist, s.album, s.duration, s.uri, ps.playlistId
 //            FROM PlaylistSong ps
-//            INNER JOIN Song s ON ps.songId = s.mediaId
+//            INNER JOIN SongDB s ON ps.songId = s.mediaId
 //            """
 //                )
 //
