@@ -1,12 +1,14 @@
 package com.farzin.core_ui.common_components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
@@ -18,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 
@@ -26,7 +27,9 @@ import com.farzin.core_ui.theme.spacing
 fun DetailTopBar(
     onBackClicked: () -> Unit,
     text: String,
-    isFromAlbumScreen: Boolean,
+    shouldHaveMiddleText: Boolean,
+    endIcon:@Composable ()->Unit = {},
+    shouldHaveEndIcon: Boolean = false
 ) {
 
     Row(
@@ -36,43 +39,61 @@ fun DetailTopBar(
             .padding(top = MaterialTheme.spacing.semiLarge24)
             .padding(horizontal = MaterialTheme.spacing.semiLarge24),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = if (isFromAlbumScreen) Arrangement.Start else Arrangement.SpaceBetween
     ) {
-        IconButton(
-            onClick = { onBackClicked() },
+
+        Box(
             modifier = Modifier
-                .size(MaterialTheme.spacing.semiLarge24)
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                contentDescription = "",
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ){
+
+            IconButton(
+                onClick = { onBackClicked() },
                 modifier = Modifier
-                    .fillMaxSize(),
-                tint = MaterialTheme.colorScheme.WhiteDarkBlue
-            )
+                    .align(Alignment.CenterStart)
+                    .size(MaterialTheme.spacing.semiLarge24)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    tint = MaterialTheme.colorScheme.WhiteDarkBlue
+                )
+            }
+
+
+
+            if (shouldHaveMiddleText) {
+
+                TextMedium(
+                    text = text,
+                    color = MaterialTheme.colorScheme.WhiteDarkBlue,
+                    maxLine = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = MaterialTheme.spacing.medium16)
+                )
+
+            }
+
+
+            if (shouldHaveEndIcon){
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                ) {
+                    endIcon()
+                }
+            }
+
         }
 
-        if (!isFromAlbumScreen) {
 
-            TextMedium(
-                text = text,
-                color = MaterialTheme.colorScheme.WhiteDarkBlue,
-                maxLine = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 20.sp,
-                modifier = Modifier
-                    .padding(horizontal = MaterialTheme.spacing.medium16)
-            )
 
-            // place holder
-            Icon(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                contentDescription = "",
-                modifier = Modifier,
-                tint = MaterialTheme.colorScheme.BackgroundColor
-            )
 
-        }
 
     }
 

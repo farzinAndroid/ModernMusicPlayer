@@ -12,12 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -47,6 +52,7 @@ import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.theme.BackgroundColor
+import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
@@ -217,30 +223,48 @@ fun PlaylistsScreen(
             ) {
                 DetailTopBar(
                     onBackClicked = {
-                        playlistViewmodel.showAddSongToPlaylistDialog = true
-//                        navController.navigateUp()
+                        navController.navigateUp()
                     },
                     text = playlistName,
-                    isFromAlbumScreen = false
+                    shouldHaveMiddleText = true,
+                    shouldHaveEndIcon = true,
+                    endIcon = {
+                        IconButton(
+                            onClick = { playlistViewmodel.showAddSongToPlaylistDialog = true },
+                            modifier = Modifier
+                                .size(MaterialTheme.spacing.semiLarge24)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                tint = MaterialTheme.colorScheme.WhiteDarkBlue
+                            )
+                        }
+                    }
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
 
-//                AlbumDetailImage(
-//                    artworkUri = album?.artworkUri.toString(),
-//                    albumName = album?.name ?: ""
-//                )
-
-                Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
                 if (songsInPlaylist.isNotEmpty()) {
+
+                    PlaylistDetailImage(
+                        songsInPlaylist = songsInPlaylist,
+                        albumName = ""
+                    )
+
+                    Spacer(Modifier.height(MaterialTheme.spacing.large32))
+
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(bottom = 64.dp)
 
                     ) {
-                        itemsIndexed(songsInPlaylist, key = {_,playlistSong->
+                        itemsIndexed(songsInPlaylist, key = { _, playlistSong ->
                             playlistSong.id
                         }) { index, playlistSong ->
                             Spacer(Modifier.height(MaterialTheme.spacing.small8))
@@ -268,8 +292,9 @@ fun PlaylistsScreen(
                                             song = it.toSongDB(),
                                             playlistId = playlistId
                                         )
-                                        // Update songsToPlay immediately after deleting
-                                        songsToPlay = songsToPlay.filter { it.mediaId != songToDelete.song.mediaId }.toSet()
+                                        songsToPlay =
+                                            songsToPlay.filter { it.mediaId != songToDelete.song.mediaId }
+                                                .toSet()
                                         playerViewmodel.showDeleteDialog = true
                                     }
                                 }

@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.farzin.core_model.Album
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.DetailTopBar
@@ -46,11 +45,9 @@ import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
-import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -208,7 +205,7 @@ fun AlbumScreen(
                         navController.navigateUp()
                     },
                     text = album?.name ?: "",
-                    isFromAlbumScreen = true
+                    shouldHaveMiddleText = false
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))

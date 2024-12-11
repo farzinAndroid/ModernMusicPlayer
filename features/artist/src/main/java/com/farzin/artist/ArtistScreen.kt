@@ -205,7 +205,7 @@ fun ArtistScreen(
                         navController.navigateUp()
                     },
                     text = artist?.name ?: "",
-                    isFromAlbumScreen = false
+                    shouldHaveMiddleText = false
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))
