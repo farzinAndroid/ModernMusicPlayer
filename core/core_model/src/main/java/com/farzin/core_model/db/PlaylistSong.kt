@@ -17,8 +17,8 @@ import com.farzin.core_common.DbConstants
     ]
 )
 data class PlaylistSong(
-    val song: SongDB,
+    val song: SongDB = SongDB(),
     @PrimaryKey(autoGenerate = false)
     val id: String = song.mediaId,
-    val playlistId: Int,
+    val playlistId: Int = -1,
 )

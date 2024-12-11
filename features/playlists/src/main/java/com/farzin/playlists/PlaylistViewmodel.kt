@@ -40,15 +40,15 @@ class PlaylistViewmodel @Inject constructor(
     )
 
 
-    val songsInPlaylist = MutableStateFlow<List<PlaylistSong>>(emptyList())
-    fun getSongsInPlaylist(playlistId:Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            songsInPlaylist.emit(playlistUseCases.getSongsInPlaylistUseCase(playlistId))
-        }
-    }
+    fun songsInPlaylist(playlistId:Int) = playlistUseCases.getSongsInPlaylistUseCase(playlistId)
 
     fun insertPlaylistSong(playlistSong: List<PlaylistSong>) = viewModelScope.launch(Dispatchers.IO) {
         playlistUseCases.insertPlaylistSongUseCase(playlistSong)
+    }
+
+    fun deleteSongFromPlaylist(playlistSong: PlaylistSong) =
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistUseCases.deleteSongInPlaylistUseCase(playlistSong)
     }
 
 }

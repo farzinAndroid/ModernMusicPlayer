@@ -26,5 +26,8 @@ interface PlaylistDao : PlaylistRepository {
     override fun getAllPlaylists() : Flow<List<Playlist>>
 
     @Query("select * from playlist_song where playlistId = :playlistId")
-    override fun getSongsInPlaylist(playlistId: Int) : List<PlaylistSong>
+    override fun getSongsInPlaylist(playlistId: Int) : Flow<List<PlaylistSong>>
+
+    @Delete
+    override suspend fun deleteSongInPlaylist(playlistSong: PlaylistSong)
 }
