@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ModernMusicPlayer</string>
+    <string name="app_name">Sonix</string>
     <string name="grant_permission">You have to grant permission to continue.</string>
     <string name="grant_storage_acess">Grant storage access</string>
     <string name="songs">Songs</string>
