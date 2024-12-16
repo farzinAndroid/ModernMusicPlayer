@@ -203,7 +203,8 @@ fun FolderScreen(
                     onBackClicked = {
                         navController.navigateUp()
                     },
-                    text = folder?.name ?: ""
+                    text = folder?.name ?: "",
+                    shouldHaveMiddleText = true
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.medium16))

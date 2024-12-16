@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.compose.rememberNavController
 import com.farzin.core_ui.common_components.ChangeStatusBarAndNavigationBarColor
 import com.farzin.core_ui.theme.BackgroundColor
@@ -33,16 +36,18 @@ class MainActivity : ComponentActivity() {
                     isDarkMode = isSystemInDarkTheme()
                 )
 
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.BackgroundColor)
-                        .statusBarsPadding()
-                        .navigationBarsPadding()
-                ) {
-                    NavGraph(
-                        navHostController = navController
-                    )
+                CompositionLocalProvider(LocalLayoutDirection.provides(LayoutDirection.Ltr)) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.BackgroundColor)
+                            .statusBarsPadding()
+                            .navigationBarsPadding()
+                    ) {
+                        NavGraph(
+                            navHostController = navController
+                        )
+                    }
                 }
             }
         }
