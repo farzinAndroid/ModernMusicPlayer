@@ -10,6 +10,7 @@ import com.farzin.core_domain.usecases.db.CreatePlaylistUseCase
 import com.farzin.core_domain.usecases.db.DeletePlaylistUseCase
 import com.farzin.core_domain.usecases.db.DeleteSongInPlaylistUseCase
 import com.farzin.core_domain.usecases.db.GetAllPlaylistsUseCase
+import com.farzin.core_domain.usecases.db.GetSongsInAllPlaylistsUseCase
 import com.farzin.core_domain.usecases.db.GetSongsInPlaylistUseCase
 import com.farzin.core_domain.usecases.db.InsertPlaylistSongUseCase
 import com.farzin.core_domain.usecases.db.PlaylistUseCases
@@ -112,7 +113,8 @@ object AppModule {
         getSongsInPlaylistUseCase = GetSongsInPlaylistUseCase(playlistRepository),
         insertPlaylistSongUseCase = InsertPlaylistSongUseCase(playlistRepository),
         deletePlaylistUseCase = DeletePlaylistUseCase(playlistRepository),
-        deleteSongInPlaylistUseCase = DeleteSongInPlaylistUseCase(playlistRepository)
+        deleteSongInPlaylistUseCase = DeleteSongInPlaylistUseCase(playlistRepository),
+        getSongsInAllPlaylistsUseCase = GetSongsInAllPlaylistsUseCase(playlistRepository)
     )
 
 }

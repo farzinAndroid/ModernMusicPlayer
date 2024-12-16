@@ -107,7 +107,7 @@ fun AddSongToPlaylistItem(
             TextMedium(
                 text = song.artist,
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.DarkGray,
+                color = MaterialTheme.colorScheme.WhiteDarkBlue.copy(0.5f),
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.medium16),
                 maxLine = 1,
@@ -117,7 +117,7 @@ fun AddSongToPlaylistItem(
 
         TextRegular(
             text = song.duration.asFormattedString(),
-            color = MaterialTheme.colorScheme.DarkGray,
+            color = MaterialTheme.colorScheme.WhiteDarkBlue.copy(0.5f),
             fontSize = 12.sp,
             textStyle = TextStyle(
                 fontWeight = FontWeight.SemiBold

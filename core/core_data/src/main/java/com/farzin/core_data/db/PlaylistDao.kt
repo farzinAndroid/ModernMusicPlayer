@@ -30,4 +30,7 @@ interface PlaylistDao : PlaylistRepository {
 
     @Delete
     override suspend fun deleteSongInPlaylist(playlistSong: PlaylistSong)
+
+    @Query("select * from playlist_song")
+    override fun getAllSongsInAllPlaylists(): Flow<List<PlaylistSong>>
 }

@@ -45,7 +45,6 @@ import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.search.search.SearchViewmodel
-import kotlinx.serialization.builtins.serializer
 
 @Composable
 fun AddSongToPlaylistDialog(
@@ -54,7 +53,8 @@ fun AddSongToPlaylistDialog(
     songs: List<Song>,
     onDismiss: () -> Unit,
     onConfirm: (List<PlaylistSong>) -> Unit,
-    playlistId:Int
+    songsInPlaylist: List<PlaylistSong>,
+    playlistId: Int,
 ) {
 
     val query by searchViewmodel.query.collectAsState()
@@ -189,9 +189,16 @@ fun AddSongToPlaylistDialog(
                         searchViewmodel.clear()
                         val playlistSongs = mutableListOf<PlaylistSong>()
                         selectedSongs.forEach { song ->
-                            playlistSongs.add(PlaylistSong(song = song.toSongDB(), playlistId = playlistId))
+                            playlistSongs.add(
+                                PlaylistSong(
+                                    song = song.toSongDB(),
+                                    playlistId = playlistId
+                                )
+                            )
                         }
+
                         onConfirm(playlistSongs)
+
                     },
                     onDismiss = {
                         searchViewmodel.clear()

@@ -2,6 +2,7 @@ package com.farzin.home.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -38,6 +39,8 @@ import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_model.db.Playlist
+import com.farzin.core_model.db.PlaylistSong
+import com.farzin.core_model.db.toSongDB
 import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.Loading
@@ -54,6 +57,7 @@ import com.farzin.home.permission.PermissionScreen
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
+import com.farzin.playlists.PlaylistViewmodel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -100,10 +104,12 @@ fun HomeScreen(
 fun Home(
     homeViewmodel: HomeViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
+    playlistViewmodel: PlaylistViewmodel = hiltViewModel(),
     navController: NavController,
 ) {
 
     val activity = LocalContext.current as Activity
+    val context = LocalContext.current
 
     var showFilter by remember { mutableStateOf(false) }
 
@@ -115,6 +121,9 @@ fun Home(
         SheetValue.PartiallyExpanded -> false
     }
 
+
+    val allSongsInAllPlaylists by playlistViewmodel.allSongsInAllPlaylists
+        .collectAsStateWithLifecycle(emptyList())
 
     val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
@@ -170,8 +179,22 @@ fun Home(
                 playerViewmodel.showDeleteDialog = false
             },
             onConfirm = {
-                playerViewmodel.deleteSong(songToDelete, launcher)
-                playerViewmodel.showDeleteDialog = false
+                scope.launch {
+                    playerViewmodel.deleteSong(
+                        song = songToDelete,
+                        launcher = launcher,
+                    )
+
+//                    if (playlistViewmodel.isSongInPlaylist(songToDelete)){
+//                        allSongsInAllPlaylists.forEach {
+//                            if (it.song.mediaId == songToDelete.mediaId) {
+//                                playlistViewmodel.deleteSongFromPlaylist(it)
+//                            }
+//                        }
+//                    }
+
+                    playerViewmodel.showDeleteDialog = false
+                }
             }
         )
     }
@@ -307,7 +330,7 @@ fun Home(
                         albums = albums,
                         onSongClick = { index, songsList ->
                             playerViewmodel.play(songsList, index)
-
+                            Log.e("TAG",playlistViewmodel.isSongInPlaylist(songsList[index]).toString())
                         },
                         onAlbumClick = { albumId ->
                             navController.navigate(Screens.Album(albumId))

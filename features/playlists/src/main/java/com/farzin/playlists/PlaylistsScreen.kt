@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Song
 import com.farzin.core_model.db.PlaylistSong
+import com.farzin.core_model.db.SongDB
 import com.farzin.core_model.db.toSong
 import com.farzin.core_model.db.toSongDB
 import com.farzin.core_ui.common_components.DeleteDialog
@@ -313,14 +314,16 @@ fun PlaylistsScreen(
                     onConfirm = { playlistSongs ->
                         scope.launch {
                             playlistViewmodel.insertPlaylistSong(
-                                playlistSongs
+                                playlistSongs = playlistSongs,
+                                playlistId = playlistId
                             )
                             playlistViewmodel.showAddSongToPlaylistDialog = false
                         }
                     },
                     songs = songs,
                     searchViewmodel = searchViewmodel,
-                    playlistId = playlistId
+                    playlistId = playlistId,
+                    songsInPlaylist = songsInPlaylist
                 )
             }
 
