@@ -60,7 +60,7 @@ fun SongItem(
     shouldUseDefaultPic: Boolean = false,
     shouldShowPic: Boolean = true,
     isFavorite: Boolean,
-    onDeleteClicked: (song: Song) -> Unit,
+    menuItemList: List<MenuItem> = emptyList(),
     modifier: Modifier = Modifier,
 ) {
 
@@ -154,58 +154,44 @@ fun SongItem(
             )
         }
 
-        DropdownMenu(
-            expanded = isMenuExpanded,
-            onDismissRequest = { isMenuExpanded = false },
-            modifier = Modifier,
-            offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
-            containerColor = Color.White,
-            border = BorderStroke(1.dp,MaterialTheme.colorScheme.MainBlue)
-        ) {
-            DropdownMenuItem(
-                text = {
-                    TextMedium(
-                        text = stringResource(com.farzin.core_ui.R.string.delete),
-                        color = MaterialTheme.colorScheme.MainBlue,
-                        fontSize = 16.sp
-                    )
-                },
-                onClick = {
-                    onDeleteClicked(song)
-                    isMenuExpanded = false
-                },
-                modifier = Modifier
-                    .height(40.dp)
-            )
+        if (menuItemList.isNotEmpty()){
+            DropdownMenu(
+                expanded = isMenuExpanded,
+                onDismissRequest = { isMenuExpanded = false },
+                modifier = Modifier,
+                offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
+                containerColor = Color.White,
+                border = BorderStroke(1.dp,MaterialTheme.colorScheme.MainBlue)
+            ) {
 
-            DropdownMenuItem(
-                text = {
-                    TextMedium(
-                        text = if (!isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
-                            com.farzin.core_ui.R.string.remove_from_fav
-                        ),
-                        color = MaterialTheme.colorScheme.MainBlue,
-                        fontSize = 16.sp
+                menuItemList.forEachIndexed { index, menuItem ->
+                    DropdownMenuItem(
+                        text = {
+                            TextMedium(
+                                text = menuItem.text,
+                                color = MaterialTheme.colorScheme.MainBlue,
+                                fontSize = 16.sp
+                            )
+                        },
+                        onClick = {
+                            menuItem.onClick()
+                            isMenuExpanded = false
+                        },
+                        modifier = Modifier
+                            .height(40.dp),
+                        trailingIcon = {
+                            menuItem.iconVector?.let {
+                                Icon(
+                                    imageVector = it,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colorScheme.MainBlue
+                                )
+                            }
+                        }
                     )
-                },
-                onClick = {
-                    onToggleFavorite(!isFavorite)
-                    isMenuExpanded = false
-                },
-                modifier = Modifier
-                    .height(40.dp),
-                trailingIcon = {
-                    Icon(
-                        imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.MainBlue
-                    )
+
                 }
-            )
-
+            }
         }
-
-
     }
-
 }

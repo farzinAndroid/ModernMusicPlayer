@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,8 +17,10 @@ import androidx.compose.ui.unit.dp
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.EmptySectionText
+import com.farzin.core_ui.common_components.MenuItem
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.theme.spacing
+import kotlinx.coroutines.launch
 
 @Composable
 fun Favorites(
@@ -43,7 +48,22 @@ fun Favorites(
                     isFavorite = song.isFavorite,
                     modifier =Modifier
                         .animateItem(),
-                    onDeleteClicked = onDeleteClicked
+                    menuItemList = listOf(
+                        MenuItem(
+                            text = stringResource(com.farzin.core_ui.R.string.delete),
+                            onClick = {
+                                onDeleteClicked(song)
+                            },
+                            iconVector = null,
+                        ),
+                        MenuItem(
+                            text = if (!song.isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
+                                com.farzin.core_ui.R.string.remove_from_fav
+                            ),
+                            onClick = { onToggleFavorite(song.mediaId,!song.isFavorite) },
+                            iconVector = if (!song.isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                        ),
+                    )
                 )
 
             }

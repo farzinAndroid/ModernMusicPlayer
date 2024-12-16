@@ -43,12 +43,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Song
 import com.farzin.core_model.db.PlaylistSong
-import com.farzin.core_model.db.SongDB
 import com.farzin.core_model.db.toSong
-import com.farzin.core_model.db.toSongDB
 import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.EmptySectionText
+import com.farzin.core_ui.common_components.MenuItem
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
@@ -287,18 +286,24 @@ fun PlaylistsScreen(
                                 isFavorite = playlistSong.song.isFavorite,
                                 modifier = Modifier
                                     .animateItem(),
-                                onDeleteClicked = {
-                                    scope.launch {
-                                        songToDelete = PlaylistSong(
-                                            song = it.toSongDB(),
-                                            playlistId = playlistId
-                                        )
-                                        songsToPlay =
-                                            songsToPlay.filter { it.mediaId != songToDelete.song.mediaId }
-                                                .toSet()
-                                        playerViewmodel.showDeleteDialog = true
-                                    }
-                                }
+                                menuItemList = listOf(
+                                    MenuItem(
+                                        text = stringResource(com.farzin.core_ui.R.string.delete_from_playlist),
+                                        onClick = {
+                                            scope.launch {
+                                                songToDelete = PlaylistSong(
+                                                    song = playlistSong.song,
+                                                    playlistId = playlistId
+                                                )
+                                                songsToPlay =
+                                                    songsToPlay.filter { it.mediaId != songToDelete.song.mediaId }
+                                                        .toSet()
+                                                playerViewmodel.showDeleteDialog = true
+                                            }
+                                        },
+                                        iconVector = null,
+                                    ),
+                                )
                             )
                         }
                     }

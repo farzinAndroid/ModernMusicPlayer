@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +34,7 @@ import com.farzin.core_ui.Screens
 import com.farzin.core_ui.common_components.DeleteDialog
 import com.farzin.core_ui.common_components.LinearAlbumItem
 import com.farzin.core_ui.common_components.MediaItem
+import com.farzin.core_ui.common_components.MenuItem
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
@@ -38,6 +42,7 @@ import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.search.components.HeaderText
 import com.farzin.search.components.SearchTextField
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -122,10 +127,25 @@ fun SearchScreen(
                                 isFavorite = song.isFavorite,
                                 modifier = Modifier
                                     .animateItem(),
-                                onDeleteClicked = {
-                                    songToDelete = it
-                                    playerViewmodel.showDeleteDialog = true
-                                }
+                                menuItemList = listOf(
+                                    MenuItem(
+                                        text = stringResource(com.farzin.core_ui.R.string.delete),
+                                        onClick = {
+                                            scope.launch {
+                                                songToDelete = song
+                                                playerViewmodel.showDeleteDialog = true
+                                            }
+                                        },
+                                        iconVector = null,
+                                    ),
+                                    MenuItem(
+                                        text = if (!song.isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
+                                            com.farzin.core_ui.R.string.remove_from_fav
+                                        ),
+                                        onClick = { playerViewmodel.setFavorite(song.mediaId, !song.isFavorite) },
+                                        iconVector = if (!song.isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                                    ),
+                                )
                             )
                         }
                     }
