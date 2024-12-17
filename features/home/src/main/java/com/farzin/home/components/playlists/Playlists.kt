@@ -184,7 +184,7 @@ fun CreatePlaylistDialogContent(
         modifier = Modifier
             .clip(Shapes().medium)
             .fillMaxWidth(0.9f)
-            .fillMaxHeight(0.2f)
+            .wrapContentHeight()
             .background(MaterialTheme.colorScheme.LyricDialogColor),
         horizontalAlignment = Alignment.Start
     ) {
