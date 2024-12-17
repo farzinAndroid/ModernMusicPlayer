@@ -1,9 +1,6 @@
 package com.farzin.player
 
-import android.annotation.SuppressLint
 import android.app.RecoverableSecurityException
-import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
@@ -22,6 +19,7 @@ import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
+import com.farzin.core_model.db.PlaylistSong
 import com.farzin.core_ui.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,7 +34,6 @@ import javax.inject.Inject
 class PlayerViewmodel @Inject constructor(
     private val musicServiceConnection: MusicServiceConnection,
     private val preferencesUseCases: PreferencesUseCases,
-    private val contentResolver: ContentResolver,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
@@ -104,7 +101,7 @@ class PlayerViewmodel @Inject constructor(
     }
 
 
-    var showDeleteDialog by mutableStateOf(false)
+    var showWarningDialog by mutableStateOf(false)
     fun deleteSong(
         song: Song,
         launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>,

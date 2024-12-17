@@ -1,7 +1,6 @@
 package com.farzin.home.components.playlists
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +19,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -33,33 +30,28 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.farzin.core_model.db.Playlist
-import com.farzin.core_ui.common_components.DeleteDialog
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.MediaItem
 import com.farzin.core_ui.common_components.TextBold
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.LyricDialogColor
-import com.farzin.core_ui.theme.MainBlue
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.home.home.HomeViewmodel
@@ -127,7 +119,7 @@ fun Playlists(
                             shouldHaveMenu = true,
                             onDeleteClicked = {
                                 playlistToDelete = playlist
-                                playerViewmodel.showDeleteDialog = true
+                                playerViewmodel.showWarningDialog = true
                             }
                         )
 
@@ -137,14 +129,14 @@ fun Playlists(
                 EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_playlists))
             }
 
-            if (playerViewmodel.showDeleteDialog){
-                DeleteDialog(
+            if (playerViewmodel.showWarningDialog){
+                WarningAlertDialog(
                     onConfirm = {
                         homeViewmodel.deletePlaylist(playlistToDelete)
-                        playerViewmodel.showDeleteDialog = false
+                        playerViewmodel.showWarningDialog = false
                     },
                     onDismiss = {
-                        playerViewmodel.showDeleteDialog = false
+                        playerViewmodel.showWarningDialog = false
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.9f)

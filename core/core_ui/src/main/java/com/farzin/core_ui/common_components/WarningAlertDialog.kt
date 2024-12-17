@@ -12,13 +12,11 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.farzin.core_ui.R
@@ -28,7 +26,7 @@ import com.farzin.core_ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteDialog(
+fun WarningAlertDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
@@ -56,14 +54,14 @@ fun DeleteDialog(
                 )
 
                 TextMedium(
-                    text = stringResource(R.string.delete_warning),
+                    text = stringResource(R.string.alert_dialog_warning),
                     color = MaterialTheme.colorScheme.WhiteDarkBlue,
                     fontSize = 16.sp,
                     maxLine = 2
                 )
 
 
-                Spacer(Modifier.height(MaterialTheme.spacing.semiLarge24))
+                Spacer(Modifier.height(MaterialTheme.spacing.large32))
 
                 Row(
                     modifier = Modifier

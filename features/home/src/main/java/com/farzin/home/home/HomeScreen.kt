@@ -39,10 +39,8 @@ import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_model.db.Playlist
-import com.farzin.core_model.db.PlaylistSong
-import com.farzin.core_model.db.toSongDB
 import com.farzin.core_ui.Screens
-import com.farzin.core_ui.common_components.DeleteDialog
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.Loading
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
@@ -166,17 +164,31 @@ fun Home(
 
 
     var songToDelete by remember { mutableStateOf(Song()) }
-    val launcher = deleteLauncher(songToDelete)
+    val launcher = deleteLauncher(
+        songToDelete = songToDelete,
+        onSuccess = {
+            scope.launch {
+                if (playlistViewmodel.isSongInPlaylist(songToDelete)){
+                        allSongsInAllPlaylists.forEach {
+                            if (it.song.mediaId == songToDelete.mediaId) {
+                                playlistViewmodel.deleteSongFromPlaylist(it)
+                            }
+                        }
+                    }
+            }
+        }
+    )
 
 
 
-    if (playerViewmodel.showDeleteDialog) {
-        DeleteDialog(
+
+    if (playerViewmodel.showWarningDialog) {
+        WarningAlertDialog(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight(),
             onDismiss = {
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.showWarningDialog = false
             },
             onConfirm = {
                 scope.launch {
@@ -185,15 +197,8 @@ fun Home(
                         launcher = launcher,
                     )
 
-//                    if (playlistViewmodel.isSongInPlaylist(songToDelete)){
-//                        allSongsInAllPlaylists.forEach {
-//                            if (it.song.mediaId == songToDelete.mediaId) {
-//                                playlistViewmodel.deleteSongFromPlaylist(it)
-//                            }
-//                        }
-//                    }
 
-                    playerViewmodel.showDeleteDialog = false
+                    playerViewmodel.showWarningDialog = false
                 }
             }
         )
@@ -350,7 +355,7 @@ fun Home(
                         recentSongs = recentSongs,
                         onDeleteClicked = {
                             songToDelete = it
-                            playerViewmodel.showDeleteDialog = true
+                            playerViewmodel.showWarningDialog = true
                         },
                         playlists = playlists,
                         onPlaylistClicked = { playlist ->
@@ -360,7 +365,7 @@ fun Home(
                                     playlistName = playlist.name
                                 )
                             )
-                        }
+                        },
                     )
                 }
             }

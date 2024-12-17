@@ -51,7 +51,6 @@ dependencies {
     implementation(project(":core:core_model"))
     implementation(project(":core:core_ui"))
     implementation(project(":features:player"))
-    implementation(project(":features:search"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

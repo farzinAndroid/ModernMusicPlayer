@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun deleteLauncher(
-    songToDelete:Song
+    songToDelete:Song,
+    onSuccess:()->Unit,
 ) : ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> {
 
     val scope = rememberCoroutineScope()
@@ -29,11 +30,15 @@ fun deleteLauncher(
             if (result.resultCode == Activity.RESULT_OK) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     scope.launch {
+                        onSuccess()
                         context.showToast(context.getString(com.farzin.core_ui.R.string.song_deleted))
                     }
+
+
                 } else {
                     try {
                         scope.launch {
+                            onSuccess()
                             val contentResolver = context.contentResolver
                             val uris = listOf(songToDelete.mediaUri)
 

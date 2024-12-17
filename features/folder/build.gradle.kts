@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":core:core_model"))
     implementation(project(":core:core_ui"))
     implementation(project(":features:player"))
+    implementation(project(":features:playlists"))
 
 
     implementation(libs.androidx.core.ktx)

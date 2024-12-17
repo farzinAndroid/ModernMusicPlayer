@@ -123,7 +123,7 @@ fun HomePager(
                     currentPlayingSongId = currentPlayingSongId,
                     songs = songs,
                     onToggleFavorite = onFavoriteClick,
-                    onDeleteClicked = onDeleteClicked
+                    onDeleteClicked = onDeleteClicked,
                 )
             }
 

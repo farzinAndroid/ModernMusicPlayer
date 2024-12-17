@@ -7,12 +7,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farzin.core_domain.usecases.db.PlaylistUseCases
 import com.farzin.core_domain.usecases.media.MediaUseCases
+import com.farzin.core_model.SearchDetails
 import com.farzin.core_model.Song
 import com.farzin.core_model.db.PlaylistSong
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +26,27 @@ class PlaylistViewmodel @Inject constructor(
     private val playlistUseCases: PlaylistUseCases,
     private val mediaUseCases: MediaUseCases,
 ) : ViewModel() {
+
+    val query = MutableStateFlow("")
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val searchDetails = query
+        .flatMapLatest { mediaUseCases.searchUseCase(it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = SearchDetails(
+                songs = emptyList(),
+                albums = emptyList(),
+                folders = emptyList(),
+                artists = emptyList(),
+            )
+        )
+
+    fun changeQuery(newQuery: String) = query.update { newQuery }
+
+    fun clear() = query.update { "" }
 
     var showAddSongToPlaylistDialog by mutableStateOf(false)
 

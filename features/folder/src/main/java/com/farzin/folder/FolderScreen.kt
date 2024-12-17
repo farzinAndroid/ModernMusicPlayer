@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Song
-import com.farzin.core_ui.common_components.DeleteDialog
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.MenuItem
@@ -52,6 +52,7 @@ import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
+import com.farzin.playlists.PlaylistViewmodel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,9 +62,13 @@ fun FolderScreen(
     navController: NavController,
     folderViewmodel: FolderViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
+    playlistViewmodel: PlaylistViewmodel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
 
+
+    val allSongsInAllPlaylists by playlistViewmodel.allSongsInAllPlaylists
+        .collectAsStateWithLifecycle(emptyList())
     val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
@@ -87,19 +92,35 @@ fun FolderScreen(
 
     var songToDelete by remember { mutableStateOf(Song()) }
     val context = LocalContext.current
-    val launcher = deleteLauncher(songToDelete)
+    val launcher = deleteLauncher(
+        songToDelete = songToDelete,
+        onSuccess = {
+            scope.launch {
+                if (playlistViewmodel.isSongInPlaylist(songToDelete)){
+                    allSongsInAllPlaylists.forEach {
+                        if (it.song.mediaId == songToDelete.mediaId) {
+                            playlistViewmodel.deleteSongFromPlaylist(it)
+                        }
+                    }
+                }
+            }
+        }
+    )
 
-    if (playerViewmodel.showDeleteDialog){
-        DeleteDialog(
+    if (playerViewmodel.showWarningDialog){
+        WarningAlertDialog(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight(),
             onDismiss = {
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.showWarningDialog = false
             },
             onConfirm = {
-                playerViewmodel.deleteSong(songToDelete, launcher)
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.deleteSong(
+                    song = songToDelete,
+                    launcher = launcher,
+                )
+                playerViewmodel.showWarningDialog = false
             }
         )
     }
@@ -253,7 +274,7 @@ fun FolderScreen(
                                             onClick = {
                                                 scope.launch {
                                                     songToDelete = song
-                                                    playerViewmodel.showDeleteDialog = true
+                                                    playerViewmodel.showWarningDialog = true
                                                 }
                                             },
                                             iconVector = null,

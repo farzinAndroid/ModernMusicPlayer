@@ -44,12 +44,11 @@ import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
-import com.farzin.search.search.SearchViewmodel
 
 @Composable
 fun AddSongToPlaylistDialog(
     modifier: Modifier = Modifier,
-    searchViewmodel: SearchViewmodel,
+    playlistViewmodel: PlaylistViewmodel,
     songs: List<Song>,
     onDismiss: () -> Unit,
     onConfirm: (List<PlaylistSong>) -> Unit,
@@ -57,8 +56,8 @@ fun AddSongToPlaylistDialog(
     playlistId: Int,
 ) {
 
-    val query by searchViewmodel.query.collectAsState()
-    val searchDetails by searchViewmodel.searchDetails.collectAsStateWithLifecycle()
+    val query by playlistViewmodel.query.collectAsState()
+    val searchDetails by playlistViewmodel.searchDetails.collectAsStateWithLifecycle()
 
     var selectedSongs by remember { mutableStateOf<Set<Song>>(emptySet()) }
 
@@ -68,7 +67,7 @@ fun AddSongToPlaylistDialog(
 
     Dialog(
         onDismissRequest = {
-            searchViewmodel.clear()
+            playlistViewmodel.clear()
             selectedSongs.toMutableSet().clear()
             onDismiss()
         }
@@ -103,7 +102,7 @@ fun AddSongToPlaylistDialog(
                     OutlinedTextField(
                         value = query,
                         onValueChange = {
-                            searchViewmodel.changeQuery(it)
+                            playlistViewmodel.changeQuery(it)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -186,7 +185,7 @@ fun AddSongToPlaylistDialog(
 
                 DialogConfirmDismissSection(
                     onConfirm = {
-                        searchViewmodel.clear()
+                        playlistViewmodel.clear()
                         val playlistSongs = mutableListOf<PlaylistSong>()
                         selectedSongs.forEach { song ->
                             playlistSongs.add(
@@ -201,7 +200,7 @@ fun AddSongToPlaylistDialog(
 
                     },
                     onDismiss = {
-                        searchViewmodel.clear()
+                        playlistViewmodel.clear()
                         onDismiss()
                     },
                     modifier = Modifier

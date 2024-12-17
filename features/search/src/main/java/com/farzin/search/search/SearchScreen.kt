@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.farzin.core_model.Song
 import com.farzin.core_ui.Screens
-import com.farzin.core_ui.common_components.DeleteDialog
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.LinearAlbumItem
 import com.farzin.core_ui.common_components.MediaItem
 import com.farzin.core_ui.common_components.MenuItem
@@ -40,6 +40,7 @@ import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
+import com.farzin.playlists.PlaylistViewmodel
 import com.farzin.search.components.HeaderText
 import com.farzin.search.components.SearchTextField
 import kotlinx.coroutines.launch
@@ -50,6 +51,7 @@ fun SearchScreen(
     navController: NavController,
     searchViewmodel: SearchViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
+    playlistViewmodel: PlaylistViewmodel = hiltViewModel(),
 ) {
 
     val scope = rememberCoroutineScope()
@@ -57,21 +59,40 @@ fun SearchScreen(
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
 
 
+
+    val allSongsInAllPlaylists by playlistViewmodel.allSongsInAllPlaylists
+        .collectAsStateWithLifecycle(emptyList())
     var songToDelete by remember { mutableStateOf(Song()) }
     val context = LocalContext.current
-    val launcher = deleteLauncher(songToDelete)
+    val launcher = deleteLauncher(
+        songToDelete = songToDelete,
+        onSuccess = {
+            scope.launch {
+                if (playlistViewmodel.isSongInPlaylist(songToDelete)){
+                    allSongsInAllPlaylists.forEach {
+                        if (it.song.mediaId == songToDelete.mediaId) {
+                            playlistViewmodel.deleteSongFromPlaylist(it)
+                        }
+                    }
+                }
+            }
+        }
+    )
 
-    if (playerViewmodel.showDeleteDialog){
-        DeleteDialog(
+    if (playerViewmodel.showWarningDialog){
+        WarningAlertDialog(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight(),
             onDismiss = {
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.showWarningDialog = false
             },
             onConfirm = {
-                playerViewmodel.deleteSong(songToDelete, launcher)
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.deleteSong(
+                    song = songToDelete,
+                    launcher = launcher,
+                )
+                playerViewmodel.showWarningDialog = false
             }
         )
     }
@@ -133,7 +154,7 @@ fun SearchScreen(
                                         onClick = {
                                             scope.launch {
                                                 songToDelete = song
-                                                playerViewmodel.showDeleteDialog = true
+                                                playerViewmodel.showWarningDialog = true
                                             }
                                         },
                                         iconVector = null,

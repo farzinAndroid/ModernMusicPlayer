@@ -44,7 +44,7 @@ import androidx.navigation.NavController
 import com.farzin.core_model.Song
 import com.farzin.core_model.db.PlaylistSong
 import com.farzin.core_model.db.toSong
-import com.farzin.core_ui.common_components.DeleteDialog
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.MenuItem
@@ -57,7 +57,6 @@ import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
-import com.farzin.search.search.SearchViewmodel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,10 +66,19 @@ fun PlaylistsScreen(
     playlistName: String,
     playlistViewmodel: PlaylistViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
-    searchViewmodel: SearchViewmodel = hiltViewModel(),
     navController: NavController,
 ) {
 
+    val allSongsInAllPlaylists by playlistViewmodel.allSongsInAllPlaylists
+        .collectAsStateWithLifecycle(emptyList())
+    val songs by playlistViewmodel.songs.collectAsStateWithLifecycle()
+    val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
+    val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
+    val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
+    val playingQueueSongs by playlistViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
+    val progress by animateFloatAsState(
+        targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
+    )
 
     val songsInPlaylist by playlistViewmodel
         .songsInPlaylist(playlistId).collectAsStateWithLifecycle(emptyList())
@@ -95,28 +103,21 @@ fun PlaylistsScreen(
     val context = LocalContext.current
 
 
-    val songs by playlistViewmodel.songs.collectAsStateWithLifecycle()
-    val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
-    val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
-    val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
-    val playingQueueSongs by playlistViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
-    val progress by animateFloatAsState(
-        targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
-    )
 
 
 
-    if (playerViewmodel.showDeleteDialog) {
-        DeleteDialog(
+
+    if (playerViewmodel.showWarningDialog) {
+        WarningAlertDialog(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight(),
             onDismiss = {
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.showWarningDialog = false
             },
             onConfirm = {
                 playlistViewmodel.deleteSongFromPlaylist(songToDelete)
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.showWarningDialog = false
             }
         )
     }
@@ -288,7 +289,7 @@ fun PlaylistsScreen(
                                     .animateItem(),
                                 menuItemList = listOf(
                                     MenuItem(
-                                        text = stringResource(com.farzin.core_ui.R.string.delete_from_playlist),
+                                        text = stringResource(com.farzin.core_ui.R.string.remove_from_playlist),
                                         onClick = {
                                             scope.launch {
                                                 songToDelete = PlaylistSong(
@@ -298,7 +299,7 @@ fun PlaylistsScreen(
                                                 songsToPlay =
                                                     songsToPlay.filter { it.mediaId != songToDelete.song.mediaId }
                                                         .toSet()
-                                                playerViewmodel.showDeleteDialog = true
+                                                playerViewmodel.showWarningDialog = true
                                             }
                                         },
                                         iconVector = null,
@@ -326,7 +327,7 @@ fun PlaylistsScreen(
                         }
                     },
                     songs = songs,
-                    searchViewmodel = searchViewmodel,
+                    playlistViewmodel = playlistViewmodel,
                     playlistId = playlistId,
                     songsInPlaylist = songsInPlaylist
                 )
