@@ -4,7 +4,16 @@ import com.farzin.core_data.preferences.SettingsRepositoryImpl
 import com.farzin.core_data.repository.MediaRepositoryImpl
 import com.farzin.core_datastore.PreferencesDataSource
 import com.farzin.core_domain.repository.MediaRepository
+import com.farzin.core_domain.repository.PlaylistRepository
 import com.farzin.core_domain.repository.SharedPreferencesRepository
+import com.farzin.core_domain.usecases.db.CreatePlaylistUseCase
+import com.farzin.core_domain.usecases.db.DeletePlaylistUseCase
+import com.farzin.core_domain.usecases.db.DeleteSongInPlaylistUseCase
+import com.farzin.core_domain.usecases.db.GetAllPlaylistsUseCase
+import com.farzin.core_domain.usecases.db.GetSongsInAllPlaylistsUseCase
+import com.farzin.core_domain.usecases.db.GetSongsInPlaylistUseCase
+import com.farzin.core_domain.usecases.db.InsertPlaylistSongUseCase
+import com.farzin.core_domain.usecases.db.PlaylistUseCases
 import com.farzin.core_domain.usecases.media.GetAlbumByIdUseCase
 import com.farzin.core_domain.usecases.media.GetAlbumsUseCase
 import com.farzin.core_domain.usecases.media.GetArtistByIdUseCase
@@ -92,6 +101,20 @@ object AppModule {
     ) : MediaRepository = MediaRepositoryImpl(
         mediaStoreSource = mediaStoreSource,
         preferencesDataSource = preferencesDataSource
+    )
+
+    @Provides
+    @Singleton
+    fun providePlaylistUseCases(
+        playlistRepository: PlaylistRepository
+    ) = PlaylistUseCases(
+        createPlaylistUseCase = CreatePlaylistUseCase(playlistRepository),
+        getAllPlaylistsUseCase = GetAllPlaylistsUseCase(playlistRepository),
+        getSongsInPlaylistUseCase = GetSongsInPlaylistUseCase(playlistRepository),
+        insertPlaylistSongUseCase = InsertPlaylistSongUseCase(playlistRepository),
+        deletePlaylistUseCase = DeletePlaylistUseCase(playlistRepository),
+        deleteSongInPlaylistUseCase = DeleteSongInPlaylistUseCase(playlistRepository),
+        getSongsInAllPlaylistsUseCase = GetSongsInAllPlaylistsUseCase(playlistRepository)
     )
 
 }

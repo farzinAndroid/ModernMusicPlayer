@@ -23,6 +23,12 @@ sealed interface Screens {
     @Serializable
     data object Search : Screens
 
+    @Serializable
+    data class Playlists(
+        val playlistId:Int,
+        val playlistName:String
+    ) : Screens
+
 
 
 }

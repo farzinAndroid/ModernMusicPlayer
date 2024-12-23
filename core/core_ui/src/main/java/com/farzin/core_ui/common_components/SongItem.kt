@@ -1,5 +1,6 @@
 package com.farzin.core_ui.common_components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +24,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +42,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import coil.compose.SubcomposeAsyncImage
 import com.farzin.core_model.Song
 import com.farzin.core_ui.R
-import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.DarkGray
 import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.MainBlue
@@ -61,7 +60,7 @@ fun SongItem(
     shouldUseDefaultPic: Boolean = false,
     shouldShowPic: Boolean = true,
     isFavorite: Boolean,
-    onDeleteClicked: (song: Song) -> Unit,
+    menuItemList: List<MenuItem> = emptyList(),
     modifier: Modifier = Modifier,
 ) {
 
@@ -155,57 +154,44 @@ fun SongItem(
             )
         }
 
-        DropdownMenu(
-            expanded = isMenuExpanded,
-            onDismissRequest = { isMenuExpanded = false },
-            modifier = Modifier,
-            offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
-            containerColor = Color.White,
-        ) {
-            DropdownMenuItem(
-                text = {
-                    TextMedium(
-                        text = stringResource(com.farzin.core_ui.R.string.delete),
-                        color = MaterialTheme.colorScheme.MainBlue,
-                        fontSize = 16.sp
-                    )
-                },
-                onClick = {
-                    onDeleteClicked(song)
-                    isMenuExpanded = false
-                },
-                modifier = Modifier
-                    .height(40.dp)
-            )
+        if (menuItemList.isNotEmpty()){
+            DropdownMenu(
+                expanded = isMenuExpanded,
+                onDismissRequest = { isMenuExpanded = false },
+                modifier = Modifier,
+                offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
+                containerColor = Color.White,
+                border = BorderStroke(1.dp,MaterialTheme.colorScheme.MainBlue)
+            ) {
 
-            DropdownMenuItem(
-                text = {
-                    TextMedium(
-                        text = if (!isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
-                            com.farzin.core_ui.R.string.remove_from_fav
-                        ),
-                        color = MaterialTheme.colorScheme.MainBlue,
-                        fontSize = 16.sp
+                menuItemList.forEachIndexed { index, menuItem ->
+                    DropdownMenuItem(
+                        text = {
+                            TextMedium(
+                                text = menuItem.text,
+                                color = MaterialTheme.colorScheme.MainBlue,
+                                fontSize = 16.sp
+                            )
+                        },
+                        onClick = {
+                            menuItem.onClick()
+                            isMenuExpanded = false
+                        },
+                        modifier = Modifier
+                            .height(40.dp),
+                        trailingIcon = {
+                            menuItem.iconVector?.let {
+                                Icon(
+                                    imageVector = it,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colorScheme.MainBlue
+                                )
+                            }
+                        }
                     )
-                },
-                onClick = {
-                    onToggleFavorite(!isFavorite)
-                    isMenuExpanded = false
-                },
-                modifier = Modifier
-                    .height(40.dp),
-                trailingIcon = {
-                    Icon(
-                        imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.MainBlue
-                    )
+
                 }
-            )
-
+            }
         }
-
-
     }
-
 }

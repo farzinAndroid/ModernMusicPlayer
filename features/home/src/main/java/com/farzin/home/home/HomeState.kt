@@ -6,6 +6,7 @@ import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
+import com.farzin.core_model.db.Playlist
 
 
 sealed class HomeState {
@@ -20,6 +21,7 @@ sealed class HomeState {
         val folders:List<Folder> = emptyList(),
         val sortOrder: SortOrder,
         val sortBy: SortBy,
+        val playlists: List<Playlist>,
     ) : HomeState()
 
 }

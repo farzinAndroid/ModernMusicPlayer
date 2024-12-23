@@ -82,7 +82,7 @@ fun LyricsDialogContent(
             TextMedium(
                 text = text,
                 color = MaterialTheme.colorScheme.WhiteDarkBlue,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 textStyle = TextStyle(
                     textAlign = TextAlign.Center
                 ),

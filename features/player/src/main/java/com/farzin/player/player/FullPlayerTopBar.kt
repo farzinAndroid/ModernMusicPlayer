@@ -1,5 +1,6 @@
 package com.farzin.player.player
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
+import com.farzin.core_ui.theme.MainBlue
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
 import com.farzin.player.R
@@ -109,6 +111,7 @@ fun FullPlayerTopBar(
             modifier = Modifier,
             offset = DpOffset(LocalConfiguration.current.screenWidthDp.dp, 0.dp),
             containerColor = Color.White,
+            border = BorderStroke(1.dp,MaterialTheme.colorScheme.MainBlue)
         ) {
             DropdownMenuItem(
                 text = {

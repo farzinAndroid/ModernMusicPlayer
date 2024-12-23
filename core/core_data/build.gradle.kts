@@ -49,7 +49,16 @@ dependencies {
 
 
     implementation(project(":core:core_model"))
+    implementation(project(":core:core_common"))
     implementation(project(":core:core_domain"))
     implementation(project(":core:core_media_store"))
     implementation(project(":core:core_datastore"))
+
+    //room
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+    ksp (libs.androidx.room.compiler)
+
+    // Gson
+    implementation(libs.converter.gson)
 }

@@ -22,7 +22,7 @@ class SearchViewmodel @Inject constructor(
     mediaUseCases: MediaUseCases,
 ) : ViewModel() {
 
-    private val query = MutableStateFlow("")
+    val query = MutableStateFlow("")
 
 
     @OptIn(ExperimentalCoroutinesApi::class)

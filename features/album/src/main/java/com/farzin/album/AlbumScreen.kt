@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -35,22 +38,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.farzin.core_model.Album
 import com.farzin.core_model.Song
-import com.farzin.core_ui.common_components.DeleteDialog
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.DetailTopBar
 import com.farzin.core_ui.common_components.EmptySectionText
+import com.farzin.core_ui.common_components.MenuItem
 import com.farzin.core_ui.common_components.SongItem
 import com.farzin.core_ui.common_components.convertToPosition
 import com.farzin.core_ui.common_components.convertToProgress
 import com.farzin.core_ui.common_components.deleteLauncher
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
-import com.farzin.core_ui.utils.showToast
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
-import kotlinx.coroutines.flow.collectLatest
+import com.farzin.playlists.PlaylistViewmodel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,12 +61,16 @@ fun AlbumScreen(
     albumId: Long,
     albumViewModel: AlbumViewmodel = hiltViewModel(),
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
+    playlistViewmodel: PlaylistViewmodel = hiltViewModel(),
     navController: NavController,
 ) {
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+
+    val allSongsInAllPlaylists by playlistViewmodel.allSongsInAllPlaylists
+        .collectAsStateWithLifecycle(emptyList())
     val currentPosition by playerViewmodel.currentPosition.collectAsStateWithLifecycle(0L)
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
@@ -86,19 +92,35 @@ fun AlbumScreen(
     }
 
     var songToDelete by remember { mutableStateOf(Song()) }
-    val launcher = deleteLauncher(songToDelete)
+    val launcher = deleteLauncher(
+        songToDelete = songToDelete,
+        onSuccess = {
+            scope.launch {
+                if (playlistViewmodel.isSongInPlaylist(songToDelete)){
+                    allSongsInAllPlaylists.forEach {
+                        if (it.song.mediaId == songToDelete.mediaId) {
+                            playlistViewmodel.deleteSongFromPlaylist(it)
+                        }
+                    }
+                }
+            }
+        }
+    )
 
-    if (playerViewmodel.showDeleteDialog){
-        DeleteDialog(
+    if (playerViewmodel.showWarningDialog){
+        WarningAlertDialog(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight(),
             onDismiss = {
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.showWarningDialog = false
             },
             onConfirm = {
-                playerViewmodel.deleteSong(songToDelete, launcher)
-                playerViewmodel.showDeleteDialog = false
+                playerViewmodel.deleteSong(
+                    song = songToDelete,
+                    launcher = launcher,
+                )
+                playerViewmodel.showWarningDialog = false
             }
         )
     }
@@ -246,12 +268,25 @@ fun AlbumScreen(
                                     isFavorite = song.isFavorite,
                                     modifier = Modifier
                                         .animateItem(),
-                                    onDeleteClicked = {
-                                        scope.launch {
-                                            songToDelete = it
-                                            playerViewmodel.showDeleteDialog = true
-                                        }
-                                    }
+                                    menuItemList = listOf(
+                                        MenuItem(
+                                            text = stringResource(com.farzin.core_ui.R.string.delete),
+                                            onClick = {
+                                                scope.launch {
+                                                    songToDelete = song
+                                                    playerViewmodel.showWarningDialog = true
+                                                }
+                                            },
+                                            iconVector = null,
+                                        ),
+                                        MenuItem(
+                                            text = if (!song.isFavorite) stringResource(com.farzin.core_ui.R.string.add_to_fav) else stringResource(
+                                                com.farzin.core_ui.R.string.remove_from_fav
+                                            ),
+                                            onClick = { playerViewmodel.setFavorite(song.mediaId, !song.isFavorite) },
+                                            iconVector = if (!song.isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                                        ),
+                                    )
                                 )
                             }
                         }

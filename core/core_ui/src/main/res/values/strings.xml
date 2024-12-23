@@ -38,9 +38,22 @@
     <string name="delete">Delete</string>
     <string name="song_deleted">Song deleted</string>
     <string name="sth_went_wrong">Something went wrong!</string>
-    <string name="delete_warning">Are you sure you want to delete this song?</string>
+    <string name="alert_dialog_warning">Are you sure you want to proceed with this operation?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="add_to_fav">Add to favorites</string>
     <string name="remove_from_fav">Remove from favorites</string>
+    <string name="playlists">Playlists</string>
+    <string name="no_playlists">No playlists</string>
+    <string name="playlist">Playlist</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="save_playlist">Save playlist</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="playlist_name">Playlist name</string>
+    <string name="add_song_to_playlist_text">Choose songs to add to your playlist and then click \'Add to playlist\'.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="confirm">Confirm</string>
+    <string name="no_songs_in_playlist">No songs in playlist</string>
+    <string name="remove_from_playlist">Remove from playlist</string>
 </resources>

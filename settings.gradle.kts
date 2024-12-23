@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":features:playlists")
+
+
 pluginManagement {
     repositories {
         google {
@@ -41,3 +44,4 @@ include(":features:player")
 include(":features:artist")
 include(":features:folder")
 include(":features:search")
+include(":features:playlists")

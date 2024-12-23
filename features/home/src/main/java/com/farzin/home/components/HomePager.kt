@@ -22,6 +22,7 @@ import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.Song
+import com.farzin.core_model.db.Playlist
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.Gray
@@ -31,6 +32,7 @@ import com.farzin.home.components.albums.Albums
 import com.farzin.home.components.artists.Artists
 import com.farzin.home.components.favorites.Favorites
 import com.farzin.home.components.folders.Folders
+import com.farzin.home.components.playlists.Playlists
 import com.farzin.home.components.recently_added.RecentlyAdded
 import com.farzin.home.components.songs.Songs
 import com.farzin.home.home.MediaTab
@@ -52,6 +54,8 @@ fun HomePager(
     artists: List<Artist>,
     folders:List<Folder>,
     recentSongs: List<Song>,
+    playlists: List<Playlist>,
+    onPlaylistClicked:(playlist:Playlist) ->Unit,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -119,7 +123,7 @@ fun HomePager(
                     currentPlayingSongId = currentPlayingSongId,
                     songs = songs,
                     onToggleFavorite = onFavoriteClick,
-                    onDeleteClicked = onDeleteClicked
+                    onDeleteClicked = onDeleteClicked,
                 )
             }
 
@@ -164,6 +168,13 @@ fun HomePager(
                     recentSongs = recentSongs,
                     onToggleFavorite = onFavoriteClick,
                     onDeleteClicked = onDeleteClicked
+                )
+            }
+
+            MediaTab.Playlists.ordinal->{
+                Playlists(
+                    playlists = playlists,
+                    onPlaylistClicked = onPlaylistClicked
                 )
             }
         }
