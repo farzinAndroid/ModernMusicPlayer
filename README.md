@@ -10,6 +10,7 @@ A Music player developed based on clean architecture and multi modular rules.
 - Flows
 - Media 3
 - Datastore
+- Room DB
 
 - ## Features:
 
@@ -20,6 +21,7 @@ A Music player developed based on clean architecture and multi modular rules.
 - Filter songs based on whatever you like
 - Find the songs lyrics (credit to 'https://github.com/khaouitiabdelhakim/LyricsAI')
 - Delete songs
+- Create playlists
 
 
 
