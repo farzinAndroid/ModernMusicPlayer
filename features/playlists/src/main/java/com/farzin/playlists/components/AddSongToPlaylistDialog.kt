@@ -1,4 +1,4 @@
-package com.farzin.playlists
+package com.farzin.playlists.components
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -44,6 +44,7 @@ import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.playlists.PlaylistViewmodel
 
 @Composable
 fun AddSongToPlaylistDialog(

@@ -57,6 +57,8 @@ import com.farzin.core_ui.theme.spacing
 import com.farzin.player.PlayerViewmodel
 import com.farzin.player.player.FullPlayer
 import com.farzin.player.player.MiniMusicController
+import com.farzin.playlists.components.AddSongToPlaylistDialog
+import com.farzin.playlists.components.PlaylistDetailImage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

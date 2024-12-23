@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,11 +44,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.farzin.core_model.db.Playlist
-import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.common_components.EmptySectionText
 import com.farzin.core_ui.common_components.MediaItem
 import com.farzin.core_ui.common_components.TextBold
 import com.farzin.core_ui.common_components.TextMedium
+import com.farzin.core_ui.common_components.WarningAlertDialog
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
@@ -64,7 +63,7 @@ fun Playlists(
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
     modifier: Modifier = Modifier,
     playlists: List<Playlist>,
-    onPlaylistClicked: (playlist:Playlist) -> Unit,
+    onPlaylistClicked: (playlist: Playlist) -> Unit,
 ) {
 
 
@@ -104,7 +103,9 @@ fun Playlists(
                         .fillMaxSize()
                         .padding(bottom = 64.dp),
                 ) {
-                    itemsIndexed(playlists, key = { _, playlist -> playlist.id }) { index, playlist ->
+                    itemsIndexed(
+                        playlists,
+                        key = { _, playlist -> playlist.id }) { index, playlist ->
                         Spacer(Modifier.height(MaterialTheme.spacing.small8))
                         MediaItem(
                             title = playlist.name,
@@ -129,7 +130,7 @@ fun Playlists(
                 EmptySectionText(stringResource(com.farzin.core_ui.R.string.no_playlists))
             }
 
-            if (playerViewmodel.showWarningDialog){
+            if (playerViewmodel.showWarningDialog) {
                 WarningAlertDialog(
                     onConfirm = {
                         homeViewmodel.deletePlaylist(playlistToDelete)
@@ -146,7 +147,10 @@ fun Playlists(
 
             if (showCreatePlaylistDialog) {
                 Dialog(
-                    onDismissRequest = { showCreatePlaylistDialog = false },
+                    onDismissRequest = {
+                        showCreatePlaylistDialog = false
+                        playlistNameValue = ""
+                    },
                 ) {
                     CreatePlaylistDialogContent(
                         nameValue = playlistNameValue,
@@ -158,9 +162,11 @@ fun Playlists(
                                 )
                             )
                             showCreatePlaylistDialog = false
+                            playlistNameValue = ""
                         },
                         onCancel = {
                             showCreatePlaylistDialog = false
+                            playlistNameValue = ""
                         }
                     )
                 }
