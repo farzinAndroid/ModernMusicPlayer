@@ -74,7 +74,7 @@ fun DetailTopBar(
                     fontSize = 20.sp,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(horizontal = MaterialTheme.spacing.medium16)
+                        .padding(horizontal = MaterialTheme.spacing.semiLarge24)
                 )
 
             }
