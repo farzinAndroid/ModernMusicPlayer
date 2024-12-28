@@ -16,8 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
+import com.farzin.core_ui.common_components.TextBold
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.home.R
 
 @Composable
 fun HomeTopBar(
@@ -47,6 +51,12 @@ fun HomeTopBar(
 
         )
 
+
+        TextBold(
+            text = stringResource(com.farzin.core_ui.R.string.app_name),
+            color = MaterialTheme.colorScheme.WhiteDarkBlue,
+            fontSize = 22.sp
+        )
 
         if (showFilter){
             Icon(
