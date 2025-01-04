@@ -89,8 +89,8 @@ fun PlaylistsScreen(
     var songToDelete by remember { mutableStateOf(PlaylistSong()) }
 
     LaunchedEffect(songsInPlaylist) {
-        songsToPlay = songsInPlaylist.map { it.song.toSong() }.toSet()
-        Log.e("TAG", songsToPlay.size.toString())
+        songsToPlay = songsInPlaylist.reversed().map { it.song.toSong() }.toSet()
+        Log.e("TAG", songsToPlay.toString())
     }
 
 
@@ -269,7 +269,7 @@ fun PlaylistsScreen(
                             .padding(bottom = 64.dp)
 
                     ) {
-                        itemsIndexed(songsInPlaylist, key = { _, playlistSong ->
+                        itemsIndexed(songsInPlaylist.reversed(), key = { _, playlistSong ->
                             playlistSong.id
                         }) { index, playlistSong ->
                             Spacer(Modifier.height(MaterialTheme.spacing.small8))
@@ -333,7 +333,7 @@ fun PlaylistsScreen(
                     songs = songs,
                     playlistViewmodel = playlistViewmodel,
                     playlistId = playlistId,
-                    songsInPlaylist = songsInPlaylist
+                    songsToPlay = songsToPlay.toList()
                 )
             }
 

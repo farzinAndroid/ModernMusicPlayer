@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -44,6 +45,7 @@ import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.core_ui.utils.showToast
 import com.farzin.playlists.PlaylistViewmodel
 
 @Composable
@@ -53,14 +55,20 @@ fun AddSongToPlaylistDialog(
     songs: List<Song>,
     onDismiss: () -> Unit,
     onConfirm: (List<PlaylistSong>) -> Unit,
-    songsInPlaylist: List<PlaylistSong>,
+    songsToPlay: List<Song>,
     playlistId: Int,
 ) {
 
+    val context = LocalContext.current
     val query by playlistViewmodel.query.collectAsState()
     val searchDetails by playlistViewmodel.searchDetails.collectAsStateWithLifecycle()
 
     var selectedSongs by remember { mutableStateOf<Set<Song>>(emptySet()) }
+    var existingMediaIds by remember { mutableStateOf<Set<String>>(emptySet()) }
+
+    LaunchedEffect(songsToPlay) {
+        existingMediaIds = songsToPlay.map { it.mediaId }.toSet()
+    }
 
     LaunchedEffect(selectedSongs) {
         Log.e("TAG", selectedSongs.toString())
@@ -152,10 +160,14 @@ fun AddSongToPlaylistDialog(
                                 AddSongToPlaylistItem(
                                     song = song,
                                     onClick = {
-                                        selectedSongs = if (it in selectedSongs) {
-                                            selectedSongs - it
+                                        if (it.mediaId in existingMediaIds) {
+                                            context.showToast(context.getString(com.farzin.core_ui.R.string.already_in_playlist))
                                         } else {
-                                            selectedSongs + it
+                                            selectedSongs = if (it in selectedSongs) {
+                                                selectedSongs - it
+                                            } else {
+                                                selectedSongs + it
+                                            }
                                         }
                                     },
                                     modifier = Modifier
@@ -169,10 +181,14 @@ fun AddSongToPlaylistDialog(
                                 AddSongToPlaylistItem(
                                     song = song,
                                     onClick = {
-                                        selectedSongs = if (it in selectedSongs) {
-                                            selectedSongs - it
+                                        if (it.mediaId in existingMediaIds) {
+                                            context.showToast(context.getString(com.farzin.core_ui.R.string.already_in_playlist))
                                         } else {
-                                            selectedSongs + it
+                                            selectedSongs = if (it in selectedSongs) {
+                                                selectedSongs - it
+                                            } else {
+                                                selectedSongs + it
+                                            }
                                         }
                                     },
                                     modifier = Modifier
