@@ -56,4 +56,6 @@
     <string name="confirm">Confirm</string>
     <string name="no_songs_in_playlist">No songs in playlist</string>
     <string name="remove_from_playlist">Remove from playlist</string>
+    <string name="view_album">View album</string>
+    <string name="view_artist">View artist</string>
 </resources>

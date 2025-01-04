@@ -2,11 +2,9 @@ package com.farzin.player.player
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -17,7 +15,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,19 +31,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import com.farzin.core_model.Song
 import com.farzin.core_ui.common_components.TextMedium
-import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.MainBlue
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
-import com.farzin.player.R
 
 @Composable
 fun FullPlayerTopBar(
     onBackClicked: () -> Unit,
     onLyricsClicked: () -> Unit,
+    onGoToAlbumClicked:()->Unit,
+    onGoToArtistClicked:()->Unit,
     song: Song,
     modifier: Modifier = Modifier
 ) {
@@ -123,6 +119,34 @@ fun FullPlayerTopBar(
                 },
                 onClick = {
                     onLyricsClicked()
+                    isExpanded = false
+                }
+            )
+
+            DropdownMenuItem(
+                text = {
+                    TextMedium(
+                        text = stringResource(com.farzin.core_ui.R.string.view_album),
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    )
+                },
+                onClick = {
+                    onGoToAlbumClicked()
+                    isExpanded = false
+                }
+            )
+
+            DropdownMenuItem(
+                text = {
+                    TextMedium(
+                        text = stringResource(com.farzin.core_ui.R.string.view_artist),
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    )
+                },
+                onClick = {
+                    onGoToArtistClicked()
                     isExpanded = false
                 }
             )

@@ -208,7 +208,9 @@ fun ArtistScreen(
                     onPlayPauseClicked = {
                         playerViewmodel.pausePlay(!musicState.playWhenReady)
                     },
-                    playbackMode = playbackMode
+                    playbackMode = playbackMode,
+                    navController = navController,
+                    sheetState = sheetState
                 )
             }
 
