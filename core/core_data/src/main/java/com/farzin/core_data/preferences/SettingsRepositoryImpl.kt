@@ -1,7 +1,7 @@
 package com.farzin.core_data.preferences
 
 import com.farzin.core_datastore.PreferencesDataSource
-import com.farzin.core_domain.repository.SharedPreferencesRepository
+import com.farzin.core_domain.repository.preferences.SharedPreferencesRepository
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder

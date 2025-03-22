@@ -61,4 +61,8 @@ dependencies {
 
     // Gson
     implementation(libs.converter.gson)
+
+    //retrofit
+    implementation (libs.retrofit)
+    implementation(libs.logging.interceptor)
 }

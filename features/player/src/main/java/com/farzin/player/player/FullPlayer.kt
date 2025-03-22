@@ -1,5 +1,6 @@
 package com.farzin.player.player
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.window.Dialog
@@ -44,6 +45,7 @@ import androidx.navigation.NavController
 import com.farzin.core_model.MusicState
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
+import com.farzin.core_model.remote.NetworkResult
 import com.farzin.core_ui.Screens
 import com.farzin.core_ui.theme.BackgroundColor
 import com.farzin.core_ui.theme.spacing
@@ -69,7 +71,7 @@ fun FullPlayer(
     playbackMode: PlaybackMode,
     playerViewmodel: PlayerViewmodel = hiltViewModel(),
     navController: NavController,
-    sheetState: BottomSheetScaffoldState
+    sheetState: BottomSheetScaffoldState,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -77,7 +79,6 @@ fun FullPlayer(
     val currentSong = songs[musicState.currentSongIndex]
 
     var showLyricsDialog by remember { mutableStateOf(false) }
-    val lyrics by playerViewmodel.lyrics.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(
         pageCount = { songs.size.coerceAtLeast(1) },
@@ -106,6 +107,25 @@ fun FullPlayer(
         }
     }
 
+    val result by playerViewmodel.lyrics.collectAsStateWithLifecycle()
+    var lyric by remember { mutableStateOf("") }
+    var loading by remember { mutableStateOf(false) }
+    when (result) {
+        is NetworkResult.Success -> {
+            loading = false
+            lyric = result.data?.result?.get(0)?.lyrics ?: ""
+
+        }
+
+        is NetworkResult.Loading -> {
+            loading = true
+        }
+
+        is NetworkResult.Error -> {
+            loading = false
+            lyric = stringResource(com.farzin.core_ui.R.string.sth_went_wrong)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -119,8 +139,10 @@ fun FullPlayer(
         FullPlayerTopBar(
             onBackClicked = onBackClicked,
             onLyricsClicked = {
-                showLyricsDialog = true
-                playerViewmodel.getLyrics(currentSong)
+                scope.launch {
+                    showLyricsDialog = true
+                    playerViewmodel.getLyrics(currentSong.title, currentSong.artist)
+                }
             },
             onGoToAlbumClicked = {
                 scope.launch {
@@ -139,12 +161,15 @@ fun FullPlayer(
                 .weight(0.05f)
         )
 
-        if (showLyricsDialog){
+        if (showLyricsDialog) {
             Dialog(
-                onDismissRequest = {showLyricsDialog = false},
+                onDismissRequest = {
+                    showLyricsDialog = false
+                },
             ) {
                 LyricsDialogContent(
-                    lyrics=lyrics
+                    lyric = lyric,
+                    loading = loading
                 )
             }
         }
@@ -247,8 +272,6 @@ fun FullPlayer(
                 musicState = musicState
             )
         }
-
-
 
 
     }

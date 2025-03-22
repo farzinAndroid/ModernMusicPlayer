@@ -1,4 +1,4 @@
-package com.farzin.core_domain.repository
+package com.farzin.core_domain.repository.preferences
 
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.SortBy

@@ -24,16 +24,15 @@ import androidx.compose.ui.unit.sp
 import com.farzin.core_common.CheckConnection
 import com.farzin.core_ui.common_components.TextMedium
 import com.farzin.core_ui.common_components.TextRegular
-import com.farzin.core_ui.theme.BackgroundColor
-import com.farzin.core_ui.theme.DarkGray
-import com.farzin.core_ui.theme.Gray
 import com.farzin.core_ui.theme.LyricDialogColor
 import com.farzin.core_ui.theme.WhiteDarkBlue
 import com.farzin.core_ui.theme.spacing
+import com.farzin.player.R
 
 @Composable
 fun LyricsDialogContent(
-    lyrics: String,
+    lyric:String,
+    loading:Boolean
 ) {
 
 
@@ -43,12 +42,11 @@ fun LyricsDialogContent(
     }
 
 
-    val text = when {
-        !isNetworkAvailable -> stringResource(com.farzin.core_ui.R.string.please_check_for_connection)
-        lyrics.isEmpty() -> stringResource(com.farzin.core_ui.R.string.please_wait)
-        else -> lyrics
+    val text = when{
+        !isNetworkAvailable-> stringResource(com.farzin.core_ui.R.string.please_check_for_connection)
+        loading-> stringResource(com.farzin.core_ui.R.string.please_wait)
+        else->lyric
     }
-
 
 
 
@@ -72,24 +70,26 @@ fun LyricsDialogContent(
                 .fillMaxWidth()
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextMedium(
-                text = text,
-                color = MaterialTheme.colorScheme.WhiteDarkBlue,
-                fontSize = 14.sp,
-                textStyle = TextStyle(
-                    textAlign = TextAlign.Center
-                ),
+            Column(
                 modifier = Modifier
-                    .padding(MaterialTheme.spacing.small8)
-            )
-        }
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                TextMedium(
+                    text =text,
+                    color = MaterialTheme.colorScheme.WhiteDarkBlue,
+                    fontSize = 14.sp,
+                    textStyle = TextStyle(
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.small8)
+                )
+            }
+
     }
 
 }
