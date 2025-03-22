@@ -1,10 +1,8 @@
 package com.farzin.core_data.repository
 
-import android.net.Uri
 import com.farzin.core_datastore.PreferencesDataSource
-import com.farzin.core_domain.repository.MediaRepository
+import com.farzin.core_domain.repository.media.MediaRepository
 import com.farzin.core_model.Album
-import kotlin.time.Duration.Companion.days
 import com.farzin.core_model.Artist
 import com.farzin.core_model.Folder
 import com.farzin.core_model.Song
@@ -14,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime

@@ -1,7 +1,6 @@
 package com.farzin.core_domain.usecases.preferences
 
-import com.farzin.core_domain.repository.SharedPreferencesRepository
-import com.farzin.core_model.SortBy
+import com.farzin.core_domain.repository.preferences.SharedPreferencesRepository
 import javax.inject.Inject
 
 class SetFavoriteUseCase @Inject constructor(

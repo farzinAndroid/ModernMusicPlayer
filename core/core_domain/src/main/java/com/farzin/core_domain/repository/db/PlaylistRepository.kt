@@ -1,4 +1,4 @@
-package com.farzin.core_domain.repository
+package com.farzin.core_domain.repository.db
 
 import com.farzin.core_model.db.Playlist
 import com.farzin.core_model.db.PlaylistSong

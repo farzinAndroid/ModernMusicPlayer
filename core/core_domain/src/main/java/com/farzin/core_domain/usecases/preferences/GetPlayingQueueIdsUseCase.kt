@@ -1,6 +1,6 @@
 package com.farzin.core_domain.usecases.preferences
 
-import com.farzin.core_domain.repository.SharedPreferencesRepository
+import com.farzin.core_domain.repository.preferences.SharedPreferencesRepository
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

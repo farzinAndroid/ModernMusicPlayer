@@ -52,5 +52,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    //retrofit
+    implementation (libs.retrofit)
+
     implementation(project(":core:core_model"))
 }

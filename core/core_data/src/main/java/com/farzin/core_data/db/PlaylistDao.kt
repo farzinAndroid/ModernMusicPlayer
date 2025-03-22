@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.farzin.core_domain.repository.PlaylistRepository
+import com.farzin.core_domain.repository.db.PlaylistRepository
 import com.farzin.core_model.db.Playlist
 import com.farzin.core_model.db.PlaylistSong
 import kotlinx.coroutines.flow.Flow

@@ -1,6 +1,6 @@
 package com.farzin.core_domain.usecases.preferences
 
-import com.farzin.core_domain.repository.SharedPreferencesRepository
+import com.farzin.core_domain.repository.preferences.SharedPreferencesRepository
 import com.farzin.core_model.PlaybackMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

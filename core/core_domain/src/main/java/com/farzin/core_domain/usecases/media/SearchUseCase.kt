@@ -1,6 +1,6 @@
 package com.farzin.core_domain.usecases.media
 
-import com.farzin.core_domain.repository.MediaRepository
+import com.farzin.core_domain.repository.media.MediaRepository
 import com.farzin.core_model.SearchDetails
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine

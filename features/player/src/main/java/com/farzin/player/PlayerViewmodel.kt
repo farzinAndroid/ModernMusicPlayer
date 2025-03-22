@@ -14,12 +14,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abdelhakim.lyricsai.LyricsAI
 import com.farzin.core_domain.usecases.preferences.PreferencesUseCases
+import com.farzin.core_domain.usecases.remote.GetLyricsUseCase
 import com.farzin.core_media_service.MusicServiceConnection
 import com.farzin.core_model.PlaybackMode
 import com.farzin.core_model.Song
 import com.farzin.core_model.SortBy
 import com.farzin.core_model.SortOrder
 import com.farzin.core_model.db.PlaylistSong
+import com.farzin.core_model.remote.Lyric
+import com.farzin.core_model.remote.LyricResult
+import com.farzin.core_model.remote.NetworkResult
 import com.farzin.core_ui.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -34,6 +38,7 @@ import javax.inject.Inject
 class PlayerViewmodel @Inject constructor(
     private val musicServiceConnection: MusicServiceConnection,
     private val preferencesUseCases: PreferencesUseCases,
+    private val getLyricsUseCase: GetLyricsUseCase,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
@@ -44,7 +49,14 @@ class PlayerViewmodel @Inject constructor(
         initialValue = 0L
     )
 
-    val lyrics = MutableStateFlow("")
+    val lyrics : MutableStateFlow<NetworkResult<Lyric>> = MutableStateFlow(NetworkResult.Loading())
+
+    fun getLyrics(songTitle:String,artist:String){
+        viewModelScope.launch {
+            lyrics.emit(NetworkResult.Success("",Lyric(listOf(LyricResult()))))
+            lyrics.emit(getLyricsUseCase(songTitle,artist))
+        }
+    }
 
     fun play(
         songs: List<Song>,
@@ -92,12 +104,6 @@ class PlayerViewmodel @Inject constructor(
 
     fun setFavorite(id: String, isFavorite: Boolean) = viewModelScope.launch {
         preferencesUseCases.setFavoriteUseCase(id, isFavorite)
-    }
-
-
-    fun getLyrics(song: Song) = viewModelScope.launch(Dispatchers.IO) {
-        lyrics.emit("")
-        lyrics.emit(LyricsAI.findLyricsBySongTitleAndArtist(song.title, song.artist))
     }
 
 

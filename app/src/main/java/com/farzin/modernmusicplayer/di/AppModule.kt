@@ -3,9 +3,10 @@ package com.farzin.modernmusicplayer.di
 import com.farzin.core_data.preferences.SettingsRepositoryImpl
 import com.farzin.core_data.repository.MediaRepositoryImpl
 import com.farzin.core_datastore.PreferencesDataSource
-import com.farzin.core_domain.repository.MediaRepository
-import com.farzin.core_domain.repository.PlaylistRepository
-import com.farzin.core_domain.repository.SharedPreferencesRepository
+import com.farzin.core_domain.repository.remote.LyricsRepository
+import com.farzin.core_domain.repository.media.MediaRepository
+import com.farzin.core_domain.repository.db.PlaylistRepository
+import com.farzin.core_domain.repository.preferences.SharedPreferencesRepository
 import com.farzin.core_domain.usecases.db.CreatePlaylistUseCase
 import com.farzin.core_domain.usecases.db.DeletePlaylistUseCase
 import com.farzin.core_domain.usecases.db.DeleteSongInPlaylistUseCase
@@ -36,6 +37,7 @@ import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIdsUseCase
 import com.farzin.core_domain.usecases.preferences.SetPlayingQueueIndexUseCase
 import com.farzin.core_domain.usecases.preferences.SetSortByUseCase
 import com.farzin.core_domain.usecases.preferences.SetSortOrderUseCase
+import com.farzin.core_domain.usecases.remote.GetLyricsUseCase
 import com.farzin.media_store.source.MediaStoreSource
 import dagger.Module
 import dagger.Provides
@@ -116,5 +118,9 @@ object AppModule {
         deleteSongInPlaylistUseCase = DeleteSongInPlaylistUseCase(playlistRepository),
         getSongsInAllPlaylistsUseCase = GetSongsInAllPlaylistsUseCase(playlistRepository)
     )
+
+    @Provides
+    @Singleton
+    fun provideLyricUseCase(lyricsRepository: LyricsRepository) = GetLyricsUseCase(lyricsRepository)
 
 }

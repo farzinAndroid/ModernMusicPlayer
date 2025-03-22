@@ -73,7 +73,6 @@ fun FolderScreen(
     val musicState by playerViewmodel.musicState.collectAsStateWithLifecycle()
     val playbackMode by playerViewmodel.playbackMode.collectAsStateWithLifecycle()
     val playingQueueSongs by folderViewmodel.playingQueueSongs.collectAsStateWithLifecycle()
-    val lyrics by playerViewmodel.lyrics.collectAsStateWithLifecycle()
     val progress by animateFloatAsState(
         targetValue = convertToProgress(currentPosition, musicState.duration), label = "",
     )
